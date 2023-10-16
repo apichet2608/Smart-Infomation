@@ -357,7 +357,29 @@ function TableData({ dataAPI }) {
       ),
     },
 
-    { field: "scr", headerName: "SCR", width: 120 },
+    {
+      field: "scr",
+      headerName: "SCR",
+      width: 120,
+      renderCell: (params) => (
+        <IconButton
+          onClick={() => handleOpenCalibrationDialog(params.row.machine)}
+          sx={{ padding: 1 }}
+        >
+          {params.value === "On plan" && (
+            <CheckCircleIcon style={{ fontSize: 20, color: "#58D68D" }} />
+          )}
+          {params.value === "Warning" && (
+            <ErrorIcon style={{ fontSize: 20, color: "#F8C471" }} /> // Red : #F1948A
+          )}
+          {params.value !== "On plan" && params.value !== "Warning" && <></>}
+          &nbsp;
+          <span style={{ color: "black", fontSize: 14, ml: 1 }}>
+            {params.value === "On plan" ? "Active" : params.value || ""}
+          </span>
+        </IconButton>
+      ),
+    },
     { field: "grr", headerName: "GR&R", width: 120 },
     // { field: "mtbf", headerName: "MTBF", width: 120 },
     // { field: "mttr", headerName: "MTTR", width: 120 },
