@@ -142,9 +142,9 @@ function TableData({ dataAPI, update }) {
   };
 
   const handleDownload = (text) => {
-    const ipAddress = "127.0.0.1:3030"; // IP ของเครื่องที่มีไฟล์อยู่
-    const filePath = "smart-infomation/download"; // เส้นทางไปยังไฟล์ที่ต้องการดาวน์โหลด
-    const downloadUrl = `http://${ipAddress}/${filePath}/${text}`;
+    const downloadUrl = `${import.meta.env.VITE_IP_API_UPLOAD}${
+      import.meta.env.VITE_PATHDOWLOAD
+    }/${text}`;
     console.log(downloadUrl);
     window.open(downloadUrl, "_blank");
   };
