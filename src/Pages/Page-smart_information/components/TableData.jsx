@@ -15,13 +15,21 @@ import { Link } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import { Edit as EditIcon } from "@mui/icons-material";
 import BuildCircleIcon from "@mui/icons-material/BuildCircle";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
 import ErrorIcon from "@mui/icons-material/Error";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import CircleIcon from "@mui/icons-material/Circle";
 import Chip from "@mui/material/Chip";
 import axios from "axios";
+
+import Avatar from "@mui/material/Avatar";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import ScheduleIcon from "@mui/icons-material/Schedule";
+import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
+import BlockIcon from "@mui/icons-material/Block";
 
 function TableData({ dataAPI, update }) {
   const [selectedMachine, setSelectedMachine] = useState(null);
@@ -30,6 +38,10 @@ function TableData({ dataAPI, update }) {
   const [openCalibrationDialog, setOpenCalibrationDialog] = useState(false);
   const [calibrationMachine, setCalibrationMachine] = useState("");
   const [calibrationData, setCalibrationData] = useState([]);
+
+  const [openSCRDialog, setOpenSCRDialog] = useState(false);
+  const [SCRMachine, setSCRMachine] = useState("");
+  const [SCRData, setSCRData] = useState([]);
 
   const [openNoDataChip, setOpenNoDataChip] = useState(false);
 
@@ -48,7 +60,30 @@ function TableData({ dataAPI, update }) {
           setOpenNoDataChip(false); // ปิดการแสดง Chip เมื่อมีข้อมูล
         } else {
           // ไม่มีข้อมูล ให้แสดง "No DATA"
-          setOpenNoDataChip(true);
+          setOpenNoDataChip(false);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching calibration data:", error);
+      });
+  };
+
+  const handleOpenSCR = (machine) => {
+    setSCRMachine(machine);
+    setMessage(machine);
+
+    axios
+      .get(
+        `http://10.17.66.242:3000/api/smart_machine_connect_list/scr?mc_code=${machine}`
+      )
+      .then((response) => {
+        if (response.data.length > 0) {
+          setSCRData(response.data);
+          setOpenSCRDialog(true);
+          setOpenNoDataChip(false); // ปิดการแสดง Chip เมื่อมีข้อมูล
+        } else {
+          // ไม่มีข้อมูล ให้แสดง "No DATA"
+          setOpenNoDataChip(false);
         }
       })
       .catch((error) => {
@@ -86,6 +121,22 @@ function TableData({ dataAPI, update }) {
     { field: "status_filter", headerName: "Status Filter", width: 130 },
     { field: "wsm_status_name", headerName: "WSM Status", width: 150 },
     { field: "mc_ref", headerName: "MC_ref", width: 150 },
+  ];
+
+  const scrColumns = [
+    { field: "mc_code", headerName: "Machine Code", width: 150 },
+    { field: "mc_desc", headerName: "Machine Desc", width: 400 },
+    { field: "cc_code", headerName: "CC Code", width: 120 },
+    {
+      field: "req_date",
+      headerName: "Req date",
+      width: 200,
+      renderCell: (params) => {
+        return formatdatewithtime(params.row.req_date);
+      },
+    },
+    { field: "status_desc", headerName: "Status Desc", width: 250 },
+    { field: "status_filter", headerName: "Status Filter", width: 150 },
   ];
 
   //---------------------Apichet---------------------------//
@@ -180,95 +231,75 @@ function TableData({ dataAPI, update }) {
         );
       },
     },
-    //---------------------Apichet---------------------------//
-    {
-      field: "machine_buyoff",
-      headerName: "Machine buyoff",
-      width: 400,
-      renderCell: (params) => {
-        if (params.row.machine_buyoff === null) {
-          // แสดง input สำหรับอัปโหลดไฟล์ เมื่อ machine_buyoff เป็น null
-          return (
-            <input
-              type="file"
-              onChange={(event) => handleFileUpload(event, params.row)}
-              style={{
-                color: "#333",
-                border: "1px solid #ccc",
-                borderRadius: "0.25rem",
-                cursor: "pointer",
-                backgroundColor: "#f7f7f7",
-                outline: "none",
-              }}
-              aria-describedby="file_input_help"
-              id="file_input"
-            />
-          );
-        } else {
-          // แสดงค่า machine_buyoff อื่น ๆ แต่งสไตล์ตามความต้องการ
-          return (
-            <Button
-              variant="text"
-              size="small"
-              // href={params.value}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: "inherit", textDecoration: "none" }}
-              onClick={() => handleDownload(params.value)}
-            >
-              {params.value}
-            </Button>
-          );
-        }
-      },
-    },
-    //---------------------Apichet---------------------------//
 
     {
       field: "scada",
       headerName: "SCADA",
-      width: 120,
-      renderCell: (params) => {
-        const scada = params.value;
-        let backgroundColor, result;
+      width: 130,
+      // renderCell: (params) => {
+      //   const scada = params.value;
+      //   let backgroundColor, result;
 
-        switch (scada) {
-          case "Finished":
-            backgroundColor = "#58D68D"; // Green
-            result = "Finished";
-            break;
-          case "Planned":
-            backgroundColor = "#F9E79F "; // Yellow
-            result = "Planned";
-            break;
-          case "Wait for plan":
-            backgroundColor = "#F7DC6F "; // Red
-            result = "Wait for plan";
-            break;
-          default:
-            backgroundColor = "#CCD1D1"; // Default: Red
-            result = "NULL";
-            break;
-        }
+      //   switch (scada) {
+      //     case "Finished":
+      //       backgroundColor = "#58D68D"; // Green
+      //       result = "Finished";
+      //       break;
+      //     case "Planned":
+      //       backgroundColor = "#F9E79F "; // Yellow
+      //       result = "Planned";
+      //       break;
+      //     case "Wait for plan":
+      //       backgroundColor = "#F7DC6F "; // Red
+      //       result = "Wait for plan";
+      //       break;
+      //     default:
+      //       backgroundColor = "#CCD1D1"; // Default: Red
+      //       result = "NULL";
+      //       break;
+      //   }
 
-        return (
-          <span
-            style={{
-              backgroundColor,
-              width: 100,
-              height: 35,
-              color: "black",
-              borderRadius: "15px",
-              fontSize: 15,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            {result}
-          </span>
-        );
-      },
+      //   return (
+      //     <span
+      //       style={{
+      //         backgroundColor,
+      //         width: 100,
+      //         height: 35,
+      //         color: "black",
+      //         borderRadius: "15px",
+      //         fontSize: 15,
+      //         display: "flex",
+      //         justifyContent: "center",
+      //         alignItems: "center",
+      //       }}
+      //     >
+      //       {result}
+      //     </span>
+      //   );
+      // },
+      renderCell: (params) => (
+        <>
+          {params.value === "Finished" && (
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <CheckCircleIcon style={{ fontSize: 20, color: "#2ECC71" }} />
+              &nbsp;Finished
+            </div>
+          )}
+          {params.value === "Planned" && (
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <CheckCircleIcon style={{ fontSize: 20, color: "#F9E79F" }} />
+              &nbsp;Planned
+            </div>
+          )}
+          {params.value === "Wait for plan" && (
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <ErrorIcon style={{ fontSize: 20, color: "#F8C471" }} />
+              &nbsp;Wait for plan
+            </div>
+          )}
+          {params.value === "Null" && <div style={{ color: "#ABB2B9" }}></div>}
+        </>
+      ),
     },
     // {
     //   field: "pm",
@@ -328,13 +359,13 @@ function TableData({ dataAPI, update }) {
         <>
           {params.value === "Active" && (
             <div style={{ display: "flex", alignItems: "center" }}>
-              <CheckCircleIcon style={{ fontSize: 20, color: "#58D68D" }} />
+              <CheckCircleIcon style={{ fontSize: 20, color: "#2ECC71" }} />
               &nbsp;Active
             </div>
           )}
           {params.value === "On plan" && (
             <div style={{ display: "flex", alignItems: "center" }}>
-              <CheckCircleIcon style={{ fontSize: 20, color: "#58D68D" }} />
+              <CheckCircleIcon style={{ fontSize: 20, color: "#2ECC71" }} />
               &nbsp;Active
             </div>
           )}
@@ -358,54 +389,138 @@ function TableData({ dataAPI, update }) {
     {
       field: "calibration",
       headerName: "Calibration",
-      width: 140,
+      width: 100,
       renderCell: (params) => (
-        <IconButton
-          onClick={() => handleOpenCalibrationDialog(params.row.machine)}
-          sx={{ padding: 1 }}
-        >
-          {params.value === "On plan" && (
-            <CheckCircleIcon style={{ fontSize: 20, color: "#58D68D" }} />
+        <>
+          {params.value === null ? (
+            <></>
+          ) : (
+            <>
+              <IconButton
+                onClick={() => handleOpenCalibrationDialog(params.row.machine)}
+                sx={{ padding: 1 }}
+              >
+                {params.value === "On plan" && (
+                  <CheckCircleIcon style={{ fontSize: 20, color: "#2ECC71" }} />
+                )}
+                {params.value === "Warning" && (
+                  <ErrorIcon style={{ fontSize: 20, color: "#F8C471" }} /> // Red : #EC7063
+                )}
+                {params.value !== "On plan" && params.value !== "Warning" && (
+                  <></>
+                )}
+                &nbsp;
+                <span style={{ color: "black", fontSize: 14, ml: 1 }}>
+                  {params.value === "On plan" ? "Active" : params.value || ""}
+                </span>
+              </IconButton>
+            </>
           )}
-          {params.value === "Warning" && (
-            <ErrorIcon style={{ fontSize: 20, color: "#F8C471" }} /> // Red : #F1948A
-          )}
-          {params.value !== "On plan" && params.value !== "Warning" && <></>}
-          &nbsp;
-          <span style={{ color: "black", fontSize: 14, ml: 1 }}>
-            {params.value === "On plan" ? "Active" : params.value || ""}
-          </span>
-        </IconButton>
+        </>
       ),
     },
 
     {
       field: "scr",
       headerName: "SCR",
-      width: 120,
-      renderCell: (params) => (
-        <IconButton
-          onClick={() => handleOpenCalibrationDialog(params.row.machine)}
-          sx={{ padding: 1 }}
-        >
-          {params.value === "On plan" && (
-            <CheckCircleIcon style={{ fontSize: 20, color: "#58D68D" }} />
-          )}
-          {params.value === "Warning" && (
-            <ErrorIcon style={{ fontSize: 20, color: "#F8C471" }} /> // Red : #F1948A
-          )}
-          {params.value !== "On plan" && params.value !== "Warning" && <></>}
-          &nbsp;
-          <span style={{ color: "black", fontSize: 14, ml: 1 }}>
-            {params.value === "On plan" ? "Active" : params.value || ""}
-          </span>
-        </IconButton>
-      ),
+      width: 130,
+      renderCell: (params) => {
+        let icon, text, color;
+
+        switch (params.value) {
+          case "ACTIVE":
+            icon = (
+              <CheckCircleIcon style={{ fontSize: 20, color: "#2ECC71" }} />
+            );
+            text = "Active";
+            color = "black";
+            break;
+          case "BREAKDOWN":
+            icon = (
+              <BuildCircleIcon style={{ fontSize: 21, color: "#EC7063" }} />
+            );
+            text = "Breakdown";
+            color = "black";
+            break;
+          case "OTHER":
+            icon = <ErrorIcon style={{ fontSize: 20, color: "#F8C471" }} />;
+            text = "Other Repair";
+            color = "black";
+            break;
+          default:
+            icon = null;
+            text = params.value || "";
+            color = "black";
+            break;
+        }
+
+        return (
+          <IconButton
+            onClick={() => handleOpenSCR(params.row.machine)}
+            sx={{ padding: 1 }}
+          >
+            {icon}
+            &nbsp;
+            <span style={{ color, fontSize: 14, ml: 1 }}>{text}</span>
+          </IconButton>
+        );
+      },
     },
+
     { field: "grr", headerName: "GR&R", width: 120 },
     // { field: "mtbf", headerName: "MTBF", width: 120 },
     // { field: "mttr", headerName: "MTTR", width: 120 },
     { field: "oee", headerName: "OEE", width: 120 },
+    //---------------------Apichet---------------------------//
+    {
+      field: "machine_buyoff",
+      headerName: "Machine Buyoff",
+      width: 130,
+      renderCell: (params) => {
+        if (params.row.machine_buyoff === null) {
+          return (
+            <Button
+              component="label"
+              variant="outlined"
+              startIcon={<CloudUploadIcon />}
+              style={{
+                backgroundColor: "#FFFF", // Blue color
+                textTransform: "none",
+                borderRadius: "0.25rem",
+              }}
+            >
+              Upload
+              <input
+                type="file"
+                onChange={(event) => handleFileUpload(event, params.row)}
+                style={{ display: "none" }}
+                aria-describedby="file_input_help"
+                id="file_input"
+              />
+            </Button>
+          );
+        } else {
+          return (
+            <Button
+              variant="contained"
+              size="small"
+              startIcon={<FileDownloadIcon />}
+              style={{
+                color: "#FFFF",
+                backgroundColor: "#3498DB",
+                textTransform: "none",
+                borderRadius: "0.25rem",
+              }}
+              onClick={() => handleDownload(params.value)}
+            >
+              Download
+            </Button>
+          );
+        }
+      },
+    },
+
+    //---------------------Apichet---------------------------//
     { field: "upd", headerName: "UPD Link", width: 120 },
     { field: "history_track", headerName: "History track", width: 120 },
     { field: "predictive", headerName: "Predictive", width: 120 },
@@ -506,6 +621,23 @@ function TableData({ dataAPI, update }) {
             onClick={() => setOpenCalibrationDialog(false)}
             color="primary"
           >
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openSCRDialog}
+        onClose={() => setOpenSCRDialog(false)}
+        // fullWidth={false}
+        maxWidth="xl"
+      >
+        <DialogTitle>SCR Data for {SCRMachine}</DialogTitle>
+        <DialogContent>
+          <DataGrid rows={SCRData} columns={scrColumns} />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenSCRDialog(false)} color="primary">
             Close
           </Button>
         </DialogActions>
