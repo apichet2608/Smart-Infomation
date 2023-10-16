@@ -51,7 +51,7 @@ function TableData({ dataAPI, update }) {
 
     axios
       .get(
-        `http://10.17.66.242:3000/api/smart_machine_connect_list/cal?mc_ref=${machine}`
+        `http://10.17.66.242:3000/smart_information/smart_machine_connect_list/cal?mc_ref=${machine}`
       )
       .then((response) => {
         if (response.data.length > 0) {
@@ -74,7 +74,7 @@ function TableData({ dataAPI, update }) {
 
     axios
       .get(
-        `http://10.17.66.242:3000/api/smart_machine_connect_list/scr?mc_code=${machine}`
+        `http://10.17.66.242:3000/smart_information/smart_machine_connect_list/scr?mc_code=${machine}`
       )
       .then((response) => {
         if (response.data.length > 0) {
@@ -173,9 +173,9 @@ function TableData({ dataAPI, update }) {
 
       try {
         const response = await axios.put(
-          `${
-            import.meta.env.VITE_IP_API
-          }/api/smart_machine_connect_list/updatemachine_buyoff/${row.id}`,
+          `${import.meta.env.VITE_IP_API}${
+            import.meta.env.VITE_Table_smart_machine_connect_list
+          }/updatemachine_buyoff/${row.id}`,
           {
             machine_buyoff: uploadedFile.name,
           }
