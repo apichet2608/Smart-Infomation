@@ -88,6 +88,59 @@ function TableData({ dataAPI }) {
     { field: "mc_ref", headerName: "MC_ref", width: 150 },
   ];
 
+  const [file, setFile] = useState(null);
+
+  const handleFileUpload = async (event, row) => {
+    const uploadedFile = event.target.files[0];
+    console.log(uploadedFile.name);
+    console.log(row.id);
+
+    if (uploadedFile) {
+      const formData = new FormData();
+      formData.append("file", uploadedFile);
+
+      try {
+        const response = await axios.post(
+          `${import.meta.env.VITE_IP_API_UPLOAD}${
+            import.meta.env.VITE_PATHUPLOAD
+          }`,
+          formData
+        );
+
+        if (response.status === 200) {
+          console.log("File uploaded successfully");
+        } else {
+          console.error("File upload failed");
+        }
+      } catch (error) {
+        console.error("Error while uploading file:", error);
+      }
+    }
+
+    if (uploadedFile) {
+      const formData = new FormData();
+      formData.append("file", uploadedFile);
+
+      try {
+        const response = await axios.put(
+          `${
+            import.meta.env.VITE_IP_API
+          }/api/smart_machine_connect_list/updatemachine_buyoff/${row.id}`,
+          {
+            machine_buyoff: uploadedFile.name,
+          }
+        );
+
+        if (response.status === 200) {
+          alert("Data updated successfully");
+        }
+      } catch (error) {
+        console.error(error);
+        alert("An error occurred while updating data");
+      }
+    }
+  };
+
   const columns = [
     // { field: "building", headerName: "Building", width: 200 },
     { field: "process", headerName: "Process", width: 110 },
@@ -118,7 +171,37 @@ function TableData({ dataAPI }) {
         );
       },
     },
-    { field: "machine_buyoff", headerName: "Machine buyoff", width: 120 },
+    {
+      field: "machine_buyoff",
+      headerName: "Machine buyoff",
+      width: 400,
+      renderCell: (params) => {
+        if (params.row.machine_buyoff === null) {
+          // แสดง input สำหรับอัปโหลดไฟล์ เมื่อ machine_buyoff เป็น null
+          return (
+            <input
+              type="file"
+              onChange={(event) => handleFileUpload(event, params.row)}
+              style={{
+                color: "#333",
+                border: "1px solid #ccc",
+                borderRadius: "0.25rem",
+                cursor: "pointer",
+                backgroundColor: "#f7f7f7",
+                outline: "none",
+              }}
+              aria-describedby="file_input_help"
+              id="file_input"
+            />
+          );
+        } else {
+          // แสดงค่า machine_buyoff อื่น ๆ แต่งสไตล์ตามความต้องการ
+          return (
+            <div style={{ color: "#333" }}>{params.row.machine_buyoff}</div>
+          );
+        }
+      },
+    },
     {
       field: "scada",
       headerName: "SCADA",
@@ -283,6 +366,7 @@ function TableData({ dataAPI }) {
     { field: "history_track", headerName: "History track", width: 120 },
     { field: "predictive", headerName: "Predictive", width: 120 },
   ];
+
   const [rows, setRows] = useState([]);
   const [search, setSearch] = useState("");
   const [csvData, setCsvData] = useState([]);

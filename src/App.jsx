@@ -8,7 +8,6 @@ import Paper from "@mui/material/Paper";
 import Appbarcomponents from "./Components/Common/Appbar/AppbarComponents";
 import Container from "@mui/material/Container";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import PageDemo from "./Pages/Page-Demo/PageDemo1";
 import "./Css/ContainerMain.css";
 import Infomation from "./Pages/Page-smart_information/smart-infomation";
 
