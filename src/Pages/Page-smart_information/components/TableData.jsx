@@ -274,10 +274,10 @@ function TableData({ dataAPI }) {
       ),
     },
 
+    { field: "scr", headerName: "SCR", width: 120 },
     { field: "grr", headerName: "GR&R", width: 120 },
     // { field: "mtbf", headerName: "MTBF", width: 120 },
     // { field: "mttr", headerName: "MTTR", width: 120 },
-    { field: "scr", headerName: "SCR", width: 120 },
     { field: "oee", headerName: "OEE", width: 120 },
     { field: "upd", headerName: "UPD Link", width: 120 },
     { field: "history_track", headerName: "History track", width: 120 },
@@ -346,7 +346,7 @@ function TableData({ dataAPI }) {
   });
 
   return (
-    <div style={{ height: 480, width: "100%" }}>
+    <div style={{ height: 680, width: "100%" }}>
       <Box display="flex" justifyContent="flex-end" marginBottom="10px">
         <TextField
           label="Search"
