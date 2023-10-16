@@ -23,7 +23,7 @@ import CircleIcon from "@mui/icons-material/Circle";
 import Chip from "@mui/material/Chip";
 import axios from "axios";
 
-function TableData({ dataAPI }) {
+function TableData({ dataAPI, update }) {
   const [selectedMachine, setSelectedMachine] = useState(null);
   const [message, setMessage] = useState("");
 
@@ -88,8 +88,7 @@ function TableData({ dataAPI }) {
     { field: "mc_ref", headerName: "MC_ref", width: 150 },
   ];
 
-  const [file, setFile] = useState(null);
-
+  //---------------------Apichet---------------------------//
   const handleFileUpload = async (event, row) => {
     const uploadedFile = event.target.files[0];
     console.log(uploadedFile.name);
@@ -138,8 +137,18 @@ function TableData({ dataAPI }) {
         console.error(error);
         alert("An error occurred while updating data");
       }
+      update();
     }
   };
+
+  const handleDownload = (text) => {
+    const ipAddress = "127.0.0.1:3030"; // IP ของเครื่องที่มีไฟล์อยู่
+    const filePath = "smart-infomation/download"; // เส้นทางไปยังไฟล์ที่ต้องการดาวน์โหลด
+    const downloadUrl = `http://${ipAddress}/${filePath}/${text}`;
+    console.log(downloadUrl);
+    window.open(downloadUrl, "_blank");
+  };
+  //---------------------Apichet---------------------------//
 
   const columns = [
     // { field: "building", headerName: "Building", width: 200 },
@@ -171,6 +180,7 @@ function TableData({ dataAPI }) {
         );
       },
     },
+    //---------------------Apichet---------------------------//
     {
       field: "machine_buyoff",
       headerName: "Machine buyoff",
@@ -197,11 +207,23 @@ function TableData({ dataAPI }) {
         } else {
           // แสดงค่า machine_buyoff อื่น ๆ แต่งสไตล์ตามความต้องการ
           return (
-            <div style={{ color: "#333" }}>{params.row.machine_buyoff}</div>
+            <Button
+              variant="text"
+              size="small"
+              // href={params.value}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: "inherit", textDecoration: "none" }}
+              onClick={() => handleDownload(params.value)}
+            >
+              {params.value}
+            </Button>
           );
         }
       },
     },
+    //---------------------Apichet---------------------------//
+
     {
       field: "scada",
       headerName: "SCADA",

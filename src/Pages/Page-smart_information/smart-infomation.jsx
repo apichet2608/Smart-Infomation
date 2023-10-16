@@ -288,7 +288,7 @@ export default function Infomation() {
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           {DataAPItable && DataAPItable.length > 0 && (
-            <TableData dataAPI={DataAPItable} />
+            <TableData dataAPI={DataAPItable} update={fetchTableData} />
           )}
         </Grid>
         {/* <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
