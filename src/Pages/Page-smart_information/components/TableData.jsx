@@ -19,7 +19,10 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
+import DoNotDisturbOnIcon from "@mui/icons-material/DoNotDisturbOn";
 import ErrorIcon from "@mui/icons-material/Error";
+import LinkIcon from "@mui/icons-material/Link";
+import DownloadIcon from "@mui/icons-material/Download";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import CircleIcon from "@mui/icons-material/Circle";
 import Chip from "@mui/material/Chip";
@@ -111,7 +114,7 @@ function TableData({ dataAPI, update }) {
 
     axios
       .get(
-        `http://127.0.0.1:3000/smart_information/smart_machine_connect_list/upd?dld_machine=${machine}`
+        `http://10.17.66.242:3000/smart_information/smart_machine_connect_list/upd?dld_machine=${machine}`
       )
       .then((response) => {
         if (response.data.length > 0) {
@@ -178,25 +181,72 @@ function TableData({ dataAPI, update }) {
   ];
 
   const updColumns = [
-    { field: "dld_group", headerName: "Group", width: 100 },
+    { field: "dld_group", headerName: "Group", width: 80 },
     { field: "dld_machine", headerName: "Machine", width: 120 },
-    { field: "dld_product", headerName: "Product", width: 150 },
-    { field: "dld_proc_name", headerName: "Proc", width: 100 },
+    { field: "dld_product", headerName: "Product", width: 180 },
+    { field: "dld_proc_name", headerName: "Proc", width: 80 },
     {
       field: "dld_customer_name",
       headerName: "Customer",
-      width: 250,
+      width: 230,
     },
-    { field: "dld_model_name", headerName: "Model", width: 150 },
+    { field: "dld_model_name", headerName: "Model", width: 230 },
     { field: "dld_build", headerName: "Build", width: 300 },
     {
       field: "dld_proc_cust_name",
       headerName: "Proc_cust",
-      width: 250,
+      width: 220,
     },
-    { field: "dld_year", headerName: "Year", width: 150 },
-    { field: "dld_customer_box", headerName: "Customer Box", width: 550 },
-    { field: "dld_ok2s", headerName: "OK2S", width: 550 },
+    { field: "dld_year", headerName: "Year", width: 80 },
+
+    {
+      field: "dld_customer_box",
+      headerName: "Customer Box",
+      width: 120,
+      renderCell: (params) => {
+        if (params.value === null) {
+          return null; // หากค่าเป็น null, ไม่แสดงข้อมูลเลย
+        }
+
+        return (
+          <Button
+            component="a"
+            variant="outlined"
+            justifyContent="center"
+            href={params.value}
+            target=""
+            rel="noopener noreferrer"
+            style={{ color: "#2980B9" }}
+          >
+            <DownloadIcon />
+          </Button>
+        );
+      },
+    },
+    {
+      field: "dld_ok2s",
+      headerName: "OK2S",
+      width: 100,
+      renderCell: (params) => {
+        if (params.value === null) {
+          return null; // หากค่าเป็น null, ไม่แสดงข้อมูลเลย
+        }
+
+        return (
+          <Button
+            component="a"
+            variant="outlined"
+            justifyContent="center"
+            href={params.value}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: "#2980B9" }}
+          >
+            <LinkIcon />
+          </Button>
+        );
+      },
+    },
   ];
 
   //---------------------Apichet---------------------------//
@@ -586,13 +636,29 @@ function TableData({ dataAPI, update }) {
       headerName: "UPD Link",
       width: 120,
       renderCell: (params) => {
-        if (params.row.machine === null || params.row.machine === "") {
-          return "No UPD";
+        if (params.row.upd === null || params.row.upd === "") {
+          // return <p>No UPD</p>;
+
+          // return (
+          //   <Chip
+          //     label="NO UPD"
+          //     color="default" // กำหนดสีเป็นสีเทา
+          //     style={{ backgroundColor: "#EAEDED ", color: "black" }} // กำหนดสีพื้นหลังและสีตัวอักษร
+          //   />
+          // );
+
+          return (
+            <div>
+              &nbsp; &nbsp; &nbsp; &nbsp;
+              <DoNotDisturbOnIcon style={{ fontSize: 20, color: "#CCD1D1 " }} />
+            </div>
+          );
         }
 
         return (
           <Button
             style={{ color: "#2980B9", cursor: "pointer" }}
+            variant="outlined"
             onClick={() => handleOpenUPD(params.row.machine)}
           >
             {params.value}
