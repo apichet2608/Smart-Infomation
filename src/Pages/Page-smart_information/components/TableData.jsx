@@ -210,7 +210,7 @@ function TableData({ dataAPI, update }) {
         const response = await axios.post(
           `${import.meta.env.VITE_IP_API_UPLOAD}${
             import.meta.env.VITE_PATHUPLOAD
-          }`,
+          }/upload`,
           formData
         );
 
@@ -252,7 +252,7 @@ function TableData({ dataAPI, update }) {
   const handleDownload = (text) => {
     const downloadUrl = `${import.meta.env.VITE_IP_API_UPLOAD}${
       import.meta.env.VITE_PATHDOWLOAD
-    }/${text}`;
+    }/download/${text}`;
     console.log(downloadUrl);
     window.open(downloadUrl, "_blank");
   };
