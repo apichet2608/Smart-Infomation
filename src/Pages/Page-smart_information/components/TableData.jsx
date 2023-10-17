@@ -178,23 +178,23 @@ function TableData({ dataAPI, update }) {
   ];
 
   const updColumns = [
-    { field: "dld_group", headerName: "dld_group", width: 150 },
-    { field: "dld_machine", headerName: "dld_machine", width: 150 },
-    { field: "dld_product", headerName: "dld_product", width: 120 },
-    { field: "dld_proc_name", headerName: "dld_proc_name", width: 250 },
+    { field: "dld_group", headerName: "Group", width: 100 },
+    { field: "dld_machine", headerName: "Machine", width: 120 },
+    { field: "dld_product", headerName: "Product", width: 150 },
+    { field: "dld_proc_name", headerName: "Proc", width: 100 },
     {
       field: "dld_customer_name",
-      headerName: "dld_customaer_name",
-      width: 150,
-    },
-    { field: "dld_model_name", headerName: "dld_model_name", width: 250 },
-    { field: "dld_build", headerName: "dld_build", width: 250 },
-    {
-      field: "dld_proc_cust_name",
-      headerName: "dld_proc_cust_name",
+      headerName: "Customer",
       width: 250,
     },
-    { field: "dld_year", headerName: "dld_year", width: 250 },
+    { field: "dld_model_name", headerName: "Model", width: 150 },
+    { field: "dld_build", headerName: "Build", width: 300 },
+    {
+      field: "dld_proc_cust_name",
+      headerName: "Proc_cust",
+      width: 150,
+    },
+    { field: "dld_year", headerName: "Year", width: 150 },
   ];
 
   //---------------------Apichet---------------------------//
@@ -584,19 +584,21 @@ function TableData({ dataAPI, update }) {
       headerName: "UPD Link",
       width: 120,
       renderCell: (params) => {
+        if (params.row.machine === null || params.row.machine === "") {
+          return "No UPD";
+        }
+
         return (
-          <>
-            <Button
-              style={{ color: "#2980B9", cursor: "pointer" }}
-              onClick={() => handleOpenUPD(params.row.machine)}
-            >
-              {params.value}
-            </Button>
-            {/* {selectedMachine === machine && <div>{message}</div>} */}
-          </>
+          <Button
+            style={{ color: "#2980B9", cursor: "pointer" }}
+            onClick={() => handleOpenUPD(params.row.machine)}
+          >
+            {params.value}
+          </Button>
         );
       },
     },
+
     { field: "history_track", headerName: "History track", width: 120 },
     { field: "predictive", headerName: "Predictive", width: 120 },
   ];
