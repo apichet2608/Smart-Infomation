@@ -45,6 +45,10 @@ function TableData({ dataAPI, update }) {
   const [SCRMachine, setSCRMachine] = useState("");
   const [SCRData, setSCRData] = useState([]);
 
+  const [openUPDDialog, setOpenUPDDialog] = useState(false);
+  const [UPDMachine, setUPDMachine] = useState("");
+  const [UPDData, setUPDData] = useState([]);
+
   const [openNoDataChip, setOpenNoDataChip] = useState(false);
 
   const handleOpenCalibrationDialog = (machine) => {
@@ -90,6 +94,29 @@ function TableData({ dataAPI, update }) {
         if (response.data.length > 0) {
           setSCRData(response.data);
           setOpenSCRDialog(true);
+          setOpenNoDataChip(false); // ปิดการแสดง Chip เมื่อมีข้อมูล
+        } else {
+          // ไม่มีข้อมูล ให้แสดง "No DATA"
+          setOpenNoDataChip(false);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching calibration data:", error);
+      });
+  };
+
+  const handleOpenUPD = (machine) => {
+    setUPDMachine(machine);
+    setMessage(machine);
+
+    axios
+      .get(
+        `http://10.17.66.242:3000/smart_information/smart_machine_connect_list/upd?dld_machine=${machine}`
+      )
+      .then((response) => {
+        if (response.data.length > 0) {
+          setUPDData(response.data);
+          setOpenUPDDialog(true);
           setOpenNoDataChip(false); // ปิดการแสดง Chip เมื่อมีข้อมูล
         } else {
           // ไม่มีข้อมูล ให้แสดง "No DATA"
@@ -147,6 +174,26 @@ function TableData({ dataAPI, update }) {
     },
     { field: "status_desc", headerName: "Status Desc", width: 250 },
     { field: "status_filter", headerName: "Status Filter", width: 150 },
+  ];
+
+  const updColumns = [
+    { field: "dld_group", headerName: "dld_group", width: 150 },
+    { field: "dld_machine", headerName: "dld_machine", width: 150 },
+    { field: "dld_product", headerName: "dld_product", width: 120 },
+    { field: "dld_proc_name", headerName: "dld_proc_name", width: 250 },
+    {
+      field: "dld_customer_name",
+      headerName: "dld_customaer_name",
+      width: 150,
+    },
+    { field: "dld_model_name", headerName: "dld_model_name", width: 250 },
+    { field: "dld_build", headerName: "dld_build", width: 250 },
+    {
+      field: "dld_proc_cust_name",
+      headerName: "dld_proc_cust_name",
+      width: 250,
+    },
+    { field: "dld_year", headerName: "dld_year", width: 250 },
   ];
 
   //---------------------Apichet---------------------------//
@@ -295,10 +342,12 @@ function TableData({ dataAPI, update }) {
               &nbsp;Finished
             </div>
           )}
-          {params.value === "Planned" && (
+          {params.value === "Planed" && (
             <div style={{ display: "flex", alignItems: "center" }}>
-              <CheckCircleIcon style={{ fontSize: 20, color: "#F9E79F" }} />
-              &nbsp;Planned
+              <AccessTimeFilledIcon
+                style={{ fontSize: 20, color: "#F7DC6F" }}
+              />
+              &nbsp;Planed
             </div>
           )}
           {params.value === "Wait for plan" && (
@@ -530,7 +579,32 @@ function TableData({ dataAPI, update }) {
     },
 
     //---------------------Apichet---------------------------//
-    { field: "upd", headerName: "UPD Link", width: 120 },
+    {
+      field: "upd",
+      headerName: "UPD Link",
+      width: 120,
+      renderCell: (params) => {
+        const machine = params.value;
+        console.log("MachineUPD:", machine);
+
+        const handleOpenUPD = () => {
+          setSelectedMachine(machine);
+          setMessage(machine);
+        };
+
+        return (
+          <>
+            <div
+              style={{ color: "#2980B9", cursor: "pointer" }}
+              onClick={handleOpenUPD}
+            >
+              {machine}
+            </div>
+            {/* {selectedMachine === machine && <div>{message}</div>} */}
+          </>
+        );
+      },
+    },
     { field: "history_track", headerName: "History track", width: 120 },
     { field: "predictive", headerName: "Predictive", width: 120 },
   ];
@@ -652,6 +726,22 @@ function TableData({ dataAPI, update }) {
         </DialogActions>
       </Dialog>
 
+      <Dialog
+        open={openUPDDialog}
+        onClose={() => setOpenUPDDialog(false)}
+        // fullWidth={false}
+        maxWidth="xl"
+      >
+        <DialogTitle>UPD Data for {UPDMachine}</DialogTitle>
+        <DialogContent>
+          <DataGrid rows={UPDData} columns={updColumns} />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenUPDDialog(false)} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
       <div>
         <h1>
           Machine:&nbsp;
