@@ -192,9 +192,11 @@ function TableData({ dataAPI, update }) {
     {
       field: "dld_proc_cust_name",
       headerName: "Proc_cust",
-      width: 150,
+      width: 250,
     },
     { field: "dld_year", headerName: "Year", width: 150 },
+    { field: "dld_customer_box", headerName: "Customer Box", width: 550 },
+    { field: "dld_ok2s", headerName: "OK2S", width: 550 },
   ];
 
   //---------------------Apichet---------------------------//
