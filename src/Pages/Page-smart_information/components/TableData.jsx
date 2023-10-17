@@ -111,10 +111,11 @@ function TableData({ dataAPI, update }) {
 
     axios
       .get(
-        `http://10.17.66.242:3000/smart_information/smart_machine_connect_list/upd?dld_machine=${machine}`
+        `http://127.0.0.1:3000/smart_information/smart_machine_connect_list/upd?dld_machine=${machine}`
       )
       .then((response) => {
         if (response.data.length > 0) {
+          console.log("test");
           setUPDData(response.data);
           setOpenUPDDialog(true);
           setOpenNoDataChip(false); // ปิดการแสดง Chip เมื่อมีข้อมูล
@@ -268,7 +269,6 @@ function TableData({ dataAPI, update }) {
       width: 110,
       renderCell: (params) => {
         const machine = params.value;
-        console.log("Machine:", machine);
 
         const handleClick = () => {
           setSelectedMachine(machine);
@@ -584,22 +584,14 @@ function TableData({ dataAPI, update }) {
       headerName: "UPD Link",
       width: 120,
       renderCell: (params) => {
-        const machine = params.value;
-        console.log("MachineUPD:", machine);
-
-        const handleOpenUPD = () => {
-          setSelectedMachine(machine);
-          setMessage(machine);
-        };
-
         return (
           <>
-            <div
+            <Button
               style={{ color: "#2980B9", cursor: "pointer" }}
-              onClick={handleOpenUPD}
+              onClick={() => handleOpenUPD(params.row.machine)}
             >
-              {machine}
-            </div>
+              {params.value}
+            </Button>
             {/* {selectedMachine === machine && <div>{message}</div>} */}
           </>
         );
@@ -742,6 +734,7 @@ function TableData({ dataAPI, update }) {
           </Button>
         </DialogActions>
       </Dialog>
+
       <div>
         <h1>
           Machine:&nbsp;
