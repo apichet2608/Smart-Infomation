@@ -25,6 +25,8 @@ import CircleIcon from "@mui/icons-material/Circle";
 import Chip from "@mui/material/Chip";
 import axios from "axios";
 
+import Swal from "sweetalert2";
+
 import Avatar from "@mui/material/Avatar";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ScheduleIcon from "@mui/icons-material/Schedule";
@@ -68,13 +70,21 @@ function TableData({ dataAPI, update }) {
       });
   };
 
-  const handleOpenSCR = (machine) => {
-    setSCRMachine(machine);
-    setMessage(machine);
-
+  const handleOpenSCR = (row) => {
+    setSCRMachine(row.machine);
+    setMessage(row.machine);
+    if (row.scr === "ACTIVE") {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Active : Machine Ready",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
     axios
       .get(
-        `http://10.17.66.242:3000/smart_information/smart_machine_connect_list/scr?mc_code=${machine}`
+        `http://10.17.66.242:3000/smart_information/smart_machine_connect_list/scr?mc_code=${row.machine}`
       )
       .then((response) => {
         if (response.data.length > 0) {
@@ -453,10 +463,9 @@ function TableData({ dataAPI, update }) {
             color = "black";
             break;
         }
-
         return (
           <IconButton
-            onClick={() => handleOpenSCR(params.row.machine)}
+            onClick={() => handleOpenSCR(params.row)}
             sx={{ padding: 1 }}
           >
             {icon}
