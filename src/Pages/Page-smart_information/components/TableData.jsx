@@ -52,6 +52,10 @@ function TableData({ dataAPI, update }) {
   const [UPDMachine, setUPDMachine] = useState("");
   const [UPDData, setUPDData] = useState([]);
 
+  const [openOEEDialog, setOpenOEEDialog] = useState(false);
+  const [OEEMachine, setOEEMachine] = useState("");
+  const [OEEData, setOEEData] = useState([]);
+
   const [openNoDataChip, setOpenNoDataChip] = useState(false);
 
   const handleOpenCalibrationDialog = (machine) => {
@@ -118,9 +122,33 @@ function TableData({ dataAPI, update }) {
       )
       .then((response) => {
         if (response.data.length > 0) {
-          console.log("test");
+          console.log("UPD");
           setUPDData(response.data);
           setOpenUPDDialog(true);
+          setOpenNoDataChip(false); // ปิดการแสดง Chip เมื่อมีข้อมูล
+        } else {
+          // ไม่มีข้อมูล ให้แสดง "No DATA"
+          setOpenNoDataChip(false);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching calibration data:", error);
+      });
+  };
+
+  const handleOpenOEE = (machine) => {
+    setOEEMachine(machine);
+    setMessage(machine);
+
+    axios
+      .get(
+        `http://127.0.0.1:3000/smart_information/smart_machine_connect_list/oee?oee_machine=${machine}`
+      )
+      .then((response) => {
+        if (response.data.length > 0) {
+          console.log("UPD");
+          setOEEData(response.data);
+          setOpenOEEDialog(true);
           setOpenNoDataChip(false); // ปิดการแสดง Chip เมื่อมีข้อมูล
         } else {
           // ไม่มีข้อมูล ให้แสดง "No DATA"
@@ -249,6 +277,20 @@ function TableData({ dataAPI, update }) {
     },
   ];
 
+  const oeeColumns = [
+    {
+      field: "date_time",
+      headerName: "Date",
+      width: 180,
+      renderCell: (params) => {
+        return formatdatewithtime(params.row.date_time);
+      },
+    },
+    { field: "mc_code", headerName: "Machine", width: 180 },
+    { field: "build", headerName: "Build", width: 180 },
+    { field: "auto_run", headerName: "Proc", width: 180 },
+  ];
+
   //---------------------Apichet---------------------------//
   const handleFileUpload = async (event, row) => {
     const uploadedFile = event.target.files[0];
@@ -345,47 +387,6 @@ function TableData({ dataAPI, update }) {
       field: "scada",
       headerName: "SCADA",
       width: 130,
-      // renderCell: (params) => {
-      //   const scada = params.value;
-      //   let backgroundColor, result;
-
-      //   switch (scada) {
-      //     case "Finished":
-      //       backgroundColor = "#58D68D"; // Green
-      //       result = "Finished";
-      //       break;
-      //     case "Planned":
-      //       backgroundColor = "#F9E79F "; // Yellow
-      //       result = "Planned";
-      //       break;
-      //     case "Wait for plan":
-      //       backgroundColor = "#F7DC6F "; // Red
-      //       result = "Wait for plan";
-      //       break;
-      //     default:
-      //       backgroundColor = "#CCD1D1"; // Default: Red
-      //       result = "NULL";
-      //       break;
-      //   }
-
-      //   return (
-      //     <span
-      //       style={{
-      //         backgroundColor,
-      //         width: 100,
-      //         height: 35,
-      //         color: "black",
-      //         borderRadius: "15px",
-      //         fontSize: 15,
-      //         display: "flex",
-      //         justifyContent: "center",
-      //         alignItems: "center",
-      //       }}
-      //     >
-      //       {result}
-      //     </span>
-      //   );
-      // },
       renderCell: (params) => (
         <>
           {params.value === "Finished" && (
@@ -412,56 +413,7 @@ function TableData({ dataAPI, update }) {
         </>
       ),
     },
-    // {
-    //   field: "pm",
-    //   headerName: "PM",
-    //   width: 130,
-    //   renderCell: (params) => {
-    //     const pm = params.value;
-    //     let backgroundColor, result;
 
-    //     switch (pm) {
-    //       case "Active":
-    //         backgroundColor = "#58D68D";
-    //         result = "Active";
-    //         break;
-    //       case "Lock / Inactive":
-    //         backgroundColor = "#EC7063";
-    //         result = "Lock";
-    //         break;
-    //       case "Warning":
-    //         backgroundColor = "#F7DC6F";
-    //         result = "Warning";
-    //         break;
-    //       case "On plan":
-    //         backgroundColor = "#58D68D";
-    //         result = "Active";
-    //         break;
-    //       default:
-    //         backgroundColor = "#CCD1D1";
-    //         result = "NULL";
-    //         break;
-    //     }
-
-    //     return (
-    //       <span
-    //         style={{
-    //           backgroundColor,
-    //           width: 120,
-    //           height: 35,
-    //           color: "black",
-    //           borderRadius: "15px",
-    //           fontSize: 15,
-    //           display: "flex",
-    //           justifyContent: "center",
-    //           alignItems: "center",
-    //         }}
-    //       >
-    //         {result}
-    //       </span>
-    //     );
-    //   },
-    // },
     {
       field: "pm",
       headerName: "PM",
@@ -580,7 +532,38 @@ function TableData({ dataAPI, update }) {
     { field: "grr", headerName: "GR&R", width: 120 },
     // { field: "mtbf", headerName: "MTBF", width: 120 },
     // { field: "mttr", headerName: "MTTR", width: 120 },
-    { field: "oee", headerName: "OEE", width: 120 },
+    {
+      field: "oee",
+      headerName: "OEE",
+      width: 520,
+      renderCell: (params) => {
+        if (params.row.oee === null || params.row.upd === "") {
+          return (
+            <div>
+              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+              <DoNotDisturbOnIcon style={{ fontSize: 20, color: "#CCD1D1 " }} />
+            </div>
+          );
+        }
+
+        return (
+          <Button
+            style={{
+              color: "#2980B9",
+              cursor: "pointer",
+              width: "150px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            variant="outlined"
+            onClick={() => handleOpenOEE(params.row.machine)}
+          >
+            {params.value}
+          </Button>
+        );
+      },
+    },
     //---------------------Apichet---------------------------//
     {
       field: "machine_buyoff",
@@ -649,7 +632,7 @@ function TableData({ dataAPI, update }) {
 
           return (
             <div>
-              &nbsp; &nbsp; &nbsp; &nbsp;
+              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
               <DoNotDisturbOnIcon style={{ fontSize: 20, color: "#CCD1D1 " }} />
             </div>
           );
@@ -657,7 +640,14 @@ function TableData({ dataAPI, update }) {
 
         return (
           <Button
-            style={{ color: "#2980B9", cursor: "pointer" }}
+            style={{
+              color: "#2980B9",
+              cursor: "pointer",
+              width: "150px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
             variant="outlined"
             onClick={() => handleOpenUPD(params.row.machine)}
           >
@@ -751,6 +741,7 @@ function TableData({ dataAPI, update }) {
         rowsPerPageOptions={[5, 10, 20]}
         getRowClassName={getRowClassName}
       />
+
       <Dialog
         open={openCalibrationDialog}
         onClose={() => setOpenCalibrationDialog(false)}
@@ -800,6 +791,23 @@ function TableData({ dataAPI, update }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenUPDDialog(false)} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openOEEDialog}
+        onClose={() => setOpenOEEDialog(false)}
+        // fullWidth={false}
+        maxWidth="xl"
+      >
+        <DialogTitle>OEE Data for {OEEMachine}</DialogTitle>
+        <DialogContent>
+          <DataGrid rows={OEEData} columns={oeeColumns} />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenOEEDialog(false)} color="primary">
             Close
           </Button>
         </DialogActions>
