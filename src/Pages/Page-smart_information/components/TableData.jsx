@@ -516,33 +516,42 @@ function TableData({ dataAPI, update }) {
       width: 140,
       renderCell: (params) => {
         let icon, text, color;
-
-        switch (params.value) {
-          case "ACTIVE":
-            icon = (
-              <CheckCircleIcon style={{ fontSize: 20, color: "#2ECC71" }} />
-            );
-            text = "Active";
-            color = "black";
-            break;
-          case "BREAKDOWN":
-            icon = (
-              <BuildCircleIcon style={{ fontSize: 21, color: "#EC7063" }} />
-            );
-            text = "Breakdown";
-            color = "black";
-            break;
-          case "OTHER":
-            icon = <ErrorIcon style={{ fontSize: 20, color: "#F8C471" }} />;
-            text = "Other Repair";
-            color = "black";
-            break;
-          default:
-            icon = null;
-            text = params.value || "";
-            color = "black";
-            break;
+        if (params.value === null) {
+          icon = (
+            <div>
+              &nbsp; &nbsp;
+              <DoNotDisturbOnIcon style={{ fontSize: 20, color: "#CCD1D1" }} />
+            </div>
+          );
+        } else {
+          switch (params.value) {
+            case "ACTIVE":
+              icon = (
+                <CheckCircleIcon style={{ fontSize: 20, color: "#2ECC71" }} />
+              );
+              text = "Active";
+              color = "black";
+              break;
+            case "BREAKDOWN":
+              icon = (
+                <BuildCircleIcon style={{ fontSize: 21, color: "#EC7063" }} />
+              );
+              text = "Breakdown";
+              color = "black";
+              break;
+            case "OTHER":
+              icon = <ErrorIcon style={{ fontSize: 20, color: "#F8C471" }} />;
+              text = "Other Repair";
+              color = "black";
+              break;
+            default:
+              icon = null;
+              text = params.value || "";
+              color = "black";
+              break;
+          }
         }
+
         return (
           <IconButton
             onClick={() => handleOpenSCR(params.row)}

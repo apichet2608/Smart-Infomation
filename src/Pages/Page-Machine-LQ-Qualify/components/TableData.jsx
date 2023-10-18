@@ -1,54 +1,70 @@
-import * as React from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
+import React, { useEffect, useState } from "react";
+import Box from "@mui/material/Box";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
+export default function TableMachineLQ({ datafromAPIlq }) {
+  const [DataTablelq, setDataTablelq] = useState([]);
 
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-];
+  useEffect(() => {
+    // Make an API request and fetch dataz
+    console.log(datafromAPIlq);
+    if (datafromAPIlq && datafromAPIlq.length > 0) {
+      setDataTablelq(datafromAPIlq);
+    } else {
+      setDataTablelq([]);
+    }
+  }, [datafromAPIlq]);
 
-export default function MachineTable() {
+  const formatCreateDate = (createDate) => {
+    if (createDate !== null) {
+      const date = new Date(createDate);
+      const year = date.getUTCFullYear();
+      const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+      const day = String(date.getUTCDate()).padStart(2, "0");
+      const hours = String(date.getUTCHours()).padStart(2, "0");
+      const minutes = String(date.getUTCMinutes()).padStart(2, "0");
+      const seconds = String(date.getUTCSeconds()).padStart(2, "0");
+
+      return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
+  };
+
+  const columns = [
+    { field: "dld_machine", headerName: "Machine", width: 150 },
+    { field: "dld_customer_name", headerName: "Customer", width: 150 },
+    { field: "dld_model_name", headerName: "Model", width: 150 },
+    { field: "dld_product", headerName: "Product", width: 150 },
+    { field: "dld_proc_name", headerName: "Process", width: 150 },
+    {
+      field: "dld_proc_cust_name",
+      headerName: "Process(Customer)",
+      width: 150,
+    },
+    { field: "----------------", headerName: "Quality Report", width: 150 },
+    { field: "dld_customer_box", headerName: "UPD Report", width: 150 },
+    { field: "dld_ok2s", headerName: "OK2S", width: 150 },
+    { field: "dld_status", headerName: "Status", width: 150 },
+  ];
+
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Dessert (100g serving)</TableCell>
-            <TableCell align="right">Calories</TableCell>
-            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-            <TableCell align="right">Protein&nbsp;(g)</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.name}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
-              <TableCell align="right">{row.fat}</TableCell>
-              <TableCell align="right">{row.carbs}</TableCell>
-              <TableCell align="right">{row.protein}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <Box sx={{ height: 700, width: "100%" }}>
+      <DataGrid
+        rows={DataTablelq}
+        columns={columns}
+        pagination
+        getRowHeight={() => "auto"}
+        pageSize={5}
+        sx={{ height: 700, maxWidth: "100%", marginTop: 2 }}
+        slots={{
+          toolbar: GridToolbar,
+        }}
+        slotProps={{
+          toolbar: {
+            showQuickFilter: true,
+            quickFilterProps: { debounceMs: 500 },
+          },
+        }}
+      />
+    </Box>
   );
 }
