@@ -102,7 +102,9 @@ export default function MiniDrawer() {
         case "/":
           return "Smart Information";
         case "/smart-information":
-          return "Smart Infomation";
+          return "Machine Information";
+        case "/machine-lq-qualify":
+          return "Machine LQ Qualify";
         case "/Smart-Factory-Dept":
           return "/Smart-Factory-Dept";
         default:
@@ -204,10 +206,10 @@ export default function MiniDrawer() {
         <Divider />
         <List>
           {[
-            // {
-            //   text: "Smart-Factory-Dept",
-            //   path: "/Smart-Factory-Dept",
-            // },
+            {
+              text: "Machine LQ Qualify",
+              path: "/machine-lq-qualify",
+            },
             // {
             //   text: "Page3",
             //   path: "/Page3",
@@ -262,65 +264,7 @@ export default function MiniDrawer() {
           ))}
         </List>
         <Divider />
-        <List>
-          {[
-            // {
-            //   text: "Page4",
-            //   path: "/Page4",
-            // },
-            // {
-            //   text: "Page5",
-            //   path: "/Page5",
-            // },
-          ].map((item, index) => (
-            <ListItem key={item.text} disablePadding sx={{ display: "block" }}>
-              <NavLink
-                to={item.path}
-                style={{ textDecoration: "none" }}
-                isActive={(match) => match && match.url === item.path}
-              >
-                {({ isActive }) => (
-                  <ListItemButton
-                    sx={{
-                      minHeight: 48,
-                      justifyContent: open ? "initial" : "center",
-                      px: 2.5,
-                      backgroundColor: isActive
-                        ? "rgba(33, 150, 243, 0.5)"
-                        : "rgba(66, 66, 66, 0.5)",
-                    }}
-                  >
-                    <ListItemIcon
-                      sx={{
-                        minWidth: 0,
-                        mr: open ? 3 : "auto",
-                        justifyContent: "center",
-                      }}
-                    >
-                      {isActive ? (
-                        <img
-                          style={{ width: "24px", height: "24px" }}
-                          src={On}
-                          alt="On Icon"
-                        />
-                      ) : (
-                        <img
-                          style={{ width: "24px", height: "24px" }}
-                          src={Off}
-                          alt="Off Icon"
-                        />
-                      )}
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={item.text}
-                      sx={{ opacity: open ? 1 : 0, color: "black" }}
-                    />
-                  </ListItemButton>
-                )}
-              </NavLink>
-            </ListItem>
-          ))}
-        </List>
+
         <Divider />
       </Drawer>
     </>

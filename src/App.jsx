@@ -10,6 +10,7 @@ import Container from "@mui/material/Container";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./Css/ContainerMain.css";
 import Infomation from "./Pages/Page-smart_information/smart-infomation";
+import MachineLQ from "./Pages/Page-Machine-LQ-Qualify/machine_lq_qualify";
 
 const drawerWidth = 240;
 
@@ -58,6 +59,14 @@ export default function PersistentDrawerLeft() {
                   element={
                     <>
                       <Infomation />
+                    </>
+                  }
+                />
+                <Route
+                  path="/machine-lq-qualify"
+                  element={
+                    <>
+                      <MachineLQ />
                     </>
                   }
                 />
