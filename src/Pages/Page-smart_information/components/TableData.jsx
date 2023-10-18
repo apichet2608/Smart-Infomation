@@ -286,9 +286,19 @@ function TableData({ dataAPI, update }) {
         return formatdatewithtime(params.row.date_time);
       },
     },
-    { field: "mc_code", headerName: "Machine", width: 180 },
-    { field: "build", headerName: "Build", width: 180 },
-    { field: "auto_run", headerName: "Proc", width: 180 },
+    { field: "mc_code", headerName: "Machine", width: 150 },
+    { field: "process_group", headerName: "Process Group", width: 120 },
+    { field: "buiding", headerName: "Building", width: 120 },
+    { field: "auto_run", headerName: "Proc", width: 120 },
+    { field: "power_on", headerName: "Power ON", width: 120 },
+    { field: "power_off", headerName: "Power OFF", width: 120 },
+    { field: "target_oee", headerName: "Target OEE", width: 120 },
+    { field: "rounded_percent_oee", headerName: "Percent OEE", width: 120 },
+    {
+      field: "rounded_percent_available",
+      headerName: "Percent available",
+      width: 130,
+    },
   ];
 
   //---------------------Apichet---------------------------//
@@ -456,7 +466,15 @@ function TableData({ dataAPI, update }) {
       renderCell: (params) => (
         <>
           {params.value === null ? (
-            <></>
+            <>
+              {" "}
+              <div>
+                &nbsp; &nbsp; &nbsp;
+                <DoNotDisturbOnIcon
+                  style={{ fontSize: 20, color: "#CCD1D1 " }}
+                />
+              </div>
+            </>
           ) : (
             <>
               <IconButton
@@ -535,12 +553,12 @@ function TableData({ dataAPI, update }) {
     {
       field: "oee",
       headerName: "OEE",
-      width: 520,
+      width: 100,
       renderCell: (params) => {
         if (params.row.oee === null || params.row.upd === "") {
           return (
             <div>
-              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+              &nbsp; &nbsp; &nbsp; &nbsp;
               <DoNotDisturbOnIcon style={{ fontSize: 20, color: "#CCD1D1 " }} />
             </div>
           );
@@ -632,7 +650,7 @@ function TableData({ dataAPI, update }) {
 
           return (
             <div>
-              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+              &nbsp; &nbsp; &nbsp; &nbsp;
               <DoNotDisturbOnIcon style={{ fontSize: 20, color: "#CCD1D1 " }} />
             </div>
           );
