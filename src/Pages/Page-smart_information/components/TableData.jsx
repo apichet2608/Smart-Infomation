@@ -365,12 +365,12 @@ function TableData({ dataAPI, update }) {
 
   const columns = [
     // { field: "building", headerName: "Building", width: 200 },
-    { field: "process", headerName: "Process", width: 110 },
-    { field: "item_owner_cc", headerName: "CC", width: 80 },
+    { field: "process", headerName: "Process", width: 120 },
+    { field: "item_owner_cc", headerName: "CC", width: 120 },
     {
       field: "machine",
       headerName: "Machine",
-      width: 110,
+      width: 120,
       renderCell: (params) => {
         const machine = params.value;
 
@@ -396,65 +396,74 @@ function TableData({ dataAPI, update }) {
     {
       field: "scada",
       headerName: "SCADA",
-      width: 130,
-      renderCell: (params) => (
-        <>
-          {params.value === "Finished" && (
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <CheckCircleIcon style={{ fontSize: 20, color: "#2ECC71" }} />
-              &nbsp;Finished
-            </div>
-          )}
-          {params.value === "Planed" && (
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <AccessTimeFilledIcon
-                style={{ fontSize: 20, color: "#F7DC6F" }}
-              />
-              &nbsp;Planed
-            </div>
-          )}
-          {params.value === "Wait for plan" && (
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <ErrorIcon style={{ fontSize: 20, color: "#F8C471" }} />
-              &nbsp;Wait for plan
-            </div>
-          )}
-          {params.value === "Null" && <div style={{ color: "#ABB2B9" }}></div>}
-        </>
-      ),
+      width: 150,
+      renderCell: (params) =>
+        params.value === null ? (
+          <div>
+            &nbsp; &nbsp; &nbsp; &nbsp;
+            <DoNotDisturbOnIcon style={{ fontSize: 20, color: "#CCD1D1" }} />
+          </div>
+        ) : (
+          <>
+            {params.value === "Finished" && (
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <CheckCircleIcon style={{ fontSize: 20, color: "#2ECC71" }} />
+                &nbsp;Finished
+              </div>
+            )}
+            {params.value === "Planed" && (
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <AccessTimeFilledIcon
+                  style={{ fontSize: 20, color: "#F7DC6F" }}
+                />
+                &nbsp;Planed
+              </div>
+            )}
+            {params.value === "Wait for plan" && (
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <ErrorIcon style={{ fontSize: 20, color: "#F8C471" }} />
+                &nbsp;Wait for plan
+              </div>
+            )}
+          </>
+        ),
     },
 
     {
       field: "pm",
       headerName: "PM",
-      width: 100,
+      width: 120,
       renderCell: (params) => (
         <>
-          {params.value === "Active" && (
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <CheckCircleIcon style={{ fontSize: 20, color: "#2ECC71" }} />
-              &nbsp;Active
+          {params.value === null ? (
+            <div>
+              &nbsp; &nbsp; &nbsp; &nbsp;
+              <DoNotDisturbOnIcon style={{ fontSize: 20, color: "#CCD1D1" }} />
             </div>
+          ) : (
+            <>
+              {params.value === "Active" || params.value === "On plan" ? (
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <CheckCircleIcon style={{ fontSize: 20, color: "#2ECC71" }} />
+                  &nbsp;Active
+                </div>
+              ) : null}
+              {params.value === "Warning" ? (
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <ErrorIcon style={{ fontSize: 20, color: "#F8C471" }} />
+                  &nbsp;Warning
+                </div>
+              ) : null}
+              {params.value === "Lock / Inactive" ? (
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <RemoveCircleIcon
+                    style={{ fontSize: 20, color: "#EC7063" }}
+                  />
+                  &nbsp;Lock
+                </div>
+              ) : null}
+            </>
           )}
-          {params.value === "On plan" && (
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <CheckCircleIcon style={{ fontSize: 20, color: "#2ECC71" }} />
-              &nbsp;Active
-            </div>
-          )}
-          {params.value === "Warning" && (
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <ErrorIcon style={{ fontSize: 20, color: "#F8C471" }} />
-              &nbsp;Warning
-            </div>
-          )}
-          {params.value === "Lock / Inactive" && (
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <RemoveCircleIcon style={{ fontSize: 20, color: "#EC7063" }} />
-              &nbsp;Lock
-            </div>
-          )}
-          {params.value === "Null" && <div style={{ color: "#ABB2B9" }}></div>}
         </>
       ),
     },
@@ -462,7 +471,7 @@ function TableData({ dataAPI, update }) {
     {
       field: "calibration",
       headerName: "Calibration",
-      width: 100,
+      width: 120,
       renderCell: (params) => (
         <>
           {params.value === null ? (
@@ -504,7 +513,7 @@ function TableData({ dataAPI, update }) {
     {
       field: "scr",
       headerName: "SCR",
-      width: 130,
+      width: 140,
       renderCell: (params) => {
         let icon, text, color;
 
@@ -553,12 +562,12 @@ function TableData({ dataAPI, update }) {
     {
       field: "oee",
       headerName: "OEE",
-      width: 100,
+      width: 120,
       renderCell: (params) => {
         if (params.row.oee === null || params.row.upd === "") {
           return (
             <div>
-              &nbsp; &nbsp; &nbsp; &nbsp;
+              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
               <DoNotDisturbOnIcon style={{ fontSize: 20, color: "#CCD1D1 " }} />
             </div>
           );
@@ -586,7 +595,7 @@ function TableData({ dataAPI, update }) {
     {
       field: "machine_buyoff",
       headerName: "Machine Buyoff",
-      width: 130,
+      width: 120,
       renderCell: (params) => {
         if (params.row.machine_buyoff === null) {
           return (
@@ -675,8 +684,8 @@ function TableData({ dataAPI, update }) {
       },
     },
 
-    { field: "history_track", headerName: "History track", width: 120 },
-    { field: "predictive", headerName: "Predictive", width: 120 },
+    { field: "history_track", headerName: "History track", width: 150 },
+    { field: "predictive", headerName: "Predictive", width: 150 },
   ];
 
   const [rows, setRows] = useState([]);
