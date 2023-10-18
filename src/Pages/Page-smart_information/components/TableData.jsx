@@ -142,7 +142,7 @@ function TableData({ dataAPI, update }) {
 
     axios
       .get(
-        `http://127.0.0.1:3000/smart_information/smart_machine_connect_list/oee?oee_machine=${machine}`
+        `http://10.17.66.242:3000/smart_information/smart_machine_connect_list/oee?oee_machine=${machine}`
       )
       .then((response) => {
         if (response.data.length > 0) {
