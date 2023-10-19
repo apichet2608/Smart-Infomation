@@ -8,9 +8,14 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import TableMachineLQ from "./components/TableData";
 
+import Chip from "@mui/material/Chip";
+import Stack from "@mui/material/Stack";
+
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Box from "@mui/material/Box";
+
+import axios from "axios";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -58,6 +63,8 @@ export default function Machine_lq() {
 
   const [DataAPItable, setDataAPItable] = useState([]);
 
+  // ############################################################### FETCH API ##############################################################################################
+
   const fetch_proc_group = async () => {
     try {
       const response = await fetch(
@@ -76,15 +83,24 @@ export default function Machine_lq() {
 
   const fetch_model_name = async () => {
     try {
-      const response = await fetch(
+      const response = await axios.get(
         `${import.meta.env.VITE_IP_API}${
           import.meta.env.VITE_Table_machine_lq_qualify
-        }/distinct_model_name`
+        }/distinct_model_name`,
+        {
+          params: {
+            select_proc_group: select_proc_group.dld_group,
+          },
+        }
       );
-      const jsonData = await response.json();
+      const jsonData = response.data;
+      console.log("Model API");
       console.log(jsonData);
-      console.log("Process group");
-      setdistinct_model_name(jsonData);
+      if (Array.isArray(jsonData) && jsonData.length > 0) {
+        setdistinct_model_name(jsonData);
+      } else {
+        console.log("No data available.");
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -92,15 +108,25 @@ export default function Machine_lq() {
 
   const fetch_product_name = async () => {
     try {
-      const response = await fetch(
+      const response = await axios.get(
         `${import.meta.env.VITE_IP_API}${
           import.meta.env.VITE_Table_machine_lq_qualify
-        }/distinct_product_name`
+        }/distinct_product_name`,
+        {
+          params: {
+            select_proc_group: select_proc_group.dld_group,
+            select_model_name: select_model_name.dld_model_name,
+          },
+        }
       );
-      const jsonData = await response.json();
+      const jsonData = response.data;
+      console.log("Product API");
       console.log(jsonData);
-      console.log("Product name");
-      setdistinct_product(jsonData);
+      if (Array.isArray(jsonData) && jsonData.length > 0) {
+        setdistinct_product(jsonData);
+      } else {
+        console.log("No data available.");
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -108,15 +134,26 @@ export default function Machine_lq() {
 
   const fetch_build = async () => {
     try {
-      const response = await fetch(
+      const response = await axios.get(
         `${import.meta.env.VITE_IP_API}${
           import.meta.env.VITE_Table_machine_lq_qualify
-        }/distinct_build`
+        }/distinct_build`,
+        {
+          params: {
+            select_proc_group: select_proc_group.dld_group,
+            select_model_name: select_model_name.dld_model_name,
+            select_product_name: select_product.dld_product,
+          },
+        }
       );
-      const jsonData = await response.json();
+      const jsonData = response.data;
+      console.log("Build API");
       console.log(jsonData);
-      console.log("Product name");
-      setdistinct_build(jsonData);
+      if (Array.isArray(jsonData) && jsonData.length > 0) {
+        setdistinct_build(jsonData);
+      } else {
+        console.log("No data available.");
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -124,15 +161,27 @@ export default function Machine_lq() {
 
   const fetch_process = async () => {
     try {
-      const response = await fetch(
+      const response = await axios.get(
         `${import.meta.env.VITE_IP_API}${
           import.meta.env.VITE_Table_machine_lq_qualify
-        }/distinct_process`
+        }/distinct_process`,
+        {
+          params: {
+            select_proc_group: select_proc_group.dld_group,
+            select_model_name: select_model_name.dld_model_name,
+            select_product_name: select_product.dld_product,
+            select_build: select_build.dld_build,
+          },
+        }
       );
-      const jsonData = await response.json();
+      const jsonData = response.data;
+      console.log("Process API");
       console.log(jsonData);
-      console.log("Product name");
-      setdistinct_process(jsonData);
+      if (Array.isArray(jsonData) && jsonData.length > 0) {
+        setdistinct_process(jsonData);
+      } else {
+        console.log("No data available.");
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -140,35 +189,63 @@ export default function Machine_lq() {
 
   const fetch_TableData = async () => {
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_IP_API}${
-          import.meta.env.VITE_Table_machine_lq_qualify
-        }/TableData`
-      );
+      const params = new URLSearchParams();
+      params.append("select_proc_group", select_proc_group.dld_group);
+      params.append("select_model_name", select_model_name.dld_model_name);
+      params.append("select_product_name", select_product.dld_product);
+      params.append("select_build", select_build.dld_build);
+      params.append("select_process", select_process.dld_proc_group_name);
+
+      const url = `${import.meta.env.VITE_IP_API}${
+        import.meta.env.VITE_Table_machine_lq_qualify
+      }/TableData?${params.toString()}`;
+      const response = await fetch(url);
       const jsonData = await response.json();
+      console.log("TableData_API");
       console.log(jsonData);
-      console.log("Product name");
-      setDataAPItable(jsonData);
+
+      if (Array.isArray(jsonData) && jsonData.length > 0) {
+        setDataAPItable(jsonData);
+      } else {
+        console.log("No data available.");
+        setDataAPItable([]);
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
+      setDataAPItable([]);
     }
   };
 
-  //   const handleProcGroupChange = (event, newvalue) => {
-  //     console.log(newvalue);
-  //     if (newvalue === null) {
-  //       setproc_group({ dld_group: "EFPC" });
-  //     } else {
-  //       setproc_group(newvalue);
-  //     }
-  //   };
+  // ############################################################### HANDLE ##############################################################################################
+
+  const handleProcGroupChange = (event, newvalue) => {
+    if (newvalue === null) {
+      setproc_group({ dld_group: "EFPC" });
+      setmodel_name({ dld_model_name: "ALL" });
+      setselect_product({ dld_product: "ALL" });
+      setbuild({ dld_build: "ALL" });
+      setselect_process({ dld_proc_group_name: "ALL" });
+    } else {
+      setproc_group(newvalue);
+      setmodel_name({ dld_model_name: "ALL" });
+      setselect_product({ dld_product: "ALL" });
+      setbuild({ dld_build: "ALL" });
+      setselect_process({ dld_proc_group_name: "ALL" });
+    }
+  };
 
   const handleModelChange = (event, newvalue) => {
     console.log(newvalue);
     if (newvalue === null) {
       setmodel_name({ dld_model_name: "ALL" });
+      setselect_product({ dld_product: "ALL" });
+      setbuild({ dld_build: "ALL" });
+      setselect_process({ dld_proc_group_name: "ALL" });
     } else {
       setmodel_name(newvalue);
+      setselect_product({ dld_product: "ALL" });
+      setbuild({ dld_build: "ALL" });
+      setselect_process({ dld_proc_group_name: "ALL" });
     }
   };
 
@@ -176,8 +253,12 @@ export default function Machine_lq() {
     console.log(newvalue);
     if (newvalue === null) {
       setselect_product({ dld_product: "ALL" });
+      setbuild({ dld_build: "ALL" });
+      setselect_process({ dld_proc_group_name: "ALL" });
     } else {
       setselect_product(newvalue);
+      setbuild({ dld_build: "ALL" });
+      setselect_process({ dld_proc_group_name: "ALL" });
     }
   };
 
@@ -185,8 +266,10 @@ export default function Machine_lq() {
     console.log(newvalue);
     if (newvalue === null) {
       setbuild({ dld_build: "ALL" });
+      setselect_process({ dld_proc_group_name: "ALL" });
     } else {
       setbuild(newvalue);
+      setselect_process({ dld_proc_group_name: "ALL" });
     }
   };
 
@@ -199,28 +282,40 @@ export default function Machine_lq() {
     }
   };
 
+  // ############################################################### USEEFECT ##############################################################################################
+
   useEffect(() => {
     fetch_proc_group();
     fetch_model_name();
     fetch_product_name();
     fetch_build();
     fetch_process();
-
-    fetch_TableData();
   }, []);
 
-  //   useEffect(() => {
-  //     if (select_proc_group.dld_group !== "ALL") {
-  //       fetch_model();
-  //       //   fetchDataTable();
-  //     }
-  //   }, [select_proc_group]);
+  useEffect(() => {
+    fetch_TableData();
+    fetch_proc_group();
+    fetch_model_name();
+    fetch_product_name();
+    fetch_build();
+    fetch_process();
+  }, [
+    select_proc_group,
+    select_model_name,
+    select_product,
+    select_build,
+    select_process,
+  ]);
 
-  const [selectedButton, setSelectedButton] = React.useState("EFPC");
+  // ############################################################### Button EFPC / SMT ####################################################################################
 
-  const handleButtonClick = (value) => {
-    setSelectedButton(value);
-  };
+  // const [selectedButton, setSelectedButton] = React.useState("EFPC");
+
+  // const handleButtonClick = (value) => {
+  //   setSelectedButton(value);
+  // };
+
+  // #####################################################################################################################################################################
 
   return (
     <ThemeProvider theme={theme}>
@@ -230,7 +325,7 @@ export default function Machine_lq() {
       {/* <Container className="custom-container"> */}
       <Grid container spacing={2}>
         <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
-          <Box
+          {/* <Box
             sx={{
               display: "flex",
               flexDirection: "column",
@@ -265,88 +360,106 @@ export default function Machine_lq() {
                 SMT
               </Button>
             </ButtonGroup>
-          </Box>
+          </Box> */}
         </Grid>
         <Grid item xs={10} sm={10} md={10} lg={10} xl={10}></Grid>
+
         <Grid item xs={1} sm={1} md={1} lg={1} xl={1}>
-          {/* <Autocomplete
-            size="small"
-            disablePortal
-            id="combo-box-demo"
-            options={distinct_proc_group}
-            getOptionLabel={(option) =>
-              option && option.dld_group ? option.dld_group : ""
-            }
-            value={select_proc_group}
-            onChange={handleProcGroupChange}
-            sx={{ width: "100%", display: "inline-block" }}
-            renderInput={(params) => (
-              <TextField {...params} label="Process Group" />
-            )}
-          /> */}
+          {distinct_proc_group && distinct_proc_group.length > 0 && (
+            <Autocomplete
+              size="small"
+              disablePortal
+              id="combo-box-demo"
+              options={distinct_proc_group}
+              getOptionLabel={(option) =>
+                option && option.dld_group ? option.dld_group : ""
+              }
+              value={select_proc_group}
+              onChange={handleProcGroupChange}
+              sx={{ width: "100%", display: "inline-block" }}
+              renderInput={(params) => (
+                <TextField {...params} label="Process Group" />
+              )}
+            />
+          )}
         </Grid>
-        <Grid item xs={11} sm={11} md={11} lg={11} xl={11}></Grid>
+        {/* <Grid item xs={11} sm={11} md={11} lg={11} xl={11}></Grid> */}
 
         <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
-          <Autocomplete
-            disablePortal
-            size="small"
-            id="combo-box-demo"
-            options={distinct_model_name}
-            getOptionLabel={(option) =>
-              option && option.dld_model_name ? option.dld_model_name : ""
-            }
-            value={select_model_name}
-            onChange={handleModelChange}
-            renderInput={(params) => (
-              <TextField {...params} label="Model Name" />
-            )}
-          />
-        </Grid>
-
-        <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
-          <Autocomplete
-            size="small"
-            options={distinct_product}
-            getOptionLabel={(option) => option && option.dld_product}
-            value={select_product}
-            onChange={handleProductChange}
-            renderInput={(params) => (
-              <TextField {...params} label="Product Name" variant="outlined" />
-            )}
-          />
+          {distinct_model_name && distinct_model_name.length > 0 && (
+            <Autocomplete
+              disablePortal
+              size="small"
+              id="combo-box-demo"
+              options={distinct_model_name}
+              getOptionLabel={(option) =>
+                option && option.dld_model_name ? option.dld_model_name : ""
+              }
+              value={select_model_name}
+              onChange={handleModelChange}
+              renderInput={(params) => (
+                <TextField {...params} label="Model Name" />
+              )}
+            />
+          )}
         </Grid>
 
         <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
-          <Autocomplete
-            size="small"
-            options={distinct_build}
-            getOptionLabel={(option) => option && option.dld_build}
-            value={select_build}
-            onChange={handleBuildChange}
-            renderInput={(params) => (
-              <TextField {...params} label="Build" variant="outlined" />
-            )}
-          />
+          {distinct_product && distinct_product.length > 0 && (
+            <Autocomplete
+              size="small"
+              options={distinct_product}
+              getOptionLabel={(option) => option && option.dld_product}
+              value={select_product}
+              onChange={handleProductChange}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Product Name"
+                  variant="outlined"
+                />
+              )}
+            />
+          )}
         </Grid>
 
         <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
-          <Autocomplete
-            size="small"
-            options={distinct_process}
-            getOptionLabel={(option) => option && option.dld_proc_group_name}
-            value={select_process}
-            onChange={handleProcessChange}
-            renderInput={(params) => (
-              <TextField {...params} label="Process" variant="outlined" />
-            )}
-          />
+          {distinct_build && distinct_build.length > 0 && (
+            <Autocomplete
+              size="small"
+              options={distinct_build}
+              getOptionLabel={(option) => option && option.dld_build}
+              value={select_build}
+              onChange={handleBuildChange}
+              renderInput={(params) => (
+                <TextField {...params} label="Build" variant="outlined" />
+              )}
+            />
+          )}
+        </Grid>
+
+        <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+          {distinct_process && distinct_process.length > 0 && (
+            <Autocomplete
+              size="small"
+              options={distinct_process}
+              getOptionLabel={(option) => option && option.dld_proc_group_name}
+              value={select_process}
+              onChange={handleProcessChange}
+              renderInput={(params) => (
+                <TextField {...params} label="Process" variant="outlined" />
+              )}
+            />
+          )}
         </Grid>
 
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <Item>
             {DataAPItable && DataAPItable.length > 0 && (
-              <TableMachineLQ datafromAPIlq={DataAPItable} />
+              <TableMachineLQ
+                datafromAPIlq={DataAPItable}
+                update={fetch_TableData}
+              />
             )}
           </Item>
         </Grid>

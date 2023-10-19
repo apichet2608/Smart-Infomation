@@ -30,6 +30,7 @@ export default function TableMachineLQ({ datafromAPIlq }) {
   };
 
   const columns = [
+    { field: "dld_year", headerName: "Year", width: 100 },
     { field: "dld_machine", headerName: "Machine", width: 150 },
     { field: "dld_customer_name", headerName: "Customer", width: 150 },
     { field: "dld_model_name", headerName: "Model", width: 150 },
@@ -40,7 +41,6 @@ export default function TableMachineLQ({ datafromAPIlq }) {
       headerName: "Process(Customer)",
       width: 150,
     },
-    { field: "----------------", headerName: "Quality Report", width: 150 },
     { field: "dld_customer_box", headerName: "UPD Report", width: 150 },
     { field: "dld_ok2s", headerName: "OK2S", width: 150 },
     { field: "dld_status", headerName: "Status", width: 150 },
