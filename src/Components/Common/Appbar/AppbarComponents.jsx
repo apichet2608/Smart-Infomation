@@ -179,9 +179,7 @@ export default function MiniDrawer() {
                       minHeight: 48,
                       justifyContent: open ? "initial" : "center",
                       px: 2.5,
-                      backgroundColor: isActive
-                        ? "rgba(33, 150, 243, 0.5)"
-                        : "rgba(66, 66, 66, 0.5)",
+                      backgroundColor: isActive ? "#AED6F1" : "#EBF5FB",
                     }}
                   >
                     <ListItemIcon
@@ -191,7 +189,11 @@ export default function MiniDrawer() {
                         justifyContent: "center",
                       }}
                     >
-                      <InboxIcon />
+                      <img
+                        style={{ width: "30px", height: "30px" }}
+                        src="/public/icons/warehouse.png" // เปลี่ยนเส้นทางไปยังไอคอน PNG ของคุณ
+                        alt="Icon"
+                      />
                     </ListItemIcon>
                     <ListItemText
                       primary={item.text}
@@ -227,9 +229,7 @@ export default function MiniDrawer() {
                       minHeight: 48,
                       justifyContent: open ? "initial" : "center",
                       px: 2.5,
-                      backgroundColor: isActive
-                        ? "rgba(33, 150, 243, 0.5)"
-                        : "rgba(66, 66, 66, 0.5)",
+                      backgroundColor: isActive ? "#AED6F1" : "#EBF5FB",
                     }}
                   >
                     <ListItemIcon
@@ -239,19 +239,11 @@ export default function MiniDrawer() {
                         justifyContent: "center",
                       }}
                     >
-                      {isActive ? (
-                        <img
-                          style={{ width: "24px", height: "24px" }}
-                          src={On}
-                          alt="On Icon"
-                        />
-                      ) : (
-                        <img
-                          style={{ width: "24px", height: "24px" }}
-                          src={Off}
-                          alt="Off Icon"
-                        />
-                      )}
+                      <img
+                        style={{ width: "30px", height: "30px" }}
+                        src="/public/icons/qql.png" // เปลี่ยนเส้นทางไปยังไอคอน PNG ของคุณ
+                        alt="Icon"
+                      />
                     </ListItemIcon>
                     <ListItemText
                       primary={item.text}
