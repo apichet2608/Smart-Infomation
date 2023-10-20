@@ -16,6 +16,7 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import Box from "@mui/material/Box";
 
 import axios from "axios";
+import StatusButtons from "./components/Button_status";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -62,6 +63,19 @@ export default function Machine_lq() {
   });
 
   const [DataAPItable, setDataAPItable] = useState([]);
+
+  const [ButtonAPI, setButtonAPI] = useState([]);
+
+  ButtonAPI.sort((a, b) => {
+    const order = [
+      "ALL",
+      "Qualify",
+      "Plan",
+      "Wait NPI Approve",
+      "Wait Manager Approve",
+    ];
+    return order.indexOf(a.title) - order.indexOf(b.title);
+  });
 
   // ############################################################### FETCH API ##############################################################################################
 
@@ -216,6 +230,79 @@ export default function Machine_lq() {
     }
   };
 
+  const [statusfrombtn, setstatusfrombtn] = useState("ALL");
+  const fetch_TableData_frombtn = async () => {
+    console.log(statusfrombtn);
+    try {
+      const params = new URLSearchParams();
+      params.append("select_proc_group", select_proc_group.dld_group);
+      params.append("select_model_name", select_model_name.dld_model_name);
+      params.append("select_product_name", select_product.dld_product);
+      params.append("select_build", select_build.dld_build);
+      params.append("select_process", select_process.dld_proc_group_name);
+      params.append("status", statusfrombtn);
+
+      const url = `${import.meta.env.VITE_IP_API}${
+        import.meta.env.VITE_Table_machine_lq_qualify
+      }/TableData?${params.toString()}`;
+      const response = await fetch(url);
+      const jsonData = await response.json();
+      console.log("TableData_API");
+      console.log(jsonData);
+
+      if (Array.isArray(jsonData) && jsonData.length > 0) {
+        setDataAPItable(jsonData);
+      } else {
+        console.log("No data available.");
+        setDataAPItable([]);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setDataAPItable([]);
+    }
+  };
+
+  const fetch_buttonAPI = async () => {
+    try {
+      const params = new URLSearchParams();
+      params.append("select_proc_group", select_proc_group.dld_group);
+      params.append("select_model_name", select_model_name.dld_model_name);
+      params.append("select_product_name", select_product.dld_product);
+      params.append("select_build", select_build.dld_build);
+      params.append("select_process", select_process.dld_proc_group_name);
+
+      const response = await fetch(
+        `${import.meta.env.VITE_IP_API}${
+          import.meta.env.VITE_Table_machine_lq_qualify
+        }/StatusResult?${params.toString()}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        const jsonData = await response.json();
+        console.log(jsonData);
+        console.log("Button");
+        if (Array.isArray(jsonData) && jsonData.length > 0) {
+          setButtonAPI(jsonData);
+        } else {
+          console.log("No data available.");
+          setButtonAPI([]);
+        }
+      } else {
+        console.error("Request failed with status:", response.status);
+        setButtonAPI([]);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setButtonAPI([]);
+    }
+  };
+
   // ############################################################### HANDLE ##############################################################################################
 
   const handleProcGroupChange = (event, newvalue) => {
@@ -225,8 +312,10 @@ export default function Machine_lq() {
       setselect_product({ dld_product: "ALL" });
       setbuild({ dld_build: "ALL" });
       setselect_process({ dld_proc_group_name: "ALL" });
+      setstatusfrombtn("ALL");
     } else {
       setproc_group(newvalue);
+      setstatusfrombtn("ALL");
       setmodel_name({ dld_model_name: "ALL" });
       setselect_product({ dld_product: "ALL" });
       setbuild({ dld_build: "ALL" });
@@ -237,12 +326,14 @@ export default function Machine_lq() {
   const handleModelChange = (event, newvalue) => {
     console.log(newvalue);
     if (newvalue === null) {
+      setstatusfrombtn("ALL");
       setmodel_name({ dld_model_name: "ALL" });
       setselect_product({ dld_product: "ALL" });
       setbuild({ dld_build: "ALL" });
       setselect_process({ dld_proc_group_name: "ALL" });
     } else {
       setmodel_name(newvalue);
+      setstatusfrombtn("ALL");
       setselect_product({ dld_product: "ALL" });
       setbuild({ dld_build: "ALL" });
       setselect_process({ dld_proc_group_name: "ALL" });
@@ -252,11 +343,13 @@ export default function Machine_lq() {
   const handleProductChange = (event, newvalue) => {
     console.log(newvalue);
     if (newvalue === null) {
+      setstatusfrombtn("ALL");
       setselect_product({ dld_product: "ALL" });
       setbuild({ dld_build: "ALL" });
       setselect_process({ dld_proc_group_name: "ALL" });
     } else {
       setselect_product(newvalue);
+      setstatusfrombtn("ALL");
       setbuild({ dld_build: "ALL" });
       setselect_process({ dld_proc_group_name: "ALL" });
     }
@@ -265,10 +358,12 @@ export default function Machine_lq() {
   const handleBuildChange = (event, newvalue) => {
     console.log(newvalue);
     if (newvalue === null) {
+      setstatusfrombtn("ALL");
       setbuild({ dld_build: "ALL" });
       setselect_process({ dld_proc_group_name: "ALL" });
     } else {
       setbuild(newvalue);
+      setstatusfrombtn("ALL");
       setselect_process({ dld_proc_group_name: "ALL" });
     }
   };
@@ -276,44 +371,58 @@ export default function Machine_lq() {
   const handleProcessChange = (event, newvalue) => {
     console.log(newvalue);
     if (newvalue === null) {
+      setstatusfrombtn("ALL");
       setselect_process({ dld_proc_group_name: "ALL" });
     } else {
       setselect_process(newvalue);
+      setstatusfrombtn("ALL");
     }
   };
+  const test = (title) => {
+    // ทำสิ่งที่คุณต้องการกับ title ที่ได้รับจากปุ่มที่คลิก
 
+    setstatusfrombtn(title);
+  };
   // ############################################################### USEEFECT ##############################################################################################
 
-  useEffect(() => {
-    fetch_proc_group();
-    fetch_model_name();
-    fetch_product_name();
-    fetch_build();
-    fetch_process();
-  }, []);
+  // useEffect(() => {
+  //   fetch_proc_group();
+  //   fetch_model_name();
+  //   fetch_product_name();
+  //   fetch_build();
+  //   fetch_process();
+  //   fetch_buttonAPI();
+  // }, []);
 
   useEffect(() => {
-    fetch_TableData();
     fetch_proc_group();
     fetch_model_name();
     fetch_product_name();
     fetch_build();
     fetch_process();
+    fetch_buttonAPI();
+    // fetch_TableData();
+    if (statusfrombtn === "ALL") {
+      fetch_TableData();
+    } else {
+      fetch_TableData_frombtn();
+    }
   }, [
     select_proc_group,
     select_model_name,
     select_product,
     select_build,
     select_process,
+    statusfrombtn,
   ]);
 
-  // ############################################################### Button EFPC / SMT ####################################################################################
-
-  // const [selectedButton, setSelectedButton] = React.useState("EFPC");
-
-  // const handleButtonClick = (value) => {
-  //   setSelectedButton(value);
-  // };
+  // useEffect(() => {
+  //   if (statusfrombtn === "ALL") {
+  //     fetch_TableData();
+  //   } else {
+  //     fetch_TableData_frombtn();
+  //   }
+  // }, [statusfrombtn]);
 
   // #####################################################################################################################################################################
 
@@ -423,7 +532,7 @@ export default function Machine_lq() {
           )}
         </Grid>
 
-        <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+        <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
           {distinct_build && distinct_build.length > 0 && (
             <Autocomplete
               size="small"
@@ -453,6 +562,9 @@ export default function Machine_lq() {
           )}
         </Grid>
 
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12} sx={{ mt: 1 }}>
+          <StatusButtons data={ButtonAPI} click={test} css={statusfrombtn} />
+        </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <Item>
             {DataAPItable && DataAPItable.length > 0 && (
