@@ -22,6 +22,8 @@ import { NavLink, useLocation } from "react-router-dom";
 import Button from "@mui/material/Button";
 import On from "../../../../public/Icons/icons8-toggle-on-100.png";
 import Off from "../../../../public/Icons/icons8-toggle-Off-100.png";
+import WH from "../../../../public/Icons/warehouse.png";
+import LQ from "../../../../public/Icons/qql.png";
 
 const drawerWidth = 240;
 
@@ -191,7 +193,7 @@ export default function MiniDrawer() {
                     >
                       <img
                         style={{ width: "30px", height: "30px" }}
-                        src="/public/icons/warehouse.png" // เปลี่ยนเส้นทางไปยังไอคอน PNG ของคุณ
+                        src={WH} // เปลี่ยนเส้นทางไปยังไอคอน PNG ของคุณ
                         alt="Icon"
                       />
                     </ListItemIcon>
@@ -241,7 +243,7 @@ export default function MiniDrawer() {
                     >
                       <img
                         style={{ width: "30px", height: "30px" }}
-                        src="/public/icons/qql.png" // เปลี่ยนเส้นทางไปยังไอคอน PNG ของคุณ
+                        src={LQ} // เปลี่ยนเส้นทางไปยังไอคอน PNG ของคุณ
                         alt="Icon"
                       />
                     </ListItemIcon>
