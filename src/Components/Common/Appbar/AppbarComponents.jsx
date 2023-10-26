@@ -24,6 +24,7 @@ import On from "../../../../public/Icons/icons8-toggle-on-100.png";
 import Off from "../../../../public/Icons/icons8-toggle-Off-100.png";
 import WH from "../../../../public/Icons/warehouse.png";
 import LQ from "../../../../public/Icons/qql.png";
+import Fuji from "../../../../public/Icons/Fuji.png";
 
 const drawerWidth = 240;
 
@@ -151,6 +152,14 @@ export default function MiniDrawer() {
       </AppBar>
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
+          <img
+            src={Fuji}
+            alt="คำอธิบายภาพ"
+            style={{
+              width: 180, // กำหนดความกว้างของภาพให้เต็มขนาดของพื้นที่ที่รองรับ
+              height: 45, // กำหนดความสูงของภาพให้ปรับแต่งตามอัตราส่วนต้นฉบับ
+            }}
+          />
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "rtl" ? (
               <ChevronRightIcon />
