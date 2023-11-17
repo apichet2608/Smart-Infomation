@@ -693,7 +693,7 @@ function TableData({ dataAPI, update }) {
       },
     },
 
-    { field: "history_track", headerName: "History track", width: 150 },
+    { field: "history_track", headerName: "Manual IS", width: 150 },
     { field: "predictive", headerName: "Predictive", width: 150 },
   ];
 
