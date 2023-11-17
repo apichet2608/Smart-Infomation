@@ -7,6 +7,7 @@ import {
   DialogActions,
   Button,
 } from "@mui/material";
+import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { formatdatewithtime } from "../../../utils/formatdate";
@@ -15,6 +16,7 @@ import { Link } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import { Edit as EditIcon } from "@mui/icons-material";
 import BuildCircleIcon from "@mui/icons-material/BuildCircle";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
@@ -36,7 +38,7 @@ import ScheduleIcon from "@mui/icons-material/Schedule";
 import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
 import BlockIcon from "@mui/icons-material/Block";
 
-function TableData({ dataAPI, update }) {
+function TableData({ dataAPI, update, refreshtable }) {
   const [selectedMachine, setSelectedMachine] = useState(null);
   const [message, setMessage] = useState("");
 
@@ -314,7 +316,7 @@ function TableData({ dataAPI, update }) {
       try {
         const response = await axios.post(
           `${import.meta.env.VITE_IP_API_UPLOAD}${
-            import.meta.env.VITE_PATHUPLOAD
+            import.meta.env.VITE_PATHUPLOAD_machine_buyoff
           }/upload`,
           formData
         );
@@ -356,10 +358,170 @@ function TableData({ dataAPI, update }) {
 
   const handleDownload = (text) => {
     const downloadUrl = `${import.meta.env.VITE_IP_API_UPLOAD}${
-      import.meta.env.VITE_PATHDOWLOAD
+      import.meta.env.VITE_PATHDOWLOAD_machine_buyoff
     }/download/${text}`;
     console.log(downloadUrl);
     window.open(downloadUrl, "_blank");
+  };
+
+  // const handleDelete = async (text) => {
+  //   const result = await Swal.fire({
+  //     title: "Are you sure?",
+  //     text: "You won't be able to revert this!",
+  //     icon: "warning",
+  //     showCancelButton: true,
+  //     confirmButtonColor: "#3085d6",
+  //     cancelButtonColor: "#d33",
+  //     confirmButtonText: "Yes, delete it!",
+  //     cancelButtonText: "Cancel", // Added a Cancel button
+  //   });
+
+  //   if (!result.isConfirmed) {
+  //     // User canceled the deletion
+  //     return;
+  //   }
+
+  //   try {
+  //     // Delete the file
+  //     const fileResponse = await axios.delete(
+  //       `${import.meta.env.VITE_IP_API_UPLOAD}${
+  //         import.meta.env.VITE_PATHDELETE
+  //       }/delete/${text.what_happen_need}`
+  //     );
+
+  //     if (fileResponse.status === 200) {
+  //       console.log("File deleted successfully");
+  //     } else {
+  //       console.log("File delete failed");
+  //     }
+
+  //     // Update data
+  //     const dataResponse = await axios.put(
+  //       `${import.meta.env.VITE_IP_API}${
+  //         import.meta.env.VITE_smart_kpi_a1_main
+  //       }/deletewhat_happen_needJson/${text.id}`
+  //     );
+
+  //     if (dataResponse.status === 200) {
+  //       console.log("Data updated successfully");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error while deleting file:", error);
+  //   }
+
+  //   // Refresh the table or update UI as needed
+  //   refreshtable();
+  // };
+
+  const handleFileUpload_is = async (event, row) => {
+    const uploadedFile = event.target.files[0];
+    console.log(uploadedFile.name);
+    console.log(row.id);
+
+    if (uploadedFile) {
+      const formData = new FormData();
+      formData.append("file", uploadedFile);
+
+      try {
+        const response = await axios.post(
+          `${import.meta.env.VITE_IP_API_UPLOAD}${
+            import.meta.env.VITE_PATHUPLOAD_manual_is
+          }/upload`,
+          formData
+        );
+
+        if (response.status === 200) {
+          console.log("File uploaded successfully");
+        } else {
+          console.error("File upload failed");
+        }
+      } catch (error) {
+        console.error("Error while uploading file:", error);
+      }
+    }
+
+    if (uploadedFile) {
+      const formData = new FormData();
+      formData.append("file", uploadedFile);
+
+      try {
+        const response = await axios.put(
+          `${import.meta.env.VITE_IP_API}${
+            import.meta.env.VITE_Table_smart_machine_connect_list
+          }/updatemachine_manual_is/${row.id}`,
+          {
+            history_track: uploadedFile.name,
+          }
+        );
+
+        if (response.status === 200) {
+          alert("Data updated successfully");
+        }
+      } catch (error) {
+        console.error(error);
+        alert("An error occurred while updating data");
+      }
+      update();
+    }
+  };
+
+  const handleDownload_is = (text) => {
+    const downloadUrl = `${import.meta.env.VITE_IP_API_UPLOAD}${
+      import.meta.env.VITE_PATHDOWLOAD_manual_is
+    }/download/${text}`;
+    console.log(downloadUrl);
+    window.open(downloadUrl, "_blank");
+  };
+
+  const handleDelete_is = async (text) => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel", // Added a Cancel button
+    });
+
+    if (!result.isConfirmed) {
+      // User canceled the deletion
+      return;
+    }
+
+    try {
+      // Delete the file
+
+      const dataResponse = await axios.put(
+        `${import.meta.env.VITE_IP_API}${
+          import.meta.env.VITE_Table_smart_machine_connect_list
+        }/deletewhat_manual_is/${text.id}`
+      );
+
+      if (fileResponse.status === 200) {
+        console.log("File deleted successfully");
+      } else {
+        console.log("File delete failed");
+      }
+
+      // Update data
+      const fileResponse = await axios.delete(
+        `${import.meta.env.VITE_IP_API_UPLOAD}${
+          import.meta.env.VITE_Table_smart_machine_connect_list
+          // }/delete/${text.history_track}`
+        }/deletewhat_manual_is/${text.id}`
+      );
+
+      if (dataResponse.status === 200) {
+        console.log("Data updated successfully");
+      }
+    } catch (error) {
+      console.error("Error while deleting file:", error);
+    }
+
+    // Refresh the table or update UI as needed
+    refreshtable();
   };
   //---------------------Apichet---------------------------//
 
@@ -693,7 +855,80 @@ function TableData({ dataAPI, update }) {
       },
     },
 
-    { field: "history_track", headerName: "Manual IS", width: 150 },
+    {
+      field: "history_track",
+      headerName: "Manual IS",
+      width: 150,
+      headerAlign: "center",
+      align: "center",
+      renderCell: (params) => {
+        if (
+          params.row.history_track === null ||
+          params.row.history_track === ""
+        ) {
+          return (
+            <Tooltip title={params.row.history_track}>
+              <IconButton
+                aria-label="upload"
+                component="label" // เพิ่มบรรทัดนี้
+                style={{
+                  color: "#3498DB",
+                  backgroundColor: "#F8F9F9",
+                  textTransform: "none",
+                  borderRadius: "0.25rem",
+                  width: "30px",
+                  height: "30px",
+                }}
+              >
+                <CloudUploadIcon />
+                <input
+                  type="file"
+                  onChange={(event) => handleFileUpload_is(event, params.row)}
+                  style={{ display: "none" }}
+                  aria-describedby="file_input_help"
+                  id="file_input"
+                />
+              </IconButton>
+            </Tooltip>
+          );
+        } else {
+          return (
+            <Tooltip title={params.row.history_track}>
+              <IconButton
+                aria-label="dowload"
+                style={{
+                  color: "#FFFF",
+                  backgroundColor: "#3498DB",
+                  textTransform: "none",
+                  borderRadius: "0.25rem",
+                  width: "25px",
+                  height: "25px",
+                }}
+                onClick={() => handleDownload_is(params.value)}
+              >
+                <FileDownloadIcon sx={{ width: "20px", height: "20px" }} />
+              </IconButton>
+
+              <IconButton
+                aria-label="dowload"
+                style={{
+                  color: "#FFFF",
+                  backgroundColor: "#f3582d",
+                  textTransform: "none",
+                  borderRadius: "0.25rem",
+                  marginLeft: "5px",
+                  width: "25px",
+                  height: "25px",
+                }}
+                onClick={() => handleDelete_is(params.row)}
+              >
+                <DeleteForeverIcon sx={{ width: "18px", height: "18px" }} />
+              </IconButton>
+            </Tooltip>
+          );
+        }
+      },
+    },
     { field: "predictive", headerName: "Predictive", width: 150 },
   ];
 
