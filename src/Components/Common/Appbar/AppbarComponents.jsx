@@ -190,7 +190,7 @@ export default function MiniDrawer() {
                       minHeight: 48,
                       justifyContent: open ? "initial" : "center",
                       px: 2.5,
-                      backgroundColor: isActive ? "#AED6F1" : "#EBF5FB",
+                      backgroundColor: isActive ? "#AED6F1" : "#FFFFFF",
                     }}
                   >
                     <ListItemIcon
@@ -240,7 +240,7 @@ export default function MiniDrawer() {
                       minHeight: 48,
                       justifyContent: open ? "initial" : "center",
                       px: 2.5,
-                      backgroundColor: isActive ? "#AED6F1" : "#EBF5FB",
+                      backgroundColor: isActive ? "#AED6F1" : "#FFFFFF",
                     }}
                   >
                     <ListItemIcon

@@ -46,6 +46,10 @@ function TableData({ dataAPI, update, refreshtable }) {
   const [calibrationMachine, setCalibrationMachine] = useState("");
   const [calibrationData, setCalibrationData] = useState([]);
 
+  const [openPMDialog, setOpenPMDialog] = useState(false);
+  const [PM_Machine, setPM_Machine] = useState("");
+  const [PMData, setPMData] = useState([]);
+
   const [openSCRDialog, setOpenSCRDialog] = useState(false);
   const [SCRMachine, setSCRMachine] = useState("");
   const [SCRData, setSCRData] = useState([]);
@@ -72,6 +76,29 @@ function TableData({ dataAPI, update, refreshtable }) {
         if (response.data.length > 0) {
           setCalibrationData(response.data);
           setOpenCalibrationDialog(true);
+          setOpenNoDataChip(false); // ปิดการแสดง Chip เมื่อมีข้อมูล
+        } else {
+          // ไม่มีข้อมูล ให้แสดง "No DATA"
+          setOpenNoDataChip(false);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching calibration data:", error);
+      });
+  };
+
+  const handleOpenPMDialog = (machine) => {
+    setPM_Machine(machine);
+    setMessage(machine);
+
+    axios
+      .get(
+        `http://10.17.66.242:3000/smart_information/smart_machine_connect_list/pm?mc_code=${machine}`
+      )
+      .then((response) => {
+        if (response.data.length > 0) {
+          setPMData(response.data);
+          setOpenPMDialog(true);
           setOpenNoDataChip(false); // ปิดการแสดง Chip เมื่อมีข้อมูล
         } else {
           // ไม่มีข้อมูล ให้แสดง "No DATA"
@@ -220,6 +247,79 @@ function TableData({ dataAPI, update, refreshtable }) {
       field: "mc_ref",
       headerName: "MC_ref",
       width: 150,
+      align: "center",
+      headerAlign: "center",
+    },
+  ];
+
+  const pmColumns = [
+    {
+      field: "mc_code",
+      headerName: "Machine Code",
+      width: 120,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "mc_desc",
+      headerName: "Machine Desc",
+      width: 280,
+      // align: "center",
+      // headerAlign: "center",
+    },
+    {
+      field: "due_date",
+      headerName: "Due Date",
+      width: 120,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "plan_date",
+      headerName: "Plan Date",
+      width: 120,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "actual_date",
+      headerName: "Actual Date",
+      width: 120,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "last_date",
+      headerName: "Last Date",
+      width: 120,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "next_date",
+      headerName: "Next Date",
+      width: 120,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "cc_code",
+      headerName: "CC Code",
+      width: 120,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "status_desc",
+      headerName: "Status Desc",
+      width: 230,
+      // align: "center",
+      // headerAlign: "center",
+    },
+    {
+      field: "stats_mc",
+      headerName: "Status Machine",
+      width: 130,
       align: "center",
       headerAlign: "center",
     },
@@ -635,26 +735,54 @@ function TableData({ dataAPI, update, refreshtable }) {
             </div>
           ) : (
             <>
-              {params.value === "Active" || params.value === "On plan" ? (
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <CheckCircleIcon style={{ fontSize: 20, color: "#2ECC71" }} />
-                  &nbsp;Active
-                </div>
-              ) : null}
-              {params.value === "Warning" ? (
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <ErrorIcon style={{ fontSize: 20, color: "#F8C471" }} />
-                  &nbsp;Warning
-                </div>
-              ) : null}
-              {params.value === "Lock / Inactive" ? (
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <RemoveCircleIcon
-                    style={{ fontSize: 20, color: "#EC7063" }}
-                  />
-                  &nbsp;Lock
-                </div>
-              ) : null}
+              <IconButton
+                onClick={() => handleOpenPMDialog(params.row.machine)}
+                sx={{ padding: 1 }}
+              >
+                {params.value === "Active" || params.value === "On plan" ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      fontSize: 14,
+                      color: "#000000",
+                    }}
+                  >
+                    <CheckCircleIcon
+                      style={{ fontSize: 18, color: "#2ECC71" }}
+                    />
+                    &nbsp;Active
+                  </div>
+                ) : null}
+                {params.value === "Warning" ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      fontSize: 14,
+                      color: "#000000",
+                    }}
+                  >
+                    <ErrorIcon style={{ fontSize: 18, color: "#F8C471" }} />
+                    &nbsp;Warning
+                  </div>
+                ) : null}
+                {params.value === "Lock / Inactive" ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      fontSize: 14,
+                      color: "#000000",
+                    }}
+                  >
+                    <RemoveCircleIcon
+                      style={{ fontSize: 18, color: "#EC7063" }}
+                    />
+                    &nbsp;Lock
+                  </div>
+                ) : null}
+              </IconButton>
             </>
           )}
         </>
@@ -703,60 +831,60 @@ function TableData({ dataAPI, update, refreshtable }) {
       ),
     },
 
-    {
-      field: "scr",
-      headerName: "SCR",
-      width: 140,
-      renderCell: (params) => {
-        let icon, text, color;
-        if (params.value === null) {
-          icon = (
-            <div>
-              &nbsp; &nbsp;
-              <DoNotDisturbOnIcon style={{ fontSize: 20, color: "#CCD1D1" }} />
-            </div>
-          );
-        } else {
-          switch (params.value) {
-            case "ACTIVE":
-              icon = (
-                <CheckCircleIcon style={{ fontSize: 20, color: "#2ECC71" }} />
-              );
-              text = "Active";
-              color = "black";
-              break;
-            case "BREAKDOWN":
-              icon = (
-                <BuildCircleIcon style={{ fontSize: 21, color: "#EC7063" }} />
-              );
-              text = "Breakdown";
-              color = "black";
-              break;
-            case "OTHER":
-              icon = <ErrorIcon style={{ fontSize: 20, color: "#F8C471" }} />;
-              text = "Other Repair";
-              color = "black";
-              break;
-            default:
-              icon = null;
-              text = params.value || "";
-              color = "black";
-              break;
-          }
-        }
+    // {
+    //   field: "scr",
+    //   headerName: "SCR",
+    //   width: 140,
+    //   renderCell: (params) => {
+    //     let icon, text, color;
+    //     if (params.value === null) {
+    //       icon = (
+    //         <div>
+    //           &nbsp; &nbsp;
+    //           <DoNotDisturbOnIcon style={{ fontSize: 20, color: "#CCD1D1" }} />
+    //         </div>
+    //       );
+    //     } else {
+    //       switch (params.value) {
+    //         case "ACTIVE":
+    //           icon = (
+    //             <CheckCircleIcon style={{ fontSize: 20, color: "#2ECC71" }} />
+    //           );
+    //           text = "Active";
+    //           color = "black";
+    //           break;
+    //         case "BREAKDOWN":
+    //           icon = (
+    //             <BuildCircleIcon style={{ fontSize: 21, color: "#EC7063" }} />
+    //           );
+    //           text = "Breakdown";
+    //           color = "black";
+    //           break;
+    //         case "OTHER":
+    //           icon = <ErrorIcon style={{ fontSize: 20, color: "#F8C471" }} />;
+    //           text = "Other Repair";
+    //           color = "black";
+    //           break;
+    //         default:
+    //           icon = null;
+    //           text = params.value || "";
+    //           color = "black";
+    //           break;
+    //       }
+    //     }
 
-        return (
-          <IconButton
-            onClick={() => handleOpenSCR(params.row)}
-            sx={{ padding: 1 }}
-          >
-            {icon}
-            &nbsp;
-            <span style={{ color, fontSize: 14, ml: 1 }}>{text}</span>
-          </IconButton>
-        );
-      },
-    },
+    //     return (
+    //       <IconButton
+    //         onClick={() => handleOpenSCR(params.row)}
+    //         sx={{ padding: 1 }}
+    //       >
+    //         {icon}
+    //         &nbsp;
+    //         <span style={{ color, fontSize: 14, ml: 1 }}>{text}</span>
+    //       </IconButton>
+    //     );
+    //   },
+    // },
 
     { field: "grr", headerName: "GR&R", width: 120 },
     // { field: "mtbf", headerName: "MTBF", width: 120 },
@@ -1066,6 +1194,25 @@ function TableData({ dataAPI, update, refreshtable }) {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* -----------------------------PM--------------------------------------------- */}
+      <Dialog
+        open={openPMDialog}
+        onClose={() => setOpenPMDialog(false)}
+        // fullWidth={false}
+        maxWidth="xl"
+      >
+        <DialogTitle>PM Data for {PM_Machine}</DialogTitle>
+        <DialogContent>
+          <DataGrid rows={PMData} columns={pmColumns} />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenPMDialog(false)} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+      {/* --------------------------------------------------------------------------- */}
 
       <Dialog
         open={openSCRDialog}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
@@ -282,6 +282,9 @@ function TableMachineLQ({ datafromAPIlq }) {
         rows={filteredItems}
         columns={columns}
         pagination
+        slots={{
+          toolbar: GridToolbar,
+        }}
         getRowHeight={() => "auto"}
         pageSize={5}
         sx={{ height: 605, maxWidth: "100%", marginTop: 2 }}

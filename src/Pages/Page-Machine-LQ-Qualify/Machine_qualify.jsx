@@ -438,7 +438,7 @@ export default function Machine_lq() {
 
         <Grid item xs={1.5} sm={1.5} md={1.5} lg={1.5} xl={1.5}>
           {distinct_proc_group && distinct_proc_group.length > 0 && (
-            <Item>
+            <Item sx={{ borderRadius: 3 }}>
               <Autocomplete
                 size="small"
                 disablePortal
@@ -461,7 +461,7 @@ export default function Machine_lq() {
 
         <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
           {distinct_model_name && distinct_model_name.length > 0 && (
-            <Item>
+            <Item sx={{ borderRadius: 3 }}>
               <Autocomplete
                 disablePortal
                 size="small"
@@ -482,7 +482,7 @@ export default function Machine_lq() {
 
         <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
           {distinct_product && distinct_product.length > 0 && (
-            <Item>
+            <Item sx={{ borderRadius: 3 }}>
               <Autocomplete
                 size="small"
                 options={distinct_product}
@@ -503,7 +503,7 @@ export default function Machine_lq() {
 
         <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
           {distinct_build && distinct_build.length > 0 && (
-            <Item>
+            <Item sx={{ borderRadius: 3 }}>
               <Autocomplete
                 size="small"
                 options={distinct_build}
@@ -522,7 +522,7 @@ export default function Machine_lq() {
 
         <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
           {distinct_process && distinct_process.length > 0 && (
-            <Item>
+            <Item sx={{ borderRadius: 3 }}>
               <Autocomplete
                 size="small"
                 options={distinct_process}
@@ -543,7 +543,7 @@ export default function Machine_lq() {
           <StatusButtons data={ButtonAPI} click={test} css={statusfrombtn} />
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <Item>
+          <Item sx={{ borderRadius: 3 }}>
             {DataAPItable && DataAPItable.length > 0 && (
               <TableMachineLQ
                 datafromAPIlq={DataAPItable}
