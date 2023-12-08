@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import {
   Dialog,
   DialogTitle,
@@ -168,30 +168,61 @@ function TableData({ dataAPI, update, refreshtable }) {
     {
       field: "due_date",
       headerName: "Due Date",
-      width: 150,
-      renderCell: (params) => {
-        return formatdatewithtime(params.row.due_date);
-      },
+      width: 120,
+      align: "center",
+      headerAlign: "center",
+      // renderCell: (params) => {
+      //   return formatdatewithtime(params.row.due_date);
+      // },
     },
     {
       field: "plan_date",
       headerName: "Plan Date",
-      width: 150,
-      renderCell: (params) => {
-        return formatdatewithtime(params.row.plan_date);
-      },
+      width: 120,
+      align: "center",
+      headerAlign: "center",
+      // renderCell: (params) => {
+      //   return formatdatewithtime(params.row.plan_date);
+      // },
     },
     {
       field: "last_date",
       headerName: "Last Date",
-      width: 150,
-      renderCell: (params) => {
-        return formatdatewithtime(params.row.last_date);
-      },
+      width: 120,
+      align: "center",
+      headerAlign: "center",
+      // renderCell: (params) => {
+      //   return formatdatewithtime(params.row.last_date);
+      // },
     },
-    { field: "status_filter", headerName: "Status Filter", width: 130 },
-    { field: "wsm_status_name", headerName: "WSM Status", width: 150 },
-    { field: "mc_ref", headerName: "MC_ref", width: 150 },
+    {
+      field: "next_date",
+      headerName: "Next Date",
+      width: 120,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "status_filter",
+      headerName: "Status Filter",
+      width: 130,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "wsm_status_name",
+      headerName: "WSM Status",
+      width: 150,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "mc_ref",
+      headerName: "MC_ref",
+      width: 150,
+      align: "center",
+      headerAlign: "center",
+    },
   ];
 
   const scrColumns = [
@@ -1009,6 +1040,9 @@ function TableData({ dataAPI, update, refreshtable }) {
         rows={filteredItems}
         columns={columns}
         pageSize={5}
+        slots={{
+          toolbar: GridToolbar,
+        }}
         rowsPerPageOptions={[5, 10, 20]}
         getRowClassName={getRowClassName}
       />
@@ -1084,7 +1118,7 @@ function TableData({ dataAPI, update, refreshtable }) {
         </DialogActions>
       </Dialog>
 
-      <div>
+      {/* <div>
         <h1>
           Machine:&nbsp;
           {message}{" "}
@@ -1094,9 +1128,9 @@ function TableData({ dataAPI, update, refreshtable }) {
         </h1>
         {/* <p>{message}</p> */}
 
-        {/* Table */}
-        {/* ... */}
-      </div>
+      {/* Table */}
+      {/* ... */}
+      {/* </div> */}
     </div>
   );
 }

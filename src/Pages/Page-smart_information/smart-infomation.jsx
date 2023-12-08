@@ -217,7 +217,7 @@ export default function Infomation() {
       {/* <Container className="custom-container"> */}
       <Grid container spacing={2}>
         <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
-          <Item>
+          <Item sx={{ borderRadius: 3 }}>
             {distinct_building && distinct_building.length > 0 && (
               <Autocomplete
                 size="small"
@@ -238,7 +238,7 @@ export default function Infomation() {
           </Item>
         </Grid>
         <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
-          <Item>
+          <Item sx={{ borderRadius: 3 }}>
             {distinct_process && distinct_process.length > 0 && (
               <Autocomplete
                 size="small"
@@ -261,7 +261,7 @@ export default function Infomation() {
           </Item>
         </Grid>
         <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
-          <Item>
+          <Item sx={{ borderRadius: 3 }}>
             {distinct_machine && distinct_machine.length > 0 && (
               <Autocomplete
                 size="small"
@@ -287,13 +287,15 @@ export default function Infomation() {
           )} */}
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          {DataAPItable && DataAPItable.length > 0 && (
-            <TableData
-              dataAPI={DataAPItable}
-              update={fetchTableData}
-              refreshtable={fetchTableData}
-            />
-          )}
+          <Item sx={{ borderRadius: 3, height: 750 }}>
+            {DataAPItable && DataAPItable.length > 0 && (
+              <TableData
+                dataAPI={DataAPItable}
+                update={fetchTableData}
+                refreshtable={fetchTableData}
+              />
+            )}
+          </Item>
         </Grid>
         {/* <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           {TableCal && TableCal.length > 0 && (
