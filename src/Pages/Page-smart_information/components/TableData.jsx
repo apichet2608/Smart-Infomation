@@ -1154,8 +1154,8 @@ function TableData({ dataAPI, update, refreshtable }) {
   });
 
   return (
-    <div style={{ height: 680, width: "100%" }}>
-      <Box display="flex" justifyContent="flex-end" marginBottom="10px">
+    <>
+      <div className="flex justify-end mb-2">
         <TextField
           label="Search"
           value={search}
@@ -1163,7 +1163,7 @@ function TableData({ dataAPI, update, refreshtable }) {
           variant="outlined"
           size="small"
         />
-      </Box>
+      </div>
       <DataGrid
         rows={filteredItems}
         columns={columns}
@@ -1173,6 +1173,7 @@ function TableData({ dataAPI, update, refreshtable }) {
         }}
         rowsPerPageOptions={[5, 10, 20]}
         getRowClassName={getRowClassName}
+        sx={{ height: 650 }}
       />
 
       <Dialog
@@ -1278,7 +1279,7 @@ function TableData({ dataAPI, update, refreshtable }) {
       {/* Table */}
       {/* ... */}
       {/* </div> */}
-    </div>
+    </>
   );
 }
 

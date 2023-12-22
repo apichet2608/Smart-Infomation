@@ -428,133 +428,137 @@ export default function Machine_lq() {
 
   return (
     <ThemeProvider theme={theme}>
-      {/* <Main open={open}> */}
-      {/* <Main open={open}> */}
-      {/* <CssBaseline /> */}
-      {/* <Container className="custom-container"> */}
-      <Grid container spacing={2}>
-        <Grid item xs={2} sm={2} md={2} lg={2} xl={2}></Grid>
-        <Grid item xs={10} sm={10} md={10} lg={10} xl={10}></Grid>
+      <div className="mt-12 animate-fade">
+        {/* <Main open={open}> */}
+        {/* <Main open={open}> */}
+        {/* <CssBaseline /> */}
+        {/* <Container className="custom-container"> */}
+        <Grid container spacing={2}>
+          <Grid item xs={2} sm={2} md={2} lg={2} xl={2}></Grid>
+          <Grid item xs={10} sm={10} md={10} lg={10} xl={10}></Grid>
 
-        <Grid item xs={1.5} sm={1.5} md={1.5} lg={1.5} xl={1.5}>
-          {distinct_proc_group && distinct_proc_group.length > 0 && (
-            <Item sx={{ borderRadius: 3 }}>
-              <Autocomplete
-                size="small"
-                disablePortal
-                id="combo-box-demo"
-                options={distinct_proc_group}
-                getOptionLabel={(option) =>
-                  option && option.dld_group ? option.dld_group : ""
-                }
-                value={select_proc_group}
-                onChange={handleProcGroupChange}
-                sx={{ width: "100%", display: "inline-block" }}
-                renderInput={(params) => (
-                  <TextField {...params} label="Process Group" />
-                )}
-              />
-            </Item>
-          )}
-        </Grid>
-        {/* <Grid item xs={11} sm={11} md={11} lg={11} xl={11}></Grid> */}
-
-        <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
-          {distinct_model_name && distinct_model_name.length > 0 && (
-            <Item sx={{ borderRadius: 3 }}>
-              <Autocomplete
-                disablePortal
-                size="small"
-                id="combo-box-demo"
-                options={distinct_model_name}
-                getOptionLabel={(option) =>
-                  option && option.dld_model_name ? option.dld_model_name : ""
-                }
-                value={select_model_name}
-                onChange={handleModelChange}
-                renderInput={(params) => (
-                  <TextField {...params} label="Model Name" />
-                )}
-              />
-            </Item>
-          )}
-        </Grid>
-
-        <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
-          {distinct_product && distinct_product.length > 0 && (
-            <Item sx={{ borderRadius: 3 }}>
-              <Autocomplete
-                size="small"
-                options={distinct_product}
-                getOptionLabel={(option) => option && option.dld_product}
-                value={select_product}
-                onChange={handleProductChange}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Product Name"
-                    variant="outlined"
-                  />
-                )}
-              />
-            </Item>
-          )}
-        </Grid>
-
-        <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-          {distinct_build && distinct_build.length > 0 && (
-            <Item sx={{ borderRadius: 3 }}>
-              <Autocomplete
-                size="small"
-                options={distinct_build}
-                getOptionLabel={(option) =>
-                  option && option.dld_build ? option.dld_build : "Null"
-                }
-                value={select_build}
-                onChange={handleBuildChange}
-                renderInput={(params) => (
-                  <TextField {...params} label="Build" variant="outlined" />
-                )}
-              />
-            </Item>
-          )}
-        </Grid>
-
-        <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
-          {distinct_process && distinct_process.length > 0 && (
-            <Item sx={{ borderRadius: 3 }}>
-              <Autocomplete
-                size="small"
-                options={distinct_process}
-                getOptionLabel={(option) =>
-                  option && option.dld_proc_group_name
-                }
-                value={select_process}
-                onChange={handleProcessChange}
-                renderInput={(params) => (
-                  <TextField {...params} label="Process" variant="outlined" />
-                )}
-              />
-            </Item>
-          )}
-        </Grid>
-
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12} sx={{ mt: 1 }}>
-          <StatusButtons data={ButtonAPI} click={test} css={statusfrombtn} />
-        </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <Item sx={{ borderRadius: 3 }}>
-            {DataAPItable && DataAPItable.length > 0 && (
-              <TableMachineLQ
-                datafromAPIlq={DataAPItable}
-                update={fetch_TableData}
-              />
+          <Grid item xs={1.5} sm={1.5} md={1.5} lg={1.5} xl={1.5}>
+            {distinct_proc_group && distinct_proc_group.length > 0 && (
+              <Item sx={{ borderRadius: 3 }}>
+                <Autocomplete
+                  size="small"
+                  disablePortal
+                  id="combo-box-demo"
+                  options={distinct_proc_group}
+                  getOptionLabel={(option) =>
+                    option && option.dld_group ? option.dld_group : ""
+                  }
+                  value={select_proc_group}
+                  onChange={handleProcGroupChange}
+                  sx={{ width: "100%", display: "inline-block" }}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Process Group" />
+                  )}
+                />
+              </Item>
             )}
-          </Item>
+          </Grid>
+          {/* <Grid item xs={11} sm={11} md={11} lg={11} xl={11}></Grid> */}
+
+          <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+            {distinct_model_name && distinct_model_name.length > 0 && (
+              <Item sx={{ borderRadius: 3 }}>
+                <Autocomplete
+                  disablePortal
+                  size="small"
+                  id="combo-box-demo"
+                  options={distinct_model_name}
+                  getOptionLabel={(option) =>
+                    option && option.dld_model_name ? option.dld_model_name : ""
+                  }
+                  value={select_model_name}
+                  onChange={handleModelChange}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Model Name" />
+                  )}
+                />
+              </Item>
+            )}
+          </Grid>
+
+          <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+            {distinct_product && distinct_product.length > 0 && (
+              <Item sx={{ borderRadius: 3 }}>
+                <Autocomplete
+                  size="small"
+                  options={distinct_product}
+                  getOptionLabel={(option) => option && option.dld_product}
+                  value={select_product}
+                  onChange={handleProductChange}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Product Name"
+                      variant="outlined"
+                    />
+                  )}
+                />
+              </Item>
+            )}
+          </Grid>
+
+          <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
+            {distinct_build && distinct_build.length > 0 && (
+              <Item sx={{ borderRadius: 3 }}>
+                <Autocomplete
+                  size="small"
+                  options={distinct_build}
+                  getOptionLabel={(option) =>
+                    option && option.dld_build ? option.dld_build : "Null"
+                  }
+                  value={select_build}
+                  onChange={handleBuildChange}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Build" variant="outlined" />
+                  )}
+                />
+              </Item>
+            )}
+          </Grid>
+
+          <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+            {distinct_process && distinct_process.length > 0 && (
+              <Item sx={{ borderRadius: 3 }}>
+                <Autocomplete
+                  size="small"
+                  options={distinct_process}
+                  getOptionLabel={(option) =>
+                    option && option.dld_proc_group_name
+                  }
+                  value={select_process}
+                  onChange={handleProcessChange}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Process" variant="outlined" />
+                  )}
+                />
+              </Item>
+            )}
+          </Grid>
+
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12} sx={{ mt: 1 }}>
+            <StatusButtons data={ButtonAPI} click={test} css={statusfrombtn} />
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+            {/* <Item sx={{ borderRadius: 3 }}> */}
+            <div className="bg-white w-fit rounded-lg">
+              {DataAPItable && DataAPItable.length > 0 && (
+                <TableMachineLQ
+                  datafromAPIlq={DataAPItable}
+                  update={fetch_TableData}
+                />
+              )}
+            </div>
+            {/* </Item> */}
+          </Grid>
         </Grid>
-      </Grid>
-      {/* </Container> */}
-      {/* </Main> */}
+        {/* </Container> */}
+        {/* </Main> */}
+      </div>
     </ThemeProvider>
   );
 }

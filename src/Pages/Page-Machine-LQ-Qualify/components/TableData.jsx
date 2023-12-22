@@ -190,7 +190,7 @@ function TableMachineLQ({ datafromAPIlq }) {
     {
       field: "dld_proc_cust_name",
       headerName: "Process(Customer)",
-      width: 300,
+      width: 280,
     },
     {
       field: "dld_customer_box",
@@ -268,8 +268,8 @@ function TableMachineLQ({ datafromAPIlq }) {
   ];
 
   return (
-    <item style={{ height: 605, width: "100%" }}>
-      <Box display="flex" justifyContent="flex-end" marginBottom="10px">
+    <div className="w-fit h-full">
+      <div className="flex justify-end pt-2 pr-2">
         <TextField
           label="Search"
           value={search}
@@ -277,7 +277,7 @@ function TableMachineLQ({ datafromAPIlq }) {
           variant="outlined"
           size="small"
         />
-      </Box>
+      </div>
       <DataGrid
         rows={filteredItems}
         columns={columns}
@@ -287,9 +287,9 @@ function TableMachineLQ({ datafromAPIlq }) {
         }}
         getRowHeight={() => "auto"}
         pageSize={5}
-        sx={{ height: 605, maxWidth: "100%", marginTop: 2 }}
+        sx={{ height: 600, marginTop: 2 }}
       />
-    </item>
+    </div>
   );
 }
 

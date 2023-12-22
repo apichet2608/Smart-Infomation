@@ -16,6 +16,10 @@ import "@fontsource/roboto/700.css";
 import Infomation from "./Pages/Page-smart_information/smart-infomation";
 import MachineLQ from "./Pages/Page-Machine-LQ-Qualify/machine_lq_qualify";
 import Machine_lq from "./Pages/Page-Machine-LQ-Qualify/Machine_qualify";
+import NPIProductStatus from "./Pages/Page-NPI-Product-Status/main/Page-NPI-Product-Status";
+import Navbar from "./Components/Common/Navbar/navbar";
+import { useDarkMode } from "../src/Components/Common/DarkModeContext/DarkModeContext";
+import { useLocation } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -39,48 +43,68 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
 );
 
 export default function PersistentDrawerLeft() {
+  const { isDarkMode } = useDarkMode();
+
+  const theme = useTheme();
+  const location = useLocation();
+
   return (
-    <Router>
-      <Box sx={{ display: "flex" }}>
-        {/* <CssBaseline /> */}
-        <Appbarcomponents />
-        {/* <ThemeProvider theme={theme}> */}
-        {/* <Main open={open}> */}
-        <Main open={open}>
+    <div
+      style={{
+        backgroundColor: isDarkMode ? "#676767" : "#FFFFFF",
+        height: "100%",
+        minHeight: "100vh",
+        width: "100%",
+        minWidth: "100vw",
+      }}
+    >
+      <>
+        <Box sx={{ display: "flex" }}>
           {/* <CssBaseline /> */}
-          <Container className="custom-container">
-            <>
-              <Routes>
-                <Route
-                  path="/"
-                  element={
-                    <>
-                      <Infomation />
-                    </>
-                  }
-                />
-                <Route
-                  path="/smart-information"
-                  element={
-                    <>
-                      <Infomation />
-                    </>
-                  }
-                />
-                <Route
-                  path="/machine-lq-qualify"
-                  element={
-                    <>
-                      <Machine_lq />
-                    </>
-                  }
-                />
-              </Routes>
-            </>
-          </Container>
-        </Main>
-        {/* </ThemeProvider> */}
-      </Box>
-    </Router>
+          <Navbar isDarkMode={isDarkMode} />
+          {/* <ThemeProvider theme={theme}> */}
+          {/* <Main open={open}> */}
+          <Main open={open}>
+            {/* <CssBaseline /> */}
+
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <>
+                    <NPIProductStatus isDarkMode={isDarkMode} />
+                  </>
+                }
+              />
+              <Route
+                path="/npi-product-status"
+                element={
+                  <>
+                    <NPIProductStatus isDarkMode={isDarkMode} />
+                  </>
+                }
+              />
+              <Route
+                path="/smart-information"
+                element={
+                  <>
+                    <Infomation isDarkMode={isDarkMode} />
+                  </>
+                }
+              />
+              <Route
+                path="/machine-lq-qualify"
+                element={
+                  <>
+                    <Machine_lq isDarkMode={isDarkMode} />
+                  </>
+                }
+              />
+            </Routes>
+          </Main>
+          {/* </ThemeProvider> */}
+        </Box>
+      </>
+    </div>
   );
 }
