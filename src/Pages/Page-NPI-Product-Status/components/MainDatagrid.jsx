@@ -7,7 +7,6 @@ import TextField from "@mui/material/TextField";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
-import { useNavigate } from "react-router-dom";
 import Tooltip from "@mui/material/Tooltip";
 
 //*Styled Components
@@ -32,8 +31,6 @@ const StyledDataGrid = styled(DataGrid)({
 });
 
 export default function MainDatagrid({ isDarkMode }) {
-  const navigate = useNavigate();
-
   const [optionsYear, setOptionsYear] = useState([]);
   const [optionsCustomerDesc, setOptionsCustomerDesc] = useState([]);
   const [optionsCustomerCode, setOptionsCustomerCode] = useState([]);
@@ -560,38 +557,38 @@ export default function MainDatagrid({ isDarkMode }) {
         }
       },
     },
-    {
-      field: "seq6",
-      headerName: "P3",
-      width: 80,
-      headerAlign: "center",
-      align: "center",
-      renderCell(params) {
-        if (
-          params.row.flqbu_seq === "6" &&
-          params.row.status_ok2s === "Y" &&
-          params.row.seq_group === "Pass"
-        ) {
-          return (
-            <div className="font-bold text-green-800 bg-green-200 w-full h-[90%] items-center justify-center flex text-center rounded-md drop-shadow-sm">
-              Pass
-            </div>
-          );
-        } else if (
-          params.row.flqbu_seq === "6" &&
-          params.row.status_ok2s === "N"
-        ) {
-          return (
-            <div className="font-bold text-yellow-800 bg-yellow-200 w-full h-[90%] items-center justify-center flex text-center rounded drop-shadow-sm">
-              Pending
-            </div>
-          );
-        }
-      },
-    },
+    // {
+    //   field: "seq6",
+    //   headerName: "P3",
+    //   width: 80,
+    //   headerAlign: "center",
+    //   align: "center",
+    //   renderCell(params) {
+    //     if (
+    //       params.row.flqbu_seq === "6" &&
+    //       params.row.status_ok2s === "Y" &&
+    //       params.row.seq_group === "Pass"
+    //     ) {
+    //       return (
+    //         <div className="font-bold text-green-800 bg-green-200 w-full h-[90%] items-center justify-center flex text-center rounded-md drop-shadow-sm">
+    //           Pass
+    //         </div>
+    //       );
+    //     } else if (
+    //       params.row.flqbu_seq === "6" &&
+    //       params.row.status_ok2s === "N"
+    //     ) {
+    //       return (
+    //         <div className="font-bold text-yellow-800 bg-yellow-200 w-full h-[90%] items-center justify-center flex text-center rounded drop-shadow-sm">
+    //           Pending
+    //         </div>
+    //       );
+    //     }
+    //   },
+    // },
     {
       field: "seq7",
-      headerName: "AB1, C2.0",
+      headerName: "C2.0",
       width: 80,
       headerAlign: "center",
       align: "center",
@@ -620,7 +617,7 @@ export default function MainDatagrid({ isDarkMode }) {
     },
     {
       field: "seq8",
-      headerName: "EVT, C1.0",
+      headerName: "EVT",
       width: 80,
       headerAlign: "center",
       align: "center",
