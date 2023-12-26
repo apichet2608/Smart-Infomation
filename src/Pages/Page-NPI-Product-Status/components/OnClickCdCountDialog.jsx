@@ -37,6 +37,7 @@ export default function OnClickCdCountDialog({
   openCdCount,
   handleCloseDialogCdCount,
   rowsCdCount,
+  showStateCustomerName,
 }) {
   const [openMachine, setOpenMachine] = useState(false);
 
@@ -59,12 +60,18 @@ export default function OnClickCdCountDialog({
     //   headerAlign: "center",
     //   align: "center",
     // },
+    // {
+    //   field: "dld_customer_name",
+    //   headerName: "Customer Name",
+    //   width: 180,
+    //   headerAlign: "center",
+    //   align: "center",
+    // },
     {
-      field: "dld_customer_name",
-      headerName: "Customer Name",
-      width: 180,
+      field: "dld_proc_cust_name",
+      headerName: "Proc Cust Name",
+      width: 240,
       headerAlign: "center",
-      align: "center",
     },
     {
       field: "grouped_status",
@@ -72,12 +79,24 @@ export default function OnClickCdCountDialog({
       width: 150,
       headerAlign: "center",
       align: "center",
-    },
-    {
-      field: "dld_proc_cust_name",
-      headerName: "Proc Cust Name",
-      width: 240,
-      headerAlign: "center",
+      renderCell: (params) => {
+        if (params.value === "Qualify") {
+          return <div className="text-green-500 font-bold">{params.value}</div>;
+        }
+        if (params.value === "Plan") {
+          return <div className="text-rose-500 font-bold">{params.value}</div>;
+        }
+        if (params.value === "Wait NPI Approve") {
+          return (
+            <div className="text-yellow-500 font-bold">{params.value}</div>
+          );
+        }
+        if (params.value === "Wait Manager Approve") {
+          return (
+            <div className="text-yellow-500 font-bold">{params.value}</div>
+          );
+        }
+      },
     },
     {
       field: "count",
@@ -153,8 +172,13 @@ export default function OnClickCdCountDialog({
         className="animate-fade"
       >
         <DialogTitle>
-          <div className="font-bold text-blue-600 drop-shadow-sm">
-            Customer Description Count
+          <div className="flex place-content-between">
+            <span className="font-bold text-blue-600 drop-shadow-sm">
+              Customer Description Count
+            </span>
+            <span className="font-bold text-violet-700 bg-violet-200 rounded-lg px-2 py-1 shadow">
+              {showStateCustomerName}
+            </span>
           </div>
         </DialogTitle>
         <DialogContent>
@@ -241,20 +265,22 @@ export default function OnClickCdCountDialog({
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            {machineData.map((item, index) => (
-              <p
-                key={index}
-                className="whitespace-pre-line leading-normal font-bold"
-              >
-                <span
-                  className={`${
-                    isDarkMode ? "text-zinc-100" : "text-slate-700"
-                  } drop-shadow`}
-                >{`${index + 1}. `}</span>
+            <div className="grid grid-cols-6 gap-5">
+              {machineData.map((item, index) => (
+                <p
+                  key={index}
+                  className="whitespace-pre-line leading-normal font-bold"
+                >
+                  <span
+                    className={`${
+                      isDarkMode ? "text-zinc-100" : "text-slate-700"
+                    } drop-shadow`}
+                  >{`${index + 1}. `}</span>
 
-                <span className="text-green-500 drop-shadow">{item}</span>
-              </p>
-            ))}
+                  <span className="text-green-500 drop-shadow">{item}</span>
+                </p>
+              ))}
+            </div>
           </DialogContentText>
         </DialogContent>
 

@@ -175,7 +175,7 @@ export default function MainDatagrid({ isDarkMode }) {
     {
       field: "pmc_customer_desc",
       headerName: "Customer Desc",
-      width: 330,
+      width: 320,
       headerAlign: "center",
       renderCell(params) {
         return (
@@ -184,6 +184,7 @@ export default function MainDatagrid({ isDarkMode }) {
               setDldYearCd(params.row.flpm_year);
               setDldCustomerNameCd(params.row.pmc_customer_desc);
               setOpenCdCount(true);
+              setShowStateCustomerName(params.row.pmc_customer_desc);
             }}
             className="hover:font-bold hover:text-black hover:bg-violet-200 px-1 rounded-md hover:drop-shadow-sm hover:scale-110 active:scale-100 hover:cursor-pointer duration-200"
           >
@@ -780,6 +781,8 @@ export default function MainDatagrid({ isDarkMode }) {
   const [dldYearCd, setDldYearCd] = useState();
   const [dldCustomerNameCd, setDldCustomerNameCd] = useState();
 
+  const [showStateCustomerName, setShowStateCustomerName] = useState("");
+
   const [rowsCdCount, setRowsCdCount] = useState([]);
 
   useEffect(() => {
@@ -1114,6 +1117,7 @@ export default function MainDatagrid({ isDarkMode }) {
         handleCloseDialogCdCount={handleCloseDialogCdCount}
         rowsCdCount={rowsCdCount}
         isDarkMode={isDarkMode}
+        showStateCustomerName={showStateCustomerName}
       />
     </>
   );
