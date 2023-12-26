@@ -8,6 +8,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 import Tooltip from "@mui/material/Tooltip";
+import OnClickLqListDialog from "./onClickLqListDialog";
+import OnClickCdCountDialog from "./onClickCdCountDialog";
 
 //*Styled Components
 const StyledDataGrid = styled(DataGrid)({
@@ -55,9 +57,9 @@ export default function MainDatagrid({ isDarkMode }) {
   useEffect(() => {
     axios
       .get(
-        `${
-          import.meta.env.VITE_IP_API
-        }/smart_information/npi_product_status/smart_machine_upd_npi_product_status/smart_machine_upd_npi_product_status_read`
+        `${import.meta.env.VITE_IP_API}/${
+          import.meta.env.VITE_NPI_STATUS
+        }/smart_machine_upd_npi_product_status_read`
       )
       .then((response) => {
         const getYear = response.data
@@ -73,9 +75,9 @@ export default function MainDatagrid({ isDarkMode }) {
   useEffect(() => {
     axios
       .get(
-        `${
-          import.meta.env.VITE_IP_API
-        }/smart_information/npi_product_status/smart_machine_upd_npi_product_status/smart_machine_upd_npi_product_status_read?flpm_year=${selectedYear}`
+        `${import.meta.env.VITE_IP_API}/${
+          import.meta.env.VITE_NPI_STATUS
+        }/smart_machine_upd_npi_product_status_read?flpm_year=${selectedYear}`
       )
       .then((response) => {
         const getCustomerDesc = response.data
@@ -91,9 +93,9 @@ export default function MainDatagrid({ isDarkMode }) {
   useEffect(() => {
     axios
       .get(
-        `${
-          import.meta.env.VITE_IP_API
-        }/smart_information/npi_product_status/smart_machine_upd_npi_product_status/smart_machine_upd_npi_product_status_read?flpm_year=${selectedYear}&pmc_customer_desc=${selectedCustomerDesc}`
+        `${import.meta.env.VITE_IP_API}/${
+          import.meta.env.VITE_NPI_STATUS
+        }/smart_machine_upd_npi_product_status_read?flpm_year=${selectedYear}&pmc_customer_desc=${selectedCustomerDesc}`
       )
       .then((response) => {
         const getCustomerCode = response.data
@@ -109,9 +111,9 @@ export default function MainDatagrid({ isDarkMode }) {
   useEffect(() => {
     axios
       .get(
-        `${
-          import.meta.env.VITE_IP_API
-        }/smart_information/npi_product_status/smart_machine_upd_npi_product_status/smart_machine_upd_npi_product_status_read?flpm_year=${selectedYear}&pmc_customer_desc=${selectedCustomerDesc}&pmc_customer_code=${selectedCustomerCode}`
+        `${import.meta.env.VITE_IP_API}/${
+          import.meta.env.VITE_NPI_STATUS
+        }/smart_machine_upd_npi_product_status_read?flpm_year=${selectedYear}&pmc_customer_desc=${selectedCustomerDesc}&pmc_customer_code=${selectedCustomerCode}`
       )
       .then((response) => {
         const getProduct = response.data
@@ -129,9 +131,9 @@ export default function MainDatagrid({ isDarkMode }) {
   useEffect(() => {
     axios
       .get(
-        `${
-          import.meta.env.VITE_IP_API
-        }/smart_information/npi_product_status/smart_machine_upd_npi_product_status/smart_machine_upd_npi_product_status_read?flpm_year=${selectedYear}&pmc_customer_desc=${selectedCustomerDesc}&pmc_customer_code=${selectedCustomerCode}&flpmb_product=${selectedProduct}`
+        `${import.meta.env.VITE_IP_API}/${
+          import.meta.env.VITE_NPI_STATUS
+        }/smart_machine_upd_npi_product_status_read?flpm_year=${selectedYear}&pmc_customer_desc=${selectedCustomerDesc}&pmc_customer_code=${selectedCustomerCode}&flpmb_product=${selectedProduct}`
       )
       .then((response) => {
         console.log("Rows data: ", response.data);
@@ -173,11 +175,18 @@ export default function MainDatagrid({ isDarkMode }) {
     {
       field: "pmc_customer_desc",
       headerName: "Customer Desc",
-      width: 340,
+      width: 330,
       headerAlign: "center",
       renderCell(params) {
         return (
-          <div className="flex flex-col">
+          <div
+            onClick={() => {
+              setDldYearCd(params.row.flpm_year);
+              setDldCustomerNameCd(params.row.pmc_customer_desc);
+              setOpenCdCount(true);
+            }}
+            className="hover:font-bold hover:text-black hover:bg-violet-200 px-1 rounded-md hover:drop-shadow-sm hover:scale-110 active:scale-100 hover:cursor-pointer duration-200"
+          >
             <div
               className={`${
                 selectedCustomerDesc
@@ -185,7 +194,7 @@ export default function MainDatagrid({ isDarkMode }) {
                   : ""
               }`}
             >
-              {params.value}
+              <Tooltip title="Open Data">{params.value}</Tooltip>
             </div>
           </div>
         );
@@ -193,8 +202,8 @@ export default function MainDatagrid({ isDarkMode }) {
     },
     {
       field: "pmc_customer_code",
-      headerName: "Customer Code",
-      width: 120,
+      headerName: "Customer",
+      width: 100,
       headerAlign: "center",
       renderCell(params) {
         return (
@@ -215,7 +224,7 @@ export default function MainDatagrid({ isDarkMode }) {
     {
       field: "flpmb_product",
       headerName: "Product",
-      width: 130,
+      width: 140,
       headerAlign: "center",
       renderCell(params) {
         return (
@@ -233,81 +242,6 @@ export default function MainDatagrid({ isDarkMode }) {
         );
       },
     },
-    // {
-    //   field: "pmc_apn",
-    //   headerName: "APN",
-    //   width: 130,
-    //   headerAlign: "center",
-    //   align: "center",
-    // },
-    // {
-    //   field: "flpm_name",
-    //   headerName: "flpm_name",
-    //   width: 150,
-    //   headerAlign: "center",
-    // },
-
-    // {
-    //   field: "flqbu_build_name",
-    //   headerName: "Build",
-    //   width: 80,
-    //   headerAlign: "center",
-    //   renderCell(params) {
-    //     return (
-    //       <div className="flex flex-col">
-    //         <div className="font-bold drop-shadow-sm">{params.value}</div>
-    //       </div>
-    //     );
-    //   },
-    // },
-    // {
-    //   field: "flqbu_seq",
-    //   headerName: "Seq",
-    //   width: 50,
-    //   headerAlign: "center",
-    //   align: "center",
-    // },
-    // {
-    //   field: "build_start",
-    //   headerName: "build_start",
-    //   width: 100,
-    //   headerAlign: "center",
-    //   align: "center",
-    //   valueFormatter: (params) => {
-    //     return params.value ? params.value.substring(0, 10) : "";
-    //   },
-    // },
-    // {
-    //   field: "build_stop",
-    //   headerName: "build_stop",
-    //   width: 100,
-    //   headerAlign: "center",
-    //   align: "center",
-    //   valueFormatter: (params) => {
-    //     return params.value ? params.value.substring(0, 10) : "";
-    //   },
-    // },
-    // {
-    //   field: "pmc_box_email",
-    //   headerName: "pmc_box_email",
-    //   width: 150,
-    //   headerAlign: "center",
-    //   align: "center",
-    // },
-    // {
-    //   field: "pmc_ok2s",
-    //   headerName: "OK2S",
-    //   width: 60,
-    //   headerAlign: "center",
-    //   align: "center",
-    // },
-    // {
-    //   field: "pmc_customer_box",
-    //   headerName: "Customer Box",
-    //   width: 110,
-    //   headerAlign: "center",
-    //   align: "center",
-    // },
     {
       field: "flpm_lock_scan",
       headerName: "Lock",
@@ -322,16 +256,6 @@ export default function MainDatagrid({ isDarkMode }) {
         );
       },
     },
-    // {
-    //   field: "lock_date",
-    //   headerName: "Date",
-    //   width: 100,
-    //   headerAlign: "center",
-    //   align: "center",
-    //   valueFormatter: (params) => {
-    //     return params.value ? params.value.substring(0, 10) : "";
-    //   },
-    // },
     {
       field: "status_ok2s",
       headerName: "OK2S",
@@ -347,7 +271,7 @@ export default function MainDatagrid({ isDarkMode }) {
                 const link = `${params.row.pmc_ok2s}`;
                 window.open(link, "_blank");
               }}
-              className="font-bold text-green-500 drop-shadow-sm hover:scale-125 active:scale-100 hover:cursor-pointer duration-200"
+              className="font-bold text-green-500 drop-shadow-sm hover:cursor-pointer hover:scale-125 active:scale-100 hover:bg-cyan-600 hover:text-white px-2 rounded-md py-0.5 duration-200"
             >
               <Tooltip title={params.row.pmc_ok2s}>{params.value}</Tooltip>
             </div>
@@ -375,43 +299,33 @@ export default function MainDatagrid({ isDarkMode }) {
       renderCell(params) {
         if (params.value === "Y") {
           return (
-            <div className="font-bold text-green-500 drop-shadow-sm">
-              {params.value}
+            <div
+              onClick={() => {
+                setDldYearLq(params.row.flpm_year);
+                setDldCustomerNameLq(params.row.pmc_customer_desc);
+                setOpenLqList(true);
+              }}
+              className="font-bold text-green-500 drop-shadow-sm hover:cursor-pointer hover:scale-125 active:scale-100 hover:bg-green-600 hover:text-white px-2 rounded-md py-0.5 duration-200"
+            >
+              <Tooltip title="Open Data">{params.value}</Tooltip>
             </div>
           );
         } else if (params.value === "N") {
           return (
-            <div className="font-bold text-red-500 drop-shadow-sm">
-              {params.value}
+            <div
+              onClick={() => {
+                setDldYearLq(params.row.flpm_year);
+                setDldCustomerNameLq(params.row.pmc_customer_desc);
+                setOpenLqList(true);
+              }}
+              className="font-bold text-red-500 drop-shadow-sm hover:cursor-pointer hover:scale-125 active:scale-100 hover:bg-red-600 hover:text-white px-2 rounded-md py-0.5 duration-200"
+            >
+              <Tooltip title="Open Data">{params.value}</Tooltip>
             </div>
           );
         }
       },
     },
-    // {
-    //   field: "id",
-    //   headerName: "id",
-    //   width: 130,
-    //   headerAlign: "center",
-    //   align: "center",
-    // },
-    // {
-    //   field: "create_at",
-    //   headerName: "create_at",
-    //   width: 100,
-    //   headerAlign: "center",
-    //   align: "center",
-    //   valueFormatter: (params) => {
-    //     return params.value ? params.value.substring(0, 10) : "";
-    //   },
-    // },
-    // {
-    //   field: "update_date",
-    //   headerName: "update_date",
-    //   width: 130,
-    //   headerAlign: "center",
-    //   align: "center",
-    // },
     {
       field: "seq1",
       headerName: "POC, C6.0",
@@ -444,7 +358,7 @@ export default function MainDatagrid({ isDarkMode }) {
     {
       field: "seq2",
       headerName: "P0, C5.0",
-      width: 80,
+      width: 90,
       headerAlign: "center",
       align: "center",
       renderCell(params) {
@@ -473,7 +387,7 @@ export default function MainDatagrid({ isDarkMode }) {
     {
       field: "seq3",
       headerName: "P1, C4.0",
-      width: 80,
+      width: 90,
       headerAlign: "center",
       align: "center",
       renderCell(params) {
@@ -502,7 +416,7 @@ export default function MainDatagrid({ isDarkMode }) {
     {
       field: "seq4",
       headerName: "P2, C3.0",
-      width: 80,
+      width: 90,
       headerAlign: "center",
       align: "center",
       renderCell(params) {
@@ -531,7 +445,7 @@ export default function MainDatagrid({ isDarkMode }) {
     {
       field: "seq5",
       headerName: "C3.1",
-      width: 80,
+      width: 90,
       headerAlign: "center",
       align: "center",
       renderCell(params) {
@@ -589,7 +503,7 @@ export default function MainDatagrid({ isDarkMode }) {
     {
       field: "seq7",
       headerName: "C2.0",
-      width: 80,
+      width: 90,
       headerAlign: "center",
       align: "center",
       renderCell(params) {
@@ -618,7 +532,7 @@ export default function MainDatagrid({ isDarkMode }) {
     {
       field: "seq8",
       headerName: "EVT",
-      width: 80,
+      width: 90,
       headerAlign: "center",
       align: "center",
       renderCell(params) {
@@ -649,7 +563,7 @@ export default function MainDatagrid({ isDarkMode }) {
     {
       field: "seq9",
       headerName: "EVT2",
-      width: 80,
+      width: 90,
       headerAlign: "center",
       align: "center",
       renderCell(params) {
@@ -680,7 +594,7 @@ export default function MainDatagrid({ isDarkMode }) {
     {
       field: "seq11",
       headerName: "CARRIER",
-      width: 80,
+      width: 90,
       headerAlign: "center",
       align: "center",
       renderCell(params) {
@@ -711,7 +625,7 @@ export default function MainDatagrid({ isDarkMode }) {
     {
       field: "seq12",
       headerName: "DVT",
-      width: 80,
+      width: 90,
       headerAlign: "center",
       align: "center",
       renderCell(params) {
@@ -742,7 +656,7 @@ export default function MainDatagrid({ isDarkMode }) {
     {
       field: "seq13",
       headerName: "MP",
-      width: 80,
+      width: 90,
       headerAlign: "center",
       align: "center",
       renderCell(params) {
@@ -772,10 +686,128 @@ export default function MainDatagrid({ isDarkMode }) {
     },
   ];
 
+  //*onCLick LQ Query data from upd
+  //*Dialog
+  const [openLqList, setOpenLqList] = useState(false);
+  const handleCloseDialogLdList = () => {
+    setOpenLqList(false);
+    setDldProcNameLq("");
+  };
+
+  const [dldYearLq, setDldYearLq] = useState();
+  const [dldCustomerNameLq, setDldCustomerNameLq] = useState();
+  const [dldProcNameLq, setDldProcNameLq] = useState("");
+
+  const [dldProcNameLqOptions, setDldProcNameLqOptions] = useState([]);
+
+  const [rowsLq, setRowsLq] = useState([]);
+
+  const [countLqQualify, setCountLqQualify] = useState(0);
+  const [countLqPlan, setCountLqPlan] = useState(0);
+  const [countLqWna, setCountLqWna] = useState(0);
+  const [countLqWma, setCountLqWma] = useState(0);
+
+  useEffect(() => {
+    axios
+      .get(
+        `${import.meta.env.VITE_IP_API}/${
+          import.meta.env.VITE_NPI_STATUS
+        }/smart_machine_upd_onclick_lq?dld_year=${dldYearLq}&dld_customer_name=${dldCustomerNameLq}` //&dld_proc_name=${dldProcNameLq}
+      )
+      .then((response) => {
+        const data = response.data;
+        const getDldProcName = data.map((row) => row.dld_proc_name);
+        const uniqueDldProcName = [...new Set(getDldProcName)];
+        setDldProcNameLqOptions(uniqueDldProcName);
+
+        console.log("onCLick LQ Option", uniqueDldProcName);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [dldYearLq, dldCustomerNameLq]);
+
+  useEffect(() => {
+    axios
+      .get(
+        `${import.meta.env.VITE_IP_API}/${
+          import.meta.env.VITE_NPI_STATUS
+        }/smart_machine_upd_onclick_lq?dld_year=${dldYearLq}&dld_customer_name=${dldCustomerNameLq}&dld_proc_name=${encodeURIComponent(
+          dldProcNameLq
+        )}`
+      )
+      .then((response) => {
+        const data = response.data;
+        console.log("onCLick LQ", data);
+
+        const countLqQualify = data.filter(
+          (row) => row.dld_status === "Qualify"
+        ).length;
+        setCountLqQualify(countLqQualify);
+
+        const countLqPlan = data.filter(
+          (row) => row.dld_status === "Plan"
+        ).length;
+        setCountLqPlan(countLqPlan);
+
+        const countLqWna = data.filter(
+          (row) => row.dld_status === "Wait NPI Approve"
+        ).length;
+        setCountLqWna(countLqWna);
+
+        const countLqWma = data.filter(
+          (row) => row.dld_status === "Wait Manager Approve"
+        ).length;
+        setCountLqWma(countLqWma);
+
+        const rowsWithId = data.map((row, index) => {
+          return { ...row, id: index + 1 };
+        });
+        setRowsLq(rowsWithId);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [dldYearLq, dldCustomerNameLq, dldProcNameLq]);
+
+  //*onCLick Customer Desc Query data from upd
+
+  const [openCdCount, setOpenCdCount] = useState(false);
+  const handleCloseDialogCdCount = () => {
+    setOpenCdCount(false);
+  };
+
+  const [dldYearCd, setDldYearCd] = useState();
+  const [dldCustomerNameCd, setDldCustomerNameCd] = useState();
+
+  const [rowsCdCount, setRowsCdCount] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(
+        `${import.meta.env.VITE_IP_API}/${
+          import.meta.env.VITE_NPI_STATUS
+        }/smart_machine_upd_onclick_customer_desc?dld_year=${dldYearCd}&dld_customer_name=${dldCustomerNameCd}`
+      )
+      .then((response) => {
+        const data = response.data;
+
+        const rowsWithId = data.map((row, index) => {
+          return { ...row, id: index + 1 };
+        });
+        setRowsCdCount(rowsWithId);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [dldYearCd, dldCustomerNameCd]);
+
   return (
     <>
       <div className="grid gap-y-4">
-        <div className={`grid grid-cols-5 gap-4 `}>
+        <div
+          className={`grid xl:grid-cols-5 gap-4 md:grid-cols-2 sm:grid-cols-1`}
+        >
           <div
             className={`py-2 px-4 duration-300 rounded-2xl shadow-md ${
               isDarkMode ? "bg-zinc-800" : "bg-white"
@@ -963,8 +995,8 @@ export default function MainDatagrid({ isDarkMode }) {
             />
           </div>
           <button
-            className={`btn btn-square my-auto duration-300 shadow-md ${
-              isDarkMode ? "btn-neutral" : "btn-ghost"
+            className={`btn xl:btn-square my-auto duration-300 shadow-md ${
+              isDarkMode ? "btn-neutral" : "btn-outline"
             }`}
             onClick={() => {
               setSelectedYear("");
@@ -976,7 +1008,7 @@ export default function MainDatagrid({ isDarkMode }) {
             <ReplayRoundedIcon />
           </button>
         </div>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid md:grid-cols-3 gap-2 grid-cols-1">
           <div
             className={`card duration-300 shadow-lg ${
               isDarkMode ? "bg-zinc-800 text-white" : "bg-white text-black"
@@ -1023,6 +1055,7 @@ export default function MainDatagrid({ isDarkMode }) {
                   showQuickFilter: true,
                 },
               }}
+              getRowHeight={() => "auto"}
               pageSize={5}
               sx={{
                 "& .MuiDataGrid-cell": {
@@ -1063,6 +1096,25 @@ export default function MainDatagrid({ isDarkMode }) {
           </div>
         </div>
       </div>
+      <OnClickLqListDialog
+        openLqList={openLqList}
+        handleCloseDialogLdList={handleCloseDialogLdList}
+        rowsLq={rowsLq}
+        isDarkMode={isDarkMode}
+        dldProcNameLqOptions={dldProcNameLqOptions}
+        dldProcNameLq={dldProcNameLq}
+        setDldProcNameLq={setDldProcNameLq}
+        countLqQualify={countLqQualify}
+        countLqPlan={countLqPlan}
+        countLqWna={countLqWna}
+        countLqWma={countLqWma}
+      />
+      <OnClickCdCountDialog
+        openCdCount={openCdCount}
+        handleCloseDialogCdCount={handleCloseDialogCdCount}
+        rowsCdCount={rowsCdCount}
+        isDarkMode={isDarkMode}
+      />
     </>
   );
 }

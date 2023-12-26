@@ -51,7 +51,7 @@ export default function PersistentDrawerLeft() {
   return (
     <div
       style={{
-        backgroundColor: isDarkMode ? "#676767" : "#FFFFFF",
+        backgroundColor: isDarkMode ? "#565656" : "#F1F1F1",
         height: "100%",
         minHeight: "100vh",
         width: "100%",
