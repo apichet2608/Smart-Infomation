@@ -5,8 +5,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import styled from "@mui/material/styles/styled";
-import Autocomplete from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
+import Divider from "@mui/material/Divider";
 
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -113,6 +112,8 @@ export default function OnClickCdCountDialog({
               setGrpStatus(params.row.grouped_status);
               setProcCustName(params.row.dld_proc_cust_name);
               setOpenMachine(true);
+              setShowStateProcCustName(params.row.dld_proc_cust_name);
+              setShowStateGrpStatus(params.row.grouped_status);
             }}
           >
             {params.value}
@@ -131,6 +132,9 @@ export default function OnClickCdCountDialog({
   // const queryDataMachine = [customerName, grpStatus, procCustName];
 
   // console.log("queryDataMachine", queryDataMachine);
+
+  const [showStateProcCustName, setShowStateProcCustName] = useState("");
+  const [showStateGrpStatus, setShowStateGrpStatus] = useState("");
 
   const [rowsMachine, setRowsMachine] = useState([]);
 
@@ -261,8 +265,39 @@ export default function OnClickCdCountDialog({
         }}
       >
         <DialogTitle>
-          <div className="font-bold text-blue-600 drop-shadow-sm">Machine</div>
+          <div className="font-bold drop-shadow-sm">
+            <div className="bg-blue-500 w-fit px-2 rounded-xl text-white my-2 text-center">
+              Machine{" "}
+            </div>
+            <p className={`${isDarkMode ? "text-zinc-100" : "text-slate-700"}`}>
+              Process Customer Name :{" "}
+              <span className="text-blue-500">{showStateProcCustName}</span>
+            </p>
+            <p className={`${isDarkMode ? "text-zinc-100" : "text-slate-700"}`}>
+              Grouped Status :{" "}
+              <span
+                className={`${
+                  showStateGrpStatus === "Qualify"
+                    ? "text-green-500"
+                    : showStateGrpStatus === "Plan"
+                    ? "text-rose-500"
+                    : "text-yellow-500"
+                }`}
+              >
+                {showStateGrpStatus}
+              </span>
+            </p>
+          </div>
         </DialogTitle>
+        <Divider>
+          <div
+            className={`${
+              isDarkMode ? "text-zinc-100" : "text-slate-700"
+            } font-bold`}
+          >
+            List
+          </div>
+        </Divider>
         <DialogContent>
           <DialogContentText>
             <div className="grid grid-cols-6 gap-5">

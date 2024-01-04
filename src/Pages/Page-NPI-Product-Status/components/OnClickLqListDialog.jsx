@@ -44,6 +44,9 @@ export default function OnClickLqListDialog({
   countLqPlan,
   countLqWna,
   countLqWma,
+  showStateCustomerName,
+  setDldStatus,
+  dldStatus,
 }) {
   const columnsLq = [
     {
@@ -129,6 +132,18 @@ export default function OnClickLqListDialog({
       align: "center",
     },
   ];
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const statusQualify = ["Q", "-", "F", ""];
+
+  const handleQualify = () => {
+    // Cycle through the status values
+    setDldStatus(statusQualify[currentIndex]);
+
+    // Update the index for the next click
+    setCurrentIndex((currentIndex + 1) % statusQualify.length);
+  };
+
   return (
     <>
       <Dialog
@@ -144,7 +159,9 @@ export default function OnClickLqListDialog({
       >
         <DialogTitle>
           <div className="flex place-content-between">
-            <div className="font-bold text-blue-600 drop-shadow">LQ list</div>
+            <div className="font-bold text-blue-500 drop-shadow">
+              {showStateCustomerName}
+            </div>
             <div
               className={`py-2 px-4 duration-300 w-72 rounded-2xl shadow-md ${
                 isDarkMode ? "bg-zinc-800" : "bg-white"
@@ -195,13 +212,32 @@ export default function OnClickLqListDialog({
         <DialogContent>
           <div className="grid md:grid-cols-4 mb-4 gap-4 grid-cols-2">
             <div
+              onClick={() => {
+                handleQualify();
+              }}
               className={`card duration-300 shadow-lg ${
                 isDarkMode ? "bg-zinc-800 text-white" : "bg-white text-black"
+              } hover:cursor-pointer ${
+                dldStatus === "Q" || dldStatus === "-" || dldStatus === "F"
+                  ? "border-green-500 border-2"
+                  : ""
               }`}
             >
               <div className="card-body">
                 <h2 className="card-title text-green-500 drop-shadow-sm flex justify-center">
-                  Qualify
+                  Qualify{" "}
+                  <span
+                    className={`bg-green-100 px-3 rounded-lg absolute -right-6 -top-6 ${
+                      dldStatus === "" ||
+                      dldStatus === "P" ||
+                      dldStatus === "A" ||
+                      dldStatus === "WA"
+                        ? "hidden"
+                        : "block"
+                    }`}
+                  >
+                    {statusQualify ? statusQualify[currentIndex - 1] : ""}
+                  </span>
                 </h2>
                 <p
                   className={`font-bold text-3xl text-center p-1 rounded-xl ${
@@ -213,8 +249,13 @@ export default function OnClickLqListDialog({
               </div>
             </div>
             <div
+              onClick={() => {
+                setDldStatus("P");
+              }}
               className={`card duration-300 shadow-lg ${
                 isDarkMode ? "bg-zinc-800 text-white" : "bg-white text-black"
+              } hover:cursor-pointer ${
+                dldStatus === "P" ? "border-rose-500 border-2" : ""
               }`}
             >
               <div className="card-body">
@@ -231,8 +272,13 @@ export default function OnClickLqListDialog({
               </div>
             </div>
             <div
+              onClick={() => {
+                setDldStatus("A");
+              }}
               className={`card duration-300 shadow-lg ${
                 isDarkMode ? "bg-zinc-800 text-white" : "bg-white text-black"
+              } hover:cursor-pointer ${
+                dldStatus === "A" ? "border-yellow-500 border-2" : ""
               }`}
             >
               <div className="card-body">
@@ -249,8 +295,13 @@ export default function OnClickLqListDialog({
               </div>
             </div>
             <div
+              onClick={() => {
+                setDldStatus("WA");
+              }}
               className={`card duration-300 shadow-lg ${
                 isDarkMode ? "bg-zinc-800 text-white" : "bg-white text-black"
+              } hover:cursor-pointer ${
+                dldStatus === "WA" ? "border-yellow-500 border-2" : ""
               }`}
             >
               <div className="card-body">
@@ -325,6 +376,14 @@ export default function OnClickLqListDialog({
           </DialogContentText>
         </DialogContent>
         <DialogActions>
+          <button
+            onClick={() => {
+              setDldStatus("");
+            }}
+            className="btn btn-neutral btn-sm"
+          >
+            Clear
+          </button>
           <button
             className="bg-red-400 hover:bg-red-500 text-white font-bold py-1 px-3 rounded-xl hover:scale-110 transform duration-150 active:scale-100 ease-in-out"
             onClick={handleCloseDialogLdList}

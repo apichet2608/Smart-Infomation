@@ -7,8 +7,8 @@ export default {
         fade: "fadeIn .6s ease-in-out",
         fadeOut: "fadeOut 5s ease-in-out",
         delay: "delay .8s ease-in-out",
-        rtl: "rtl .6s ease-in-out",
-        ltr: "ltr .6s ease-in-out",
+        rtl: "rtl .7s ease-in-out",
+        ltr: "ltr .7s ease-in-out",
         floating: "floating 3s ease-in-out infinite",
         topDown: "topDown 0.8s ease-in-out",
         bottomUp: "bottomUp 0.8s ease-in-out",
@@ -33,11 +33,11 @@ export default {
           "100%": { opacity: 1, transform: "translateY(0px)" },
         },
         rtl: {
-          "0%": { opacity: 0, transform: "translateX(10%)" },
+          "0%": { opacity: 0, transform: "translateX(3%)" },
           "100%": { opacity: 1, transform: "translateX(0)" },
         },
         ltr: {
-          "0%": { opacity: 0, transform: "translateX(-10%)" },
+          "0%": { opacity: 0, transform: "translateX(-3%)" },
           "100%": { opacity: 1, transform: "translateX(0)" },
         },
         floating: {

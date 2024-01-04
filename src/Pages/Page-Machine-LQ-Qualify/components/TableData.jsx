@@ -13,7 +13,30 @@ import DoNotDisturbOnIcon from "@mui/icons-material/DoNotDisturbOn";
 
 import RemoveIcon from "@mui/icons-material/Remove";
 
-function TableMachineLQ({ datafromAPIlq }) {
+import styled from "@mui/material/styles/styled";
+
+//*Styled Components
+const StyledDataGrid = styled(DataGrid)({
+  "& .MuiDataGrid-columnHeaderTitle": {
+    fontWeight: "bold",
+    color: "#3371ff",
+    fontSize: "14px",
+  },
+  "& ::-webkit-scrollbar": {
+    width: "8px",
+    height: "8px",
+  },
+  "& ::-webkit-scrollbar-track": {
+    backgroundColor: "#ffffff",
+  },
+  "& ::-webkit-scrollbar-thumb": {
+    borderRadius: "4px",
+    backgroundColor: "#3b82f6",
+  },
+  borderRadius: "16px",
+});
+
+function TableMachineLQ({ datafromAPIlq, isDarkMode }) {
   const [DataTablelq, setDataTablelq] = useState([]);
 
   useEffect(() => {
@@ -86,7 +109,7 @@ function TableMachineLQ({ datafromAPIlq }) {
   });
 
   const columns = [
-    { field: "dld_year", headerName: "Year", width: 80 },
+    { field: "dld_year", headerName: "Year", width: 80, headerAlign: "center" },
     // {
     //   field: "dld_status",
     //   headerName: "Status",
@@ -144,6 +167,7 @@ function TableMachineLQ({ datafromAPIlq }) {
       field: "dld_status_result",
       headerName: "Status",
       width: 200,
+      headerAlign: "center",
       renderCell: (params) =>
         params.value === null ? (
           <div>
@@ -182,20 +206,47 @@ function TableMachineLQ({ datafromAPIlq }) {
           </>
         ),
     },
-    { field: "dld_machine", headerName: "Machine", width: 120 },
-    { field: "dld_customer_name", headerName: "Customer", width: 250 },
-    { field: "dld_model_name", headerName: "Model", width: 200 },
-    { field: "dld_product", headerName: "Product", width: 200 },
-    { field: "dld_proc_name", headerName: "Process", width: 120 },
+    {
+      field: "dld_machine",
+      headerName: "Machine",
+      headerAlign: "center",
+      width: 120,
+    },
+    {
+      field: "dld_customer_name",
+      headerName: "Customer",
+      headerAlign: "center",
+      width: 250,
+    },
+    {
+      field: "dld_model_name",
+      headerName: "Model",
+      headerAlign: "center",
+      width: 200,
+    },
+    {
+      field: "dld_product",
+      headerName: "Product",
+      headerAlign: "center",
+      width: 200,
+    },
+    {
+      field: "dld_proc_name",
+      headerName: "Process",
+      headerAlign: "center",
+      width: 120,
+    },
     {
       field: "dld_proc_cust_name",
       headerName: "Process(Customer)",
+      headerAlign: "center",
       width: 280,
     },
     {
       field: "dld_customer_box",
       headerName: "UPD",
       width: 80,
+      headerAlign: "center",
       renderCell: (params) => {
         if (params.value === null) {
           return (
@@ -233,6 +284,7 @@ function TableMachineLQ({ datafromAPIlq }) {
       field: "dld_ok2s",
       headerName: "OK2S",
       width: 100,
+      headerAlign: "center",
       renderCell: (params) => {
         if (params.value === null) {
           return (
@@ -268,8 +320,8 @@ function TableMachineLQ({ datafromAPIlq }) {
   ];
 
   return (
-    <div className="w-fit h-full">
-      <div className="flex justify-end pt-2 pr-2">
+    <div className="grid">
+      {/* <div className="flex justify-end pt-2 pr-2">
         <TextField
           label="Search"
           value={search}
@@ -277,17 +329,50 @@ function TableMachineLQ({ datafromAPIlq }) {
           variant="outlined"
           size="small"
         />
-      </div>
-      <DataGrid
+      </div> */}
+      <StyledDataGrid
         rows={filteredItems}
         columns={columns}
         pagination
         slots={{
           toolbar: GridToolbar,
         }}
+        slotProps={{
+          toolbar: {
+            showQuickFilter: true,
+          },
+        }}
         getRowHeight={() => "auto"}
         pageSize={5}
-        sx={{ height: 600, marginTop: 2 }}
+        sx={{
+          "& .MuiDataGrid-cell": {
+            borderRight: isDarkMode ? "1px solid #676767" : "1px solid #e3e3e3",
+            borderBottom: isDarkMode
+              ? "1px solid #676767"
+              : "1px solid #e3e3e3",
+            color: isDarkMode ? "#FFFFFF" : "#000000", // Set text color based on isDarkMode
+          },
+          "& .MuiIconButton-root": {
+            color: "#3371ff",
+          },
+          "& .MuiTablePagination-root": {
+            color: isDarkMode ? "#FFFFFF" : "#000000", // Set text color for pagination text
+          },
+          "& .MuiInputBase-input": {
+            color: isDarkMode ? "#FFFFFF" : "#000000", // Set text color for input
+          },
+          "& .MuiInput-underline:before": {
+            borderBottomColor: isDarkMode ? "#FFFFFF" : "#000000", // Set color for the underline
+          },
+          "& .MuiDataGrid-columnHeader": {
+            borderRight: isDarkMode ? "1px solid #676767" : "1px solid #e3e3e3",
+            borderBottom: isDarkMode
+              ? "1px solid #676767"
+              : "1px solid #e3e3e3",
+            borderTop: isDarkMode ? "1px solid #676767" : "1px solid #e3e3e3",
+          },
+          height: 640,
+        }}
       />
     </div>
   );

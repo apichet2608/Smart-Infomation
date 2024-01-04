@@ -37,8 +37,30 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ScheduleIcon from "@mui/icons-material/Schedule";
 import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
 import BlockIcon from "@mui/icons-material/Block";
+import { styled } from "@mui/material/styles";
 
-function TableData({ dataAPI, update, refreshtable }) {
+//*Styled Components
+const StyledDataGrid = styled(DataGrid)({
+  "& .MuiDataGrid-columnHeaderTitle": {
+    fontWeight: "bold",
+    color: "#3371ff",
+    fontSize: "14px",
+  },
+  "& ::-webkit-scrollbar": {
+    width: "8px",
+    height: "8px",
+  },
+  "& ::-webkit-scrollbar-track": {
+    backgroundColor: "#ffffff",
+  },
+  "& ::-webkit-scrollbar-thumb": {
+    borderRadius: "4px",
+    backgroundColor: "#3b82f6",
+  },
+  borderRadius: "16px",
+});
+
+function TableData({ dataAPI, update, refreshtable, isDarkMode }) {
   const [selectedMachine, setSelectedMachine] = useState(null);
   const [message, setMessage] = useState("");
 
@@ -658,12 +680,23 @@ function TableData({ dataAPI, update, refreshtable }) {
 
   const columns = [
     // { field: "building", headerName: "Building", width: 200 },
-    { field: "process", headerName: "Process", width: 120 },
-    { field: "item_owner_cc", headerName: "CC", width: 120 },
+    {
+      field: "process",
+      headerName: "Process",
+      width: 120,
+      headerAlign: "center",
+    },
+    {
+      field: "item_owner_cc",
+      headerName: "CC",
+      width: 120,
+      headerAlign: "center",
+    },
     {
       field: "machine",
       headerName: "Machine",
       width: 120,
+      headerAlign: "center",
       renderCell: (params) => {
         const machine = params.value;
 
@@ -675,7 +708,7 @@ function TableData({ dataAPI, update, refreshtable }) {
         return (
           <>
             <div
-              style={{ color: "#2980B9", cursor: "pointer" }}
+              style={{ color: "#0ea5e9", cursor: "pointer" }}
               onClick={handleClick}
             >
               {machine}
@@ -690,6 +723,7 @@ function TableData({ dataAPI, update, refreshtable }) {
       field: "scada",
       headerName: "SCADA",
       width: 150,
+      headerAlign: "center",
       renderCell: (params) =>
         params.value === null ? (
           <div>
@@ -726,6 +760,7 @@ function TableData({ dataAPI, update, refreshtable }) {
       field: "pm",
       headerName: "PM",
       width: 120,
+      headerAlign: "center",
       renderCell: (params) => (
         <>
           {params.value === null ? (
@@ -745,7 +780,7 @@ function TableData({ dataAPI, update, refreshtable }) {
                       display: "flex",
                       alignItems: "center",
                       fontSize: 14,
-                      color: "#000000",
+                      color: isDarkMode ? "#ffffff" : "#000000",
                     }}
                   >
                     <CheckCircleIcon
@@ -760,7 +795,7 @@ function TableData({ dataAPI, update, refreshtable }) {
                       display: "flex",
                       alignItems: "center",
                       fontSize: 14,
-                      color: "#000000",
+                      color: isDarkMode ? "#ffffff" : "#000000",
                     }}
                   >
                     <ErrorIcon style={{ fontSize: 18, color: "#F8C471" }} />
@@ -773,7 +808,7 @@ function TableData({ dataAPI, update, refreshtable }) {
                       display: "flex",
                       alignItems: "center",
                       fontSize: 14,
-                      color: "#000000",
+                      color: isDarkMode ? "#ffffff" : "#000000",
                     }}
                   >
                     <RemoveCircleIcon
@@ -793,11 +828,11 @@ function TableData({ dataAPI, update, refreshtable }) {
       field: "calibration",
       headerName: "Calibration",
       width: 120,
+      headerAlign: "center",
       renderCell: (params) => (
         <>
           {params.value === null ? (
             <>
-              {" "}
               <div>
                 &nbsp; &nbsp; &nbsp;
                 <DoNotDisturbOnIcon
@@ -821,7 +856,10 @@ function TableData({ dataAPI, update, refreshtable }) {
                   <></>
                 )}
                 &nbsp;
-                <span style={{ color: "black", fontSize: 14, ml: 1 }}>
+                <span
+                  style={{ fontSize: 14, ml: 1 }}
+                  className={`${isDarkMode ? "text-white" : "text-black"}`}
+                >
                   {params.value === "On plan" ? "Active" : params.value || ""}
                 </span>
               </IconButton>
@@ -886,13 +924,14 @@ function TableData({ dataAPI, update, refreshtable }) {
     //   },
     // },
 
-    { field: "grr", headerName: "GR&R", width: 120 },
+    { field: "grr", headerName: "GR&R", width: 120, headerAlign: "center" },
     // { field: "mtbf", headerName: "MTBF", width: 120 },
     // { field: "mttr", headerName: "MTTR", width: 120 },
     {
       field: "oee",
       headerName: "OEE",
       width: 120,
+      headerAlign: "center",
       renderCell: (params) => {
         if (params.row.oee === null || params.row.upd === "") {
           return (
@@ -926,6 +965,7 @@ function TableData({ dataAPI, update, refreshtable }) {
       field: "machine_buyoff",
       headerName: "Machine Buyoff",
       width: 120,
+      headerAlign: "center",
       renderCell: (params) => {
         if (params.row.machine_buyoff === null) {
           return (
@@ -975,6 +1015,7 @@ function TableData({ dataAPI, update, refreshtable }) {
       field: "upd",
       headerName: "UPD Link",
       width: 120,
+      headerAlign: "center",
       renderCell: (params) => {
         if (params.row.upd === null || params.row.upd === "") {
           // return <p>No UPD</p>;
@@ -1088,7 +1129,12 @@ function TableData({ dataAPI, update, refreshtable }) {
         }
       },
     },
-    { field: "predictive", headerName: "Predictive", width: 150 },
+    {
+      field: "predictive",
+      headerName: "Predictive",
+      width: 150,
+      headerAlign: "center",
+    },
   ];
 
   const [rows, setRows] = useState([]);
@@ -1155,7 +1201,11 @@ function TableData({ dataAPI, update, refreshtable }) {
 
   return (
     <>
-      <div className="flex justify-end mb-2">
+      {/* <div
+        className={`flex justify-end mb-2 w-fit ${
+          isDarkMode ? "bg-white" : ""
+        }`}
+      >
         <TextField
           label="Search"
           value={search}
@@ -1163,17 +1213,50 @@ function TableData({ dataAPI, update, refreshtable }) {
           variant="outlined"
           size="small"
         />
-      </div>
-      <DataGrid
+      </div> */}
+      <StyledDataGrid
         rows={filteredItems}
         columns={columns}
         pageSize={5}
         slots={{
           toolbar: GridToolbar,
         }}
+        slotProps={{
+          toolbar: {
+            showQuickFilter: true,
+          },
+        }}
         rowsPerPageOptions={[5, 10, 20]}
         getRowClassName={getRowClassName}
-        sx={{ height: 650 }}
+        sx={{
+          "& .MuiDataGrid-cell": {
+            borderRight: isDarkMode ? "1px solid #676767" : "1px solid #e3e3e3",
+            borderBottom: isDarkMode
+              ? "1px solid #676767"
+              : "1px solid #e3e3e3",
+            color: isDarkMode ? "#FFFFFF" : "#000000", // Set text color based on isDarkMode
+          },
+          "& .MuiIconButton-root": {
+            color: "#3371ff",
+          },
+          "& .MuiTablePagination-root": {
+            color: isDarkMode ? "#FFFFFF" : "#000000", // Set text color for pagination text
+          },
+          "& .MuiInputBase-input": {
+            color: isDarkMode ? "#FFFFFF" : "#000000", // Set text color for input
+          },
+          "& .MuiInput-underline:before": {
+            borderBottomColor: isDarkMode ? "#FFFFFF" : "#000000", // Set color for the underline
+          },
+          "& .MuiDataGrid-columnHeader": {
+            borderRight: isDarkMode ? "1px solid #676767" : "1px solid #e3e3e3",
+            borderBottom: isDarkMode
+              ? "1px solid #676767"
+              : "1px solid #e3e3e3",
+            borderTop: isDarkMode ? "1px solid #676767" : "1px solid #e3e3e3",
+          },
+          height: 700,
+        }}
       />
 
       <Dialog

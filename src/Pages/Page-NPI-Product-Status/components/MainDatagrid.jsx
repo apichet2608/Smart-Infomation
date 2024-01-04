@@ -175,7 +175,7 @@ export default function MainDatagrid({ isDarkMode }) {
     {
       field: "pmc_customer_desc",
       headerName: "Customer Desc",
-      width: 320,
+      width: 300,
       headerAlign: "center",
       renderCell(params) {
         return (
@@ -193,7 +193,7 @@ export default function MainDatagrid({ isDarkMode }) {
                 selectedCustomerDesc
                   ? "text-violet-600 font-bold drop-shadow-sm"
                   : ""
-              }`}
+              } ${params.row.status_ok2s === "Y" ? "text-blue-600" : ""}`}
             >
               <Tooltip title="Open Data">{params.value}</Tooltip>
             </div>
@@ -272,7 +272,7 @@ export default function MainDatagrid({ isDarkMode }) {
                 const link = `${params.row.pmc_ok2s}`;
                 window.open(link, "_blank");
               }}
-              className="font-bold text-green-500 drop-shadow-sm hover:cursor-pointer hover:scale-125 active:scale-100 hover:bg-cyan-600 hover:text-white px-2 rounded-md py-0.5 duration-200"
+              className="font-bold text-green-500 drop-shadow-sm hover:cursor-pointer hover:scale-110 active:scale-100 hover:bg-cyan-600 hover:text-white px-2 rounded-md py-0.5 duration-200"
             >
               <Tooltip title={params.row.pmc_ok2s}>{params.value}</Tooltip>
             </div>
@@ -305,8 +305,9 @@ export default function MainDatagrid({ isDarkMode }) {
                 setDldYearLq(params.row.flpm_year);
                 setDldCustomerNameLq(params.row.pmc_customer_desc);
                 setOpenLqList(true);
+                setShowStateCustomerName(params.row.pmc_customer_desc);
               }}
-              className="font-bold text-green-500 drop-shadow-sm hover:cursor-pointer hover:scale-125 active:scale-100 hover:bg-green-600 hover:text-white px-2 rounded-md py-0.5 duration-200"
+              className="font-bold text-green-500 drop-shadow-sm hover:cursor-pointer hover:scale-110 active:scale-100 hover:bg-green-600 hover:text-white px-2 rounded-md py-0.5 duration-200"
             >
               <Tooltip title="Open Data">{params.value}</Tooltip>
             </div>
@@ -318,8 +319,9 @@ export default function MainDatagrid({ isDarkMode }) {
                 setDldYearLq(params.row.flpm_year);
                 setDldCustomerNameLq(params.row.pmc_customer_desc);
                 setOpenLqList(true);
+                setShowStateCustomerName(params.row.pmc_customer_desc);
               }}
-              className="font-bold text-red-500 drop-shadow-sm hover:cursor-pointer hover:scale-125 active:scale-100 hover:bg-red-600 hover:text-white px-2 rounded-md py-0.5 duration-200"
+              className="font-bold text-red-500 drop-shadow-sm hover:cursor-pointer hover:scale-110 active:scale-100 hover:bg-red-600 hover:text-white px-2 rounded-md py-0.5 duration-200"
             >
               <Tooltip title="Open Data">{params.value}</Tooltip>
             </div>
@@ -698,6 +700,9 @@ export default function MainDatagrid({ isDarkMode }) {
   const [dldYearLq, setDldYearLq] = useState();
   const [dldCustomerNameLq, setDldCustomerNameLq] = useState();
   const [dldProcNameLq, setDldProcNameLq] = useState("");
+  const [dldStatus, setDldStatus] = useState("");
+
+  console.log("stutus click", dldStatus);
 
   const [dldProcNameLqOptions, setDldProcNameLqOptions] = useState([]);
 
@@ -760,16 +765,30 @@ export default function MainDatagrid({ isDarkMode }) {
           (row) => row.dld_status === "Wait Manager Approve"
         ).length;
         setCountLqWma(countLqWma);
-
-        const rowsWithId = data.map((row, index) => {
-          return { ...row, id: index + 1 };
-        });
-        setRowsLq(rowsWithId);
       })
       .catch((error) => {
         console.log(error);
       });
   }, [dldYearLq, dldCustomerNameLq, dldProcNameLq]);
+
+  useEffect(() => {
+    axios
+      .get(
+        `${import.meta.env.VITE_IP_API}/${
+          import.meta.env.VITE_NPI_STATUS
+        }/smart_machine_upd_onclick_lq?dld_year=${dldYearLq}&dld_customer_name=${dldCustomerNameLq}&dld_proc_name=${encodeURIComponent(
+          dldProcNameLq
+        )}&dld_status=${dldStatus}`
+      )
+      .then((response) => {
+        const data = response.data;
+        const rowsWithId = data.map((row, index) => {
+          return { ...row, id: index + 1 };
+        });
+        setRowsLq(rowsWithId);
+        console.log("onCLick LQ 2024", data);
+      });
+  }, [dldYearLq, dldCustomerNameLq, dldProcNameLq, dldStatus]);
 
   //*onCLick Customer Desc Query data from upd
 
@@ -809,7 +828,7 @@ export default function MainDatagrid({ isDarkMode }) {
     <>
       <div className="grid gap-y-4">
         <div
-          className={`grid xl:grid-cols-5 gap-4 md:grid-cols-2 sm:grid-cols-1`}
+          className={`grid xl:grid-cols-5 gap-4 md:grid-cols-2 sm:grid-cols-1 animate-fade`}
         >
           <div
             className={`py-2 px-4 duration-300 rounded-2xl shadow-md ${
@@ -1011,7 +1030,7 @@ export default function MainDatagrid({ isDarkMode }) {
             <ReplayRoundedIcon />
           </button>
         </div>
-        <div className="grid md:grid-cols-3 gap-2 grid-cols-1">
+        <div className="grid md:grid-cols-3 gap-2 grid-cols-1 animate-rtl">
           <div
             className={`card duration-300 shadow-lg ${
               isDarkMode ? "bg-zinc-800 text-white" : "bg-white text-black"
@@ -1043,7 +1062,7 @@ export default function MainDatagrid({ isDarkMode }) {
             </div>
           </div>
         </div>
-        <div className="max-w-[1920px] overflow-auto">
+        <div className="grid grid-cols-1 animate-delay">
           <div
             className={`${
               isDarkMode ? "bg-zinc-800" : "bg-white"
@@ -1111,6 +1130,9 @@ export default function MainDatagrid({ isDarkMode }) {
         countLqPlan={countLqPlan}
         countLqWna={countLqWna}
         countLqWma={countLqWma}
+        showStateCustomerName={showStateCustomerName}
+        setDldStatus={setDldStatus}
+        dldStatus={dldStatus}
       />
       <OnClickCdCountDialog
         openCdCount={openCdCount}

@@ -18,7 +18,7 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-export default function Infomation() {
+export default function Infomation({ isDarkMode }) {
   const theme = createTheme({
     breakpoints: {
       values: {
@@ -217,94 +217,183 @@ export default function Infomation() {
           {/* <Main open={open}> */}
           {/* <CssBaseline /> */}
           {/* <Container className="custom-container"> */}
-          <Grid container spacing={2}>
-            <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
-              <Item sx={{ borderRadius: 3 }}>
-                {distinct_building && distinct_building.length > 0 && (
-                  <Autocomplete
-                    size="small"
-                    disablePortal
-                    id="combo-box-demo"
-                    options={distinct_building}
-                    getOptionLabel={(option) =>
-                      option && option.item_building ? option.item_building : ""
-                    }
-                    value={select_building}
-                    onChange={handleBuildingChange}
-                    sx={{ width: "100%", display: "inline-block" }}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Building" />
-                    )}
-                  />
-                )}
-              </Item>
-            </Grid>
-            <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
-              <Item sx={{ borderRadius: 3 }}>
-                {distinct_process && distinct_process.length > 0 && (
-                  <Autocomplete
-                    size="small"
-                    disablePortal
-                    id="combo-box-demo"
-                    options={distinct_process}
-                    getOptionLabel={(option) =>
-                      option && option.item_sub_process
-                        ? option.item_sub_process
-                        : ""
-                    }
-                    value={select_process}
-                    onChange={handleProcessChange}
-                    sx={{ width: "100%", display: "inline-block" }}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Process" />
-                    )}
-                  />
-                )}
-              </Item>
-            </Grid>
-            <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
-              <Item sx={{ borderRadius: 3 }}>
-                {distinct_machine && distinct_machine.length > 0 && (
-                  <Autocomplete
-                    size="small"
-                    disablePortal
-                    id="combo-box-demo"
-                    options={distinct_machine}
-                    getOptionLabel={(option) =>
-                      option && option.item_code ? option.item_code : ""
-                    }
-                    value={select_machine}
-                    onChange={handleMachineChange}
-                    sx={{ width: "100%", display: "inline-block" }}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Machine" />
-                    )}
-                  />
-                )}
-              </Item>
-            </Grid>
-            {/* <Grid item xs={6} sm={6} md={6} lg={6} xl={6}> */}
-            {/* {TableCal && TableCal.length > 0 && (
+          {/* <Grid container spacing={2}> */}
+          {/* <Grid item xs={2} sm={2} md={2} lg={2} xl={2}> */}
+          {/* <Item sx={{ borderRadius: 3 }}> */}
+          <div className="grid grid-cols-3 gap-4">
+            <div
+              className={`py-2 px-4 duration-300 rounded-2xl shadow-md ${
+                isDarkMode ? "bg-zinc-800" : "bg-white"
+              }`}
+            >
+              {distinct_building && distinct_building.length > 0 && (
+                <Autocomplete
+                  size="small"
+                  disablePortal
+                  id="combo-box-demo"
+                  options={distinct_building}
+                  getOptionLabel={(option) =>
+                    option && option.item_building ? option.item_building : ""
+                  }
+                  value={select_building}
+                  onChange={handleBuildingChange}
+                  sx={{ width: "100%", display: "inline-block" }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Building"
+                      variant="standard"
+                      sx={{
+                        "& .MuiInputLabel-root": {
+                          color: isDarkMode ? "#ffffff" : "inherit",
+                          fontWeight: "bold",
+                        },
+                        "& .MuiInput-input": {
+                          color: "#8c37e9", // Set the default text color
+                          fontWeight: "bold",
+                        },
+                        "& .MuiInput-underline:before": {
+                          borderBottomColor: isDarkMode ? "#ffffff" : "inherit", // Change the underline color
+                        },
+                        "& .MuiIconButton-root": {
+                          color: isDarkMode ? "#ffffff" : "inherit", // Change the clear value button color
+                        },
+                      }}
+                    />
+                  )}
+                />
+              )}
+            </div>
+            {/* </Item> */}
+            {/* </Grid> */}
+            {/* <Grid item xs={2} sm={2} md={2} lg={2} xl={2}> */}
+            {/* <Item sx={{ borderRadius: 3 }}> */}
+            <div
+              className={`py-2 px-4 duration-300 rounded-2xl shadow-md ${
+                isDarkMode ? "bg-zinc-800" : "bg-white"
+              }`}
+            >
+              {distinct_process && distinct_process.length > 0 && (
+                <Autocomplete
+                  size="small"
+                  disablePortal
+                  id="combo-box-demo"
+                  options={distinct_process}
+                  getOptionLabel={(option) =>
+                    option && option.item_sub_process
+                      ? option.item_sub_process
+                      : ""
+                  }
+                  value={select_process}
+                  onChange={handleProcessChange}
+                  sx={{ width: "100%", display: "inline-block" }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Process"
+                      variant="standard"
+                      sx={{
+                        "& .MuiInputLabel-root": {
+                          color: isDarkMode ? "#ffffff" : "inherit",
+                          fontWeight: "bold",
+                        },
+                        "& .MuiInput-input": {
+                          color: "#8c37e9", // Set the default text color
+                          fontWeight: "bold",
+                        },
+                        "& .MuiInput-underline:before": {
+                          borderBottomColor: isDarkMode ? "#ffffff" : "inherit", // Change the underline color
+                        },
+                        "& .MuiIconButton-root": {
+                          color: isDarkMode ? "#ffffff" : "inherit", // Change the clear value button color
+                        },
+                      }}
+                    />
+                  )}
+                />
+              )}
+            </div>
+            {/* </Item> */}
+            {/* </Grid> */}
+            {/* <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+            <Item sx={{ borderRadius: 3 }}> */}
+            <div
+              className={`py-2 px-4 duration-300 rounded-2xl shadow-md ${
+                isDarkMode ? "bg-zinc-800" : "bg-white"
+              }`}
+            >
+              {distinct_machine && distinct_machine.length > 0 && (
+                <Autocomplete
+                  size="small"
+                  disablePortal
+                  id="combo-box-demo"
+                  options={distinct_machine}
+                  getOptionLabel={(option) =>
+                    option && option.item_code ? option.item_code : ""
+                  }
+                  value={select_machine}
+                  onChange={handleMachineChange}
+                  sx={{ width: "100%", display: "inline-block" }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Machine"
+                      variant="standard"
+                      sx={{
+                        "& .MuiInputLabel-root": {
+                          color: isDarkMode ? "#ffffff" : "inherit",
+                          fontWeight: "bold",
+                        },
+                        "& .MuiInput-input": {
+                          color: "#8c37e9", // Set the default text color
+                          fontWeight: "bold",
+                        },
+                        "& .MuiInput-underline:before": {
+                          borderBottomColor: isDarkMode ? "#ffffff" : "inherit", // Change the underline color
+                        },
+                        "& .MuiIconButton-root": {
+                          color: isDarkMode ? "#ffffff" : "inherit", // Change the clear value button color
+                        },
+                      }}
+                    />
+                  )}
+                />
+              )}
+            </div>
+          </div>
+          {/* </Item>
+          </Grid> */}
+          {/* <Grid item xs={6} sm={6} md={6} lg={6} xl={6}> */}
+          {/* {TableCal && TableCal.length > 0 && (
             <TableData datafromAPICal={TableCal} />
           )} */}
-            {/* </Grid> */}
-            {/* <Grid item xs={12} sm={12} md={12} lg={12} xl={12}> */}
-            <Item sx={{ borderRadius: 3 }}>
+          {/* </Grid> */}
+          {/* <Grid item xs={12} sm={12} md={12} lg={12} xl={12}> */}
+          {/* <Item sx={{ borderRadius: 3 }}> */}
+          <div className="grid grid-cols-1 mt-4">
+            <div
+              className={`${
+                isDarkMode ? "bg-zinc-800" : "bg-white"
+              } rounded-2xl shadow-md duration-300`}
+            >
               {DataAPItable && DataAPItable.length > 0 && (
                 <TableData
                   dataAPI={DataAPItable}
                   update={fetchTableData}
                   refreshtable={fetchTableData}
+                  isDarkMode={isDarkMode}
                 />
               )}
-            </Item>
-            {/* </Grid> */}
-            {/* <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+            </div>
+          </div>
+          {/* </Item> */}
+          {/* </Grid> */}
+          {/* <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           {TableCal && TableCal.length > 0 && (
             <TableData datafromAPICal={TableCal} />
           )}
         </Grid> */}
-          </Grid>
+          {/* </Grid> */}
           {/* </Container> */}
           {/* </Main> */}
         </div>
