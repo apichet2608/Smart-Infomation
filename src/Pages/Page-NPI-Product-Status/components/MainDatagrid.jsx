@@ -10,6 +10,8 @@ import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 import Tooltip from "@mui/material/Tooltip";
 import OnClickLqListDialog from "./onClickLqListDialog";
 import OnClickCdCountDialog from "./onClickCdCountDialog";
+import MainChart from "./MainChart";
+import OnclickYearDialog from "./OnclickYearDialog";
 
 //*Styled Components
 const StyledDataGrid = styled(DataGrid)({
@@ -186,17 +188,21 @@ export default function MainDatagrid({ isDarkMode }) {
               setOpenCdCount(true);
               setShowStateCustomerName(params.row.pmc_customer_desc);
             }}
-            className="hover:font-bold hover:text-black hover:bg-violet-200 px-1 rounded-md hover:drop-shadow-sm hover:scale-110 active:scale-100 hover:cursor-pointer duration-200"
+            className={`hover:font-bold ${
+              isDarkMode
+                ? "hover:bg-zinc-300 hover:text-black"
+                : "hover:bg-slate-400 hover:text-white"
+            } hover:drop-shadow-sm hover:scale-110 active:scale-100 px-1 rounded hover:cursor-pointer duration-200 ${
+              selectedCustomerDesc && params.row.status_ok2s !== "Y"
+                ? "text-violet-600 font-bold drop-shadow-sm"
+                : ""
+            } ${
+              params.row.status_ok2s === "Y"
+                ? "text-emerald-600 font-bold drop-shadow-sm"
+                : ""
+            }`}
           >
-            <div
-              className={`${
-                selectedCustomerDesc
-                  ? "text-violet-600 font-bold drop-shadow-sm"
-                  : ""
-              } ${params.row.status_ok2s === "Y" ? "text-blue-600" : ""}`}
-            >
-              <Tooltip title="Open Data">{params.value}</Tooltip>
-            </div>
+            <Tooltip title="Open Data">{params.value}</Tooltip>
           </div>
         );
       },
@@ -824,9 +830,182 @@ export default function MainDatagrid({ isDarkMode }) {
       });
   }, [dldYearCd, dldCustomerNameCd]);
 
+  //*Get Data Chart
+  useEffect(() => {
+    axios
+      .get(
+        `${import.meta.env.VITE_IP_API}/${
+          import.meta.env.VITE_NPI_STATUS
+        }/upd_status_chart_table`
+      )
+      .then((response) => {
+        const data = response.data;
+        // console.log("card", data);
+
+        const rowsWithId = data.map((row, index) => {
+          return { ...row, id: index + 1 };
+        });
+
+        setRowsDataChart(rowsWithId);
+      });
+  }, []);
+
+  const [rowsDataChart, setRowsDataChart] = useState([]);
+
+  const columnsDataChart = [
+    {
+      field: "flpm_year",
+      headerName: "Year",
+      width: 70,
+      headerAlign: "center",
+      align: "center",
+      renderCell: (params) => {
+        return (
+          <>
+            <div
+              onClick={() => {
+                setFlpmYear(params.value);
+                setOpenYearPrd(true);
+              }}
+              className="font-bold hover:cursor-pointer hover:scale-110 active:scale-100 duration-300 hover:text-blue-500"
+            >
+              {params.value}
+            </div>
+          </>
+        );
+      },
+    },
+    // {
+    //   field: "pmc_customer_desc",
+    //   headerName: "Customer Desc",
+    //   width: 150,
+    //   headerAlign: "center",
+    // },
+    // {
+    //   field: "flqbu_build_name",
+    //   headerName: "Build Name",
+    //   width: 100,
+    //   headerAlign: "center",
+    // },
+    {
+      field: "status_lq_n",
+      headerName: "Status LQ N",
+      // width: 70,
+      headerAlign: "center",
+      align: "center",
+      flex: 1,
+    },
+    {
+      field: "status_lq_y",
+      headerName: "Status LQ Y",
+      // width: 100,
+      headerAlign: "center",
+      align: "center",
+      flex: 1,
+    },
+  ];
+
+  // console.log("rowsDataChart", rowsDataChart);
+
+  //*onclick Year Dialog
+  const [openYearPrd, setOpenYearPrd] = useState(false);
+
+  const [flpmYear, setFlpmYear] = useState("");
+
   return (
     <>
       <div className="grid gap-y-4">
+        {/* <div className="grid md:grid-cols-3 gap-2 grid-cols-1 animate-rtl">
+          <div
+            className={`card duration-300 shadow-lg ${
+              isDarkMode ? "bg-zinc-800 text-white" : "bg-white text-black"
+            }`}
+          >
+            <div className="card-body">
+              <h2 className="card-title">Card title!</h2>
+              <p>This is demo card</p>
+            </div>
+          </div>
+          <div
+            className={`card duration-300 shadow-lg ${
+              isDarkMode ? "bg-zinc-800 text-white" : "bg-white text-black"
+            }`}
+          >
+            <div className="card-body">
+              <h2 className="card-title">Card title!</h2>
+              <p>This is demo card</p>
+            </div>
+          </div>
+          <div
+            className={`card duration-300 shadow-lg ${
+              isDarkMode ? "bg-zinc-800 text-white" : "bg-white text-black"
+            }`}
+          >
+            <div className="card-body">
+              <h2 className="card-title">Card title!</h2>
+              <p>This is demo card</p>
+            </div>
+          </div>
+        </div> */}
+        <div className="flex md:flex-col lg:flex-row">
+          <div
+            className={`${
+              isDarkMode ? "bg-zinc-800" : "bg-white"
+            } rounded-2xl shadow-md duration-300`}
+          >
+            <StyledDataGrid
+              rows={rowsDataChart}
+              columns={columnsDataChart}
+              slots={{ toolbar: GridToolbar }}
+              slotProps={{
+                toolbar: {
+                  showQuickFilter: true,
+                },
+              }}
+              // getRowHeight={() => "auto"}
+              rowHeight={30}
+              pageSize={5}
+              sx={{
+                "& .MuiDataGrid-cell": {
+                  borderRight: isDarkMode
+                    ? "1px solid #676767"
+                    : "1px solid #e3e3e3",
+                  borderBottom: isDarkMode
+                    ? "1px solid #676767"
+                    : "1px solid #e3e3e3",
+                  color: isDarkMode ? "#FFFFFF" : "#000000", // Set text color based on isDarkMode
+                },
+                "& .MuiIconButton-root": {
+                  color: "#3371ff",
+                },
+                "& .MuiTablePagination-root": {
+                  color: isDarkMode ? "#FFFFFF" : "#000000", // Set text color for pagination text
+                },
+                "& .MuiInputBase-input": {
+                  color: isDarkMode ? "#FFFFFF" : "#000000", // Set text color for input
+                },
+                "& .MuiInput-underline:before": {
+                  borderBottomColor: isDarkMode ? "#FFFFFF" : "#000000", // Set color for the underline
+                },
+                "& .MuiDataGrid-columnHeader": {
+                  borderRight: isDarkMode
+                    ? "1px solid #676767"
+                    : "1px solid #e3e3e3",
+                  borderBottom: isDarkMode
+                    ? "1px solid #676767"
+                    : "1px solid #e3e3e3",
+                  borderTop: isDarkMode
+                    ? "1px solid #676767"
+                    : "1px solid #e3e3e3",
+                },
+                height: 340,
+              }}
+            />
+          </div>
+          <div className="w-full">
+            <MainChart isDarkMode={isDarkMode} rowsDataChart={rowsDataChart} />
+          </div>
+        </div>
         <div
           className={`grid xl:grid-cols-5 gap-4 md:grid-cols-2 sm:grid-cols-1 animate-fade`}
         >
@@ -1030,38 +1209,6 @@ export default function MainDatagrid({ isDarkMode }) {
             <ReplayRoundedIcon />
           </button>
         </div>
-        <div className="grid md:grid-cols-3 gap-2 grid-cols-1 animate-rtl">
-          <div
-            className={`card duration-300 shadow-lg ${
-              isDarkMode ? "bg-zinc-800 text-white" : "bg-white text-black"
-            }`}
-          >
-            <div className="card-body">
-              <h2 className="card-title">Card title!</h2>
-              <p>This is demo card</p>
-            </div>
-          </div>
-          <div
-            className={`card duration-300 shadow-lg ${
-              isDarkMode ? "bg-zinc-800 text-white" : "bg-white text-black"
-            }`}
-          >
-            <div className="card-body">
-              <h2 className="card-title">Card title!</h2>
-              <p>This is demo card</p>
-            </div>
-          </div>
-          <div
-            className={`card duration-300 shadow-lg ${
-              isDarkMode ? "bg-zinc-800 text-white" : "bg-white text-black"
-            }`}
-          >
-            <div className="card-body">
-              <h2 className="card-title">Card title!</h2>
-              <p>This is demo card</p>
-            </div>
-          </div>
-        </div>
         <div className="grid grid-cols-1 animate-delay">
           <div
             className={`${
@@ -1112,7 +1259,7 @@ export default function MainDatagrid({ isDarkMode }) {
                     ? "1px solid #676767"
                     : "1px solid #e3e3e3",
                 },
-                height: 550,
+                height: 350,
               }}
             />
           </div>
@@ -1140,6 +1287,14 @@ export default function MainDatagrid({ isDarkMode }) {
         rowsCdCount={rowsCdCount}
         isDarkMode={isDarkMode}
         showStateCustomerName={showStateCustomerName}
+      />
+      <OnclickYearDialog
+        isDarkMode={isDarkMode}
+        openYearPrd={openYearPrd}
+        setOpenYearPrd={setOpenYearPrd}
+        StyledDataGrid={StyledDataGrid}
+        flpmYear={flpmYear}
+        setFlpmYear={setFlpmYear}
       />
     </>
   );
