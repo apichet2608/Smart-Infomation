@@ -124,6 +124,7 @@ export default function OnclickYearDialog({
                   },
                 }}
                 // getRowHeight={() => "auto"}
+                disableSelectionOnClick
                 rowHeight={30}
                 pageSize={5}
                 sx={{

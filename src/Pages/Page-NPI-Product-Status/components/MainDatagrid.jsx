@@ -947,7 +947,7 @@ export default function MainDatagrid({ isDarkMode }) {
             </div>
           </div>
         </div> */}
-        <div className="flex md:flex-col lg:flex-row">
+        <div className="flex flex-col lg:flex-row">
           <div
             className={`${
               isDarkMode ? "bg-zinc-800" : "bg-white"
@@ -998,7 +998,7 @@ export default function MainDatagrid({ isDarkMode }) {
                     ? "1px solid #676767"
                     : "1px solid #e3e3e3",
                 },
-                height: 340,
+                height: 350,
               }}
             />
           </div>
