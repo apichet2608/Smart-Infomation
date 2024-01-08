@@ -39,6 +39,9 @@ import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
 import BlockIcon from "@mui/icons-material/Block";
 import { styled } from "@mui/material/styles";
 
+import PanToolAltIcon from "@mui/icons-material/PanToolAlt";
+import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
+
 //*Styled Components
 const StyledDataGrid = styled(DataGrid)({
   "& .MuiDataGrid-columnHeaderTitle": {
@@ -83,6 +86,10 @@ function TableData({ dataAPI, update, refreshtable, isDarkMode }) {
   const [openOEEDialog, setOpenOEEDialog] = useState(false);
   const [OEEMachine, setOEEMachine] = useState("");
   const [OEEData, setOEEData] = useState([]);
+
+  const [openGRRDialog, setOpenGRRDialog] = useState(false);
+  const [GRRMachine, setGRRMachine] = useState("");
+  const [GRRData, setGRRData] = useState([]);
 
   const [openNoDataChip, setOpenNoDataChip] = useState(false);
 
@@ -200,6 +207,31 @@ function TableData({ dataAPI, update, refreshtable, isDarkMode }) {
           console.log("UPD");
           setOEEData(response.data);
           setOpenOEEDialog(true);
+          setOpenNoDataChip(false); // ปิดการแสดง Chip เมื่อมีข้อมูล
+        } else {
+          // ไม่มีข้อมูล ให้แสดง "No DATA"
+          setOpenNoDataChip(false);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching calibration data:", error);
+      });
+  };
+
+  const handleOpenGRR = (machine) => {
+    setGRRMachine(machine);
+    setMessage(machine);
+
+    axios
+      .get(
+        `http://10.17.66.242:3000/smart_information/smart_machine_connect_list/grr?grr_machine=${machine}`
+        // `http://127.0.0.1:3000/smart_information/smart_machine_connect_list/grr?grr_machine=${machine}`
+      )
+      .then((response) => {
+        if (response.data.length > 0) {
+          console.log("GR&R");
+          setGRRData(response.data);
+          setOpenGRRDialog(true);
           setOpenNoDataChip(false); // ปิดการแสดง Chip เมื่อมีข้อมูล
         } else {
           // ไม่มีข้อมูล ให้แสดง "No DATA"
@@ -456,6 +488,61 @@ function TableData({ dataAPI, update, refreshtable, isDarkMode }) {
     },
   ];
 
+  const grrColumns = [
+    {
+      field: "create_at",
+      headerName: "Create Date",
+      width: 140,
+      renderCell: (params) => {
+        return formatdatewithtime(params.row.create_at);
+      },
+    },
+    { field: "mc_code", headerName: "Machine", width: 110 },
+    { field: "grr_desc", headerName: "GR&R Desc", width: 150 },
+    { field: "plan", headerName: "Plan Date", width: 140 },
+    { field: "actual", headerName: "Actual", width: 140 },
+    {
+      field: "upload",
+      headerName: "Upload",
+      headerAlign: "center",
+      align: "center",
+      width: 120,
+      renderCell: (params) => {
+        if (params.row.upload === null) {
+          return (
+            <div>
+              <DoNotDisturbOnIcon style={{ fontSize: 20, color: "#CCD1D1 " }} />
+            </div>
+          );
+        } else {
+          return (
+            <Button
+              variant="contained"
+              size="small"
+              startIcon={<FileDownloadIcon />}
+              style={{
+                color: "#0E6655",
+                backgroundColor: "#D0ECE7",
+                textTransform: "none",
+                borderRadius: "0.25rem",
+              }}
+              onClick={() => handleGRRDownload(params.value)}
+            >
+              Download
+            </Button>
+          );
+        }
+      },
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      width: 120,
+      align: "center",
+      headerAlign: "center",
+    },
+  ];
+
   //---------------------Apichet---------------------------//
   const handleFileUpload = async (event, row) => {
     const uploadedFile = event.target.files[0];
@@ -512,6 +599,16 @@ function TableData({ dataAPI, update, refreshtable, isDarkMode }) {
   const handleDownload = (text) => {
     const downloadUrl = `${import.meta.env.VITE_IP_API_UPLOAD}${
       import.meta.env.VITE_PATHDOWLOAD_machine_buyoff
+    }/download/${text}`;
+    console.log(downloadUrl);
+    window.open(downloadUrl, "_blank");
+  };
+
+  // DOWLLOAD FILE GR&R
+
+  const handleGRRDownload = (text) => {
+    const downloadUrl = `${import.meta.env.VITE_IP_API_UPLOAD}${
+      import.meta.env.VITE_PATHDOWLOAD_grr_upload
     }/download/${text}`;
     console.log(downloadUrl);
     window.open(downloadUrl, "_blank");
@@ -723,6 +820,7 @@ function TableData({ dataAPI, update, refreshtable, isDarkMode }) {
       field: "scada",
       headerName: "SCADA",
       width: 150,
+      align: "center",
       headerAlign: "center",
       renderCell: (params) =>
         params.value === null ? (
@@ -760,6 +858,7 @@ function TableData({ dataAPI, update, refreshtable, isDarkMode }) {
       field: "pm",
       headerName: "PM",
       width: 120,
+      align: "center",
       headerAlign: "center",
       renderCell: (params) => (
         <>
@@ -828,15 +927,19 @@ function TableData({ dataAPI, update, refreshtable, isDarkMode }) {
       field: "calibration",
       headerName: "Calibration",
       width: 120,
+      align: "center",
       headerAlign: "center",
       renderCell: (params) => (
         <>
           {params.value === null ? (
             <>
               <div>
-                &nbsp; &nbsp; &nbsp;
                 <DoNotDisturbOnIcon
-                  style={{ fontSize: 20, color: "#CCD1D1 " }}
+                  style={{
+                    fontSize: 20,
+                    color: "#CCD1D1 ",
+                    justifyContent: "center",
+                  }}
                 />
               </div>
             </>
@@ -924,19 +1027,49 @@ function TableData({ dataAPI, update, refreshtable, isDarkMode }) {
     //   },
     // },
 
-    { field: "grr", headerName: "GR&R", width: 120, headerAlign: "center" },
+    {
+      field: "grr",
+      headerName: "GR&R",
+      width: 120,
+      headerAlign: "center",
+      align: "center",
+      renderCell: (params) => {
+        if (params.row.grr === null || params.row.grr === "") {
+          return (
+            <div>
+              <DoNotDisturbOnIcon style={{ fontSize: 20, color: "#CCD1D1 " }} />
+            </div>
+          );
+        }
+
+        return (
+          <FileDownloadDoneIcon
+            style={{
+              color: "#3498DB",
+              cursor: "pointer",
+              width: "26px",
+              height: "26px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onClick={() => handleOpenGRR(params.row.machine)}
+          />
+        );
+      },
+    },
     // { field: "mtbf", headerName: "MTBF", width: 120 },
     // { field: "mttr", headerName: "MTTR", width: 120 },
     {
       field: "oee",
       headerName: "OEE",
       width: 120,
+      align: "center",
       headerAlign: "center",
       renderCell: (params) => {
-        if (params.row.oee === null || params.row.upd === "") {
+        if (params.row.oee === null || params.row.oee === "") {
           return (
             <div>
-              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
               <DoNotDisturbOnIcon style={{ fontSize: 20, color: "#CCD1D1 " }} />
             </div>
           );
@@ -965,6 +1098,7 @@ function TableData({ dataAPI, update, refreshtable, isDarkMode }) {
       field: "machine_buyoff",
       headerName: "Machine Buyoff",
       width: 120,
+      align: "center",
       headerAlign: "center",
       renderCell: (params) => {
         if (params.row.machine_buyoff === null) {
@@ -1015,6 +1149,7 @@ function TableData({ dataAPI, update, refreshtable, isDarkMode }) {
       field: "upd",
       headerName: "UPD Link",
       width: 120,
+      align: "center",
       headerAlign: "center",
       renderCell: (params) => {
         if (params.row.upd === null || params.row.upd === "") {
@@ -1030,7 +1165,6 @@ function TableData({ dataAPI, update, refreshtable, isDarkMode }) {
 
           return (
             <div>
-              &nbsp; &nbsp; &nbsp; &nbsp;
               <DoNotDisturbOnIcon style={{ fontSize: 20, color: "#CCD1D1 " }} />
             </div>
           );
@@ -1344,6 +1478,23 @@ function TableData({ dataAPI, update, refreshtable, isDarkMode }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenOEEDialog(false)} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openGRRDialog}
+        onClose={() => setOpenGRRDialog(false)}
+        // fullWidth={false}
+        maxWidth="xl"
+      >
+        <DialogTitle>OEE Data for {GRRMachine}</DialogTitle>
+        <DialogContent>
+          <DataGrid rows={GRRData} columns={grrColumns} />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenGRRDialog(false)} color="primary">
             Close
           </Button>
         </DialogActions>
