@@ -854,9 +854,9 @@ export default function MainDatagrid({ isDarkMode }) {
 
   const columnsDataChart = [
     {
-      field: "flpm_year",
+      field: "year",
       headerName: "Year",
-      width: 70,
+      width: 150,
       headerAlign: "center",
       align: "center",
       renderCell: (params) => {
@@ -867,7 +867,7 @@ export default function MainDatagrid({ isDarkMode }) {
                 setFlpmYear(params.value);
                 setOpenYearPrd(true);
               }}
-              className="font-bold hover:cursor-pointer hover:scale-110 active:scale-100 duration-300 hover:text-blue-500"
+              className="font-bold hover:cursor-pointer hover:scale-110 text-xl active:scale-100 duration-300 hover:text-blue-500"
             >
               {params.value}
             </div>
@@ -875,6 +875,55 @@ export default function MainDatagrid({ isDarkMode }) {
         );
       },
     },
+    {
+      field: "countStatusLqN",
+      headerName: "Status N",
+      width: 100,
+      headerAlign: "center",
+      renderCell: (params) => (
+        <div className="font-bold text-xl text-red-500">{params.value}</div>
+      ),
+    },
+    {
+      field: "countStatusLqY",
+      headerName: "Status Y",
+      width: 100,
+      headerAlign: "center",
+      renderCell: (params) => (
+        <div className="font-bold text-xl text-green-500">{params.value}</div>
+      ),
+    },
+    {
+      field: "countStatusLqAll",
+      headerName: "All Status",
+      width: 100,
+      headerAlign: "center",
+      renderCell: (params) => (
+        <div className="font-bold text-xl">{params.value}</div>
+      ),
+    },
+    // {
+    //   field: "flpm_year",
+    //   headerName: "Year",
+    //   width: 120,
+    //   headerAlign: "center",
+    //   align: "center",
+    //   renderCell: (params) => {
+    //     return (
+    //       <>
+    //         <div
+    //           onClick={() => {
+    //             setFlpmYear(params.value);
+    //             setOpenYearPrd(true);
+    //           }}
+    //           className="font-bold hover:cursor-pointer hover:scale-110 active:scale-100 duration-300 hover:text-blue-500"
+    //         >
+    //           {params.value}
+    //         </div>
+    //       </>
+    //     );
+    //   },
+    // },
     // {
     //   field: "pmc_customer_desc",
     //   headerName: "Customer Desc",
@@ -887,22 +936,20 @@ export default function MainDatagrid({ isDarkMode }) {
     //   width: 100,
     //   headerAlign: "center",
     // },
-    {
-      field: "status_lq_n",
-      headerName: "Status LQ N",
-      // width: 70,
-      headerAlign: "center",
-      align: "center",
-      flex: 1,
-    },
-    {
-      field: "status_lq_y",
-      headerName: "Status LQ Y",
-      // width: 100,
-      headerAlign: "center",
-      align: "center",
-      flex: 1,
-    },
+    // {
+    //   field: "status_lq_n",
+    //   headerName: "Status LQ N",
+    //   width: 100,
+    //   headerAlign: "center",
+    //   align: "center",
+    // },
+    // {
+    //   field: "status_lq_y",
+    //   headerName: "Status LQ Y",
+    //   width: 100,
+    //   headerAlign: "center",
+    //   align: "center",
+    // },
   ];
 
   // console.log("rowsDataChart", rowsDataChart);
@@ -911,6 +958,86 @@ export default function MainDatagrid({ isDarkMode }) {
   const [openYearPrd, setOpenYearPrd] = useState(false);
 
   const [flpmYear, setFlpmYear] = useState("");
+
+  const [yearStatus, setYearStatus] = useState("");
+  const [countStatusLqN, setCountStatusLqN] = useState(0);
+  const [countStatusLqY, setCountStatusLqY] = useState(0);
+  const [countStatusLqAll, setCountStatusLqAll] = useState(0);
+
+  const logDataStatus = [
+    {
+      year: yearStatus,
+    },
+    {
+      status: "Status LQ N",
+      count: countStatusLqN,
+    },
+    {
+      status: "Status LQ Y",
+      count: countStatusLqY,
+    },
+    {
+      status: "Status LQ All",
+      count: countStatusLqAll,
+    },
+  ];
+
+  console.log("logDataStatus", logDataStatus);
+
+  useEffect(() => {
+    axios
+      .get(
+        `${import.meta.env.VITE_IP_API}/${
+          import.meta.env.VITE_NPI_STATUS
+        }/upd_status_onclick_year?flpm_year`
+      )
+      .then((res) => {
+        const data = res.data;
+
+        console.log("table chart", data);
+
+        // Filter out null years and rows with null pmc_customer_desc
+        const filteredData = data.filter(
+          (row) => row.flpm_year !== null && row.pmc_customer_desc !== null
+        );
+
+        // Create a map to store counts for each year
+        const countsByYear = new Map();
+
+        // Iterate through filtered data and count 'N' and 'Y' for each year
+        filteredData.forEach((row) => {
+          const year = row.flpm_year;
+          const countN = row.status_lq === "N" ? 1 : 0;
+          const countY = row.status_lq === "Y" ? 1 : 0;
+
+          // Update counts in the map
+          if (!countsByYear.has(year)) {
+            countsByYear.set(year, { N: countN, Y: countY });
+          } else {
+            countsByYear.get(year).N += countN;
+            countsByYear.get(year).Y += countY;
+          }
+        });
+
+        // Extract unique years and counts
+        const uniqueYears = Array.from(countsByYear.keys()).sort();
+
+        // Sort counts by year
+        const sortedCounts = uniqueYears.map((year) => countsByYear.get(year));
+
+        // Calculate total count for each year
+        const totalCounts = sortedCounts.map((count) => count.N + count.Y);
+
+        // Set state with sorted unique years, counts, and total counts
+        setYearStatus(uniqueYears);
+        setCountStatusLqN(sortedCounts.map((count) => count.N));
+        setCountStatusLqY(sortedCounts.map((count) => count.Y));
+        setCountStatusLqAll(totalCounts);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   return (
     <>
@@ -951,9 +1078,9 @@ export default function MainDatagrid({ isDarkMode }) {
           <div
             className={`${
               isDarkMode ? "bg-zinc-800" : "bg-white"
-            } rounded-2xl shadow-md duration-300`}
+            } rounded-2xl shadow-md duration-300 w-full lg:w-1/2`}
           >
-            <StyledDataGrid
+            {/* <StyledDataGrid
               rows={rowsDataChart}
               columns={columnsDataChart}
               slots={{ toolbar: GridToolbar }}
@@ -1000,10 +1127,72 @@ export default function MainDatagrid({ isDarkMode }) {
                 },
                 height: 350,
               }}
-            />
+            /> */}
+            {Array.isArray(yearStatus) ? (
+              <StyledDataGrid
+                rows={yearStatus.map((year, index) => ({
+                  id: index + 1,
+                  year: year,
+                  countStatusLqN: countStatusLqN[index],
+                  countStatusLqY: countStatusLqY[index],
+                  countStatusLqAll: countStatusLqAll[index],
+                }))}
+                columns={columnsDataChart}
+                slots={{ toolbar: GridToolbar }}
+                slotProps={{
+                  toolbar: {
+                    showQuickFilter: true,
+                  },
+                }}
+                rowHeight={30}
+                pageSize={5}
+                sx={{
+                  "& .MuiDataGrid-cell": {
+                    borderRight: isDarkMode
+                      ? "1px solid #676767"
+                      : "1px solid #e3e3e3",
+                    borderBottom: isDarkMode
+                      ? "1px solid #676767"
+                      : "1px solid #e3e3e3",
+                    color: isDarkMode ? "#FFFFFF" : "#000000",
+                  },
+                  "& .MuiIconButton-root": {
+                    color: "#3371ff",
+                  },
+                  "& .MuiTablePagination-root": {
+                    color: isDarkMode ? "#FFFFFF" : "#000000",
+                  },
+                  "& .MuiInputBase-input": {
+                    color: isDarkMode ? "#FFFFFF" : "#000000",
+                  },
+                  "& .MuiInput-underline:before": {
+                    borderBottomColor: isDarkMode ? "#FFFFFF" : "#000000",
+                  },
+                  "& .MuiDataGrid-columnHeader": {
+                    borderRight: isDarkMode
+                      ? "1px solid #676767"
+                      : "1px solid #e3e3e3",
+                    borderBottom: isDarkMode
+                      ? "1px solid #676767"
+                      : "1px solid #e3e3e3",
+                    borderTop: isDarkMode
+                      ? "1px solid #676767"
+                      : "1px solid #e3e3e3",
+                  },
+                  height: 350,
+                }}
+              />
+            ) : (
+              <div>Loading</div>
+            )}
           </div>
           <div className="w-full">
-            <MainChart isDarkMode={isDarkMode} rowsDataChart={rowsDataChart} />
+            <MainChart
+              isDarkMode={isDarkMode}
+              rowsDataChart={rowsDataChart}
+              countStatusLqN={countStatusLqN}
+              countStatusLqY={countStatusLqY}
+            />
           </div>
         </div>
         <div

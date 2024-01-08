@@ -1,7 +1,12 @@
 import React from "react";
 import ReactApexChart from "react-apexcharts";
 
-const MainChart = ({ isDarkMode, rowsDataChart }) => {
+const MainChart = ({
+  isDarkMode,
+  rowsDataChart,
+  countStatusLqN,
+  countStatusLqY,
+}) => {
   //   console.log("rowsDataChart in MainChart: ", rowsDataChart);
 
   const categoriesUniqueYear = Array.from(
@@ -10,9 +15,9 @@ const MainChart = ({ isDarkMode, rowsDataChart }) => {
 
   //   console.log("categoriesUniqueYear: ", categoriesUniqueYear);
 
-  const countStatusLqN = rowsDataChart.map((row) => row.status_lq_n);
+  // const countStatusLqN = rowsDataChart.map((row) => row.status_lq_n);
 
-  const countStatusLqY = rowsDataChart.map((row) => row.status_lq_y);
+  // const countStatusLqY = rowsDataChart.map((row) => row.status_lq_y);
 
   //   console.log("status_lq_n: ", countStatusLqN);
   //   console.log("status_lq_y", countStatusLqY);

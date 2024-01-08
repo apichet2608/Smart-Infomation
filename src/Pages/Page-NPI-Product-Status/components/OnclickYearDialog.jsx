@@ -36,10 +36,39 @@ export default function OnclickYearDialog({
     },
     {
       field: "flqbu_seq",
-      headerName: "Seq",
+      headerName: "Build",
       width: 100,
       headerAlign: "center",
       align: "center",
+      renderCell: (params) => {
+        if (params.value === "1") {
+          return <div className="drop-shadow-sm">POC, C6.0</div>;
+        } else if (params.value === "2") {
+          return <div className="drop-shadow-sm">P0, C5.0</div>;
+        } else if (params.value === "3") {
+          return <div className="drop-shadow-sm">P1, C4.0</div>;
+        } else if (params.value === "4") {
+          return <div className="drop-shadow-sm">P2, C3.0</div>;
+        } else if (params.value === "5") {
+          return <div className="drop-shadow-sm">C3.1</div>;
+        } else if (params.value === "6") {
+          return <div className="drop-shadow-sm">P3</div>;
+        } else if (params.value === "7") {
+          return <div className="drop-shadow-sm">AB1, C2.0</div>;
+        } else if (params.value === "8") {
+          return <div className="drop-shadow-sm">EVT, C1.0</div>;
+        } else if (params.value === "9") {
+          return <div className="drop-shadow-sm">EVT2</div>;
+        } else if (params.value === "11") {
+          return <div className="drop-shadow-sm">CARRIER</div>;
+        } else if (params.value === "12") {
+          return <div className="drop-shadow-sm">DVT</div>;
+        } else if (params.value === "13") {
+          return <div className="drop-shadow-sm">MP</div>;
+        } else if (params.value === "22") {
+          return <div className="drop-shadow-sm">END</div>;
+        } else return <div className="drop-shadow-sm">{params.value}</div>;
+      },
     },
     {
       field: "status_lq",
@@ -59,13 +88,13 @@ export default function OnclickYearDialog({
         );
       },
     },
-    {
-      field: "status_lq_count",
-      headerName: "Count",
-      width: 100,
-      headerAlign: "center",
-      align: "center",
-    },
+    // {
+    //   field: "status_lq_count",
+    //   headerName: "Count",
+    //   width: 100,
+    //   headerAlign: "center",
+    //   align: "center",
+    // },
   ];
 
   useEffect(() => {
@@ -78,7 +107,12 @@ export default function OnclickYearDialog({
       .then((res) => {
         const data = res.data;
 
-        const rowsWithid = data.map((row, index) => {
+        // Filter out rows with null pmc_customer_desc
+        const filteredRows = data.filter(
+          (row) => row.pmc_customer_desc !== null
+        );
+
+        const rowsWithid = filteredRows.map((row, index) => {
           return { id: index + 1, ...row };
         });
         setRowYearPrd(rowsWithid);
