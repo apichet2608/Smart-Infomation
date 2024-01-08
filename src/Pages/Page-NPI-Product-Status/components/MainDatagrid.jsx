@@ -877,18 +877,21 @@ export default function MainDatagrid({ isDarkMode }) {
     },
     {
       field: "countStatusLqN",
-      headerName: "Status N",
-      width: 100,
+      headerName: "Before EVT stage",
+      width: 140,
       headerAlign: "center",
+      align: "center",
       renderCell: (params) => (
         <div className="font-bold text-xl text-red-500">{params.value}</div>
       ),
     },
     {
       field: "countStatusLqY",
-      headerName: "Status Y",
-      width: 100,
+      headerName: "LQ Approved",
+      width: 140,
       headerAlign: "center",
+      align: "center",
+
       renderCell: (params) => (
         <div className="font-bold text-xl text-green-500">{params.value}</div>
       ),
@@ -898,6 +901,8 @@ export default function MainDatagrid({ isDarkMode }) {
       headerName: "All Status",
       width: 100,
       headerAlign: "center",
+      align: "center",
+
       renderCell: (params) => (
         <div className="font-bold text-xl">{params.value}</div>
       ),
