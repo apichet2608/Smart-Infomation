@@ -110,7 +110,7 @@ export default function MainFilter({
             </li>
           )}
           onChange={(event, newValue) => {
-            setSelectedApp(newValue);
+            setSelectedApp(newValue ? newValue : "");
             setSelectedFlexName("");
             setSelectedXcode("");
           }}
