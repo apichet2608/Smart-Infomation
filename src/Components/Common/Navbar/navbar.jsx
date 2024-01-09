@@ -15,6 +15,7 @@ import FujiLogo from "../../../../public/Fuji.png";
 import WH from "../../../../public/Icons/warehouse.png";
 import LQ from "../../../../public/Icons/qql.png";
 import PS from "../../../../public/Icons/status.png";
+import UP from "../../../../public/Icons/ulproduct.png";
 import PageTitle from "./Title/Title";
 import Navbuttton from "./Button/Navbuttton";
 import { NavLink, useLocation } from "react-router-dom";
@@ -99,6 +100,7 @@ export default function MiniDrawer({ isDarkMode }) {
     { name: "NPI Product Status", link: "/npi-product-status", icon: PS },
     { name: "Machine Information", link: "/smart-information", icon: WH },
     { name: "Machine LQ Qualify", link: "/machine-lq-qualify", icon: LQ },
+    { name: "UL Product", link: "/ul-product", icon: UP },
     // Add more sidebar items as needed
   ];
 
@@ -120,8 +122,10 @@ export default function MiniDrawer({ isDarkMode }) {
           return "Machine Information";
         case "/machine-lq-qualify":
           return "Machine LQ Qualify";
-        case "/Smart-Factory-Dept":
-          return "/Smart-Factory-Dept";
+        // case "/Smart-Factory-Dept":
+        //   return "/Smart-Factory-Dept";
+        case "/ul-product":
+          return "UL Product";
         default:
           return "";
       }

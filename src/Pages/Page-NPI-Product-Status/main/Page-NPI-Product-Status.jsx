@@ -21,13 +21,13 @@ function NPIProductStatus({ isDarkMode }) {
 
   return (
     <>
-      <ThemeProvider theme={theme}>
-        {/* <Grid container spacing={2}> */}
-        <div className="mt-16 mx-auto">
-          <MainDatagrid isDarkMode={isDarkMode} />
-        </div>
-        {/* </Grid> */}
-      </ThemeProvider>
+      {/* <ThemeProvider theme={theme}> */}
+      {/* <Grid container spacing={2}> */}
+      <div className="mt-16 grid grid-cols-1">
+        <MainDatagrid isDarkMode={isDarkMode} />
+      </div>
+      {/* </Grid> */}
+      {/* </ThemeProvider> */}
     </>
   );
 }

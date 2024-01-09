@@ -17,8 +17,10 @@ export default function Title() {
           return "Machine Information";
         case "/machine-lq-qualify":
           return "Machine LQ Qualify";
-        case "/Smart-Factory-Dept":
-          return "/Smart-Factory-Dept";
+        // case "/Smart-Factory-Dept":
+        //   return "Smart-Factory-Dept";
+        case "/ul-product":
+          return "UL Product";
         default:
           return "";
       }

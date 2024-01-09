@@ -17,6 +17,7 @@ import Infomation from "./Pages/Page-smart_information/smart-infomation";
 import MachineLQ from "./Pages/Page-Machine-LQ-Qualify/machine_lq_qualify";
 import Machine_lq from "./Pages/Page-Machine-LQ-Qualify/Machine_qualify";
 import NPIProductStatus from "./Pages/Page-NPI-Product-Status/main/Page-NPI-Product-Status";
+import ULProduct from "./Pages/Page-UL-Product/main/Page-UL-Product";
 import Navbar from "./Components/Common/Navbar/navbar";
 import { useDarkMode } from "../src/Components/Common/DarkModeContext/DarkModeContext";
 import { useLocation } from "react-router-dom";
@@ -54,8 +55,6 @@ export default function PersistentDrawerLeft() {
         backgroundColor: isDarkMode ? "#565656" : "#F1F1F1",
         height: "100%",
         minHeight: "100vh",
-        width: "100%",
-        minWidth: "100vw",
       }}
     >
       <>
@@ -97,6 +96,14 @@ export default function PersistentDrawerLeft() {
                 element={
                   <>
                     <Machine_lq isDarkMode={isDarkMode} />
+                  </>
+                }
+              />
+              <Route
+                path="/ul-product"
+                element={
+                  <>
+                    <ULProduct isDarkMode={isDarkMode} />
                   </>
                 }
               />
