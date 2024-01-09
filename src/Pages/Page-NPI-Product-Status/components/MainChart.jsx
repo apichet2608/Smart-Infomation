@@ -48,11 +48,11 @@ const MainChart = ({
     },
     series: [
       {
-        name: "Y",
+        name: "LQ Approved",
         data: countStatusLqY,
       },
       {
-        name: "N",
+        name: "Before EVT stage",
         data: countStatusLqN,
       },
     ],

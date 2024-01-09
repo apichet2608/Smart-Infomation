@@ -856,7 +856,9 @@ export default function MainDatagrid({ isDarkMode }) {
     {
       field: "year",
       headerName: "Year",
-      width: 150,
+      // width: 150,
+      flex: 1,
+
       headerAlign: "center",
       align: "center",
       renderCell: (params) => {
@@ -877,8 +879,9 @@ export default function MainDatagrid({ isDarkMode }) {
     },
     {
       field: "countStatusLqN",
-      headerName: "N",
-      width: 70,
+      headerName: "Before EVT",
+      // width: 70,
+      flex: 1,
       headerAlign: "center",
       align: "center",
       renderCell: (params) => (
@@ -887,8 +890,10 @@ export default function MainDatagrid({ isDarkMode }) {
     },
     {
       field: "countStatusLqY",
-      headerName: "Y",
-      width: 70,
+      headerName: "LQ Approved",
+      // width: 70,
+      flex: 1,
+
       headerAlign: "center",
       align: "center",
 
@@ -898,8 +903,10 @@ export default function MainDatagrid({ isDarkMode }) {
     },
     {
       field: "countStatusLqAll",
-      headerName: "All",
-      width: 70,
+      headerName: "All Status",
+      // width: 70,
+      flex: 1,
+
       headerAlign: "center",
       align: "center",
 
@@ -1083,7 +1090,7 @@ export default function MainDatagrid({ isDarkMode }) {
           <div
             className={`${
               isDarkMode ? "bg-zinc-800" : "bg-white"
-            } rounded-2xl shadow-md duration-300 w-full lg:w-1/2`}
+            } rounded-2xl shadow-md duration-300 w-full lg:w-1/3`}
           >
             {/* <StyledDataGrid
               rows={rowsDataChart}
