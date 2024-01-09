@@ -249,20 +249,20 @@ export default function MainDatagrid({ isDarkMode }) {
         );
       },
     },
-    {
-      field: "flpm_lock_scan",
-      headerName: "Lock",
-      width: 50,
-      headerAlign: "center",
-      align: "center",
-      renderCell(params) {
-        return (
-          <div className="font-bold text-slate-500 drop-shadow-sm">
-            {params.value}
-          </div>
-        );
-      },
-    },
+    // {
+    //   field: "flpm_lock_scan",
+    //   headerName: "Lock",
+    //   width: 50,
+    //   headerAlign: "center",
+    //   align: "center",
+    //   renderCell(params) {
+    //     return (
+    //       <div className="font-bold text-slate-500 drop-shadow-sm">
+    //         {params.value}
+    //       </div>
+    //     );
+    //   },
+    // },
     {
       field: "status_ok2s",
       headerName: "OK2S",
@@ -877,8 +877,8 @@ export default function MainDatagrid({ isDarkMode }) {
     },
     {
       field: "countStatusLqN",
-      headerName: "Before EVT stage",
-      width: 140,
+      headerName: "N",
+      width: 70,
       headerAlign: "center",
       align: "center",
       renderCell: (params) => (
@@ -887,8 +887,8 @@ export default function MainDatagrid({ isDarkMode }) {
     },
     {
       field: "countStatusLqY",
-      headerName: "LQ Approved",
-      width: 140,
+      headerName: "Y",
+      width: 70,
       headerAlign: "center",
       align: "center",
 
@@ -898,8 +898,8 @@ export default function MainDatagrid({ isDarkMode }) {
     },
     {
       field: "countStatusLqAll",
-      headerName: "All Status",
-      width: 100,
+      headerName: "All",
+      width: 70,
       headerAlign: "center",
       align: "center",
 
@@ -994,7 +994,7 @@ export default function MainDatagrid({ isDarkMode }) {
       .get(
         `${import.meta.env.VITE_IP_API}/${
           import.meta.env.VITE_NPI_STATUS
-        }/upd_status_onclick_year?flpm_year`
+        }/upd_status_onclick_year`
       )
       .then((res) => {
         const data = res.data;
@@ -1149,7 +1149,7 @@ export default function MainDatagrid({ isDarkMode }) {
                     showQuickFilter: true,
                   },
                 }}
-                rowHeight={30}
+                // rowHeight={30}
                 pageSize={5}
                 sx={{
                   "& .MuiDataGrid-cell": {

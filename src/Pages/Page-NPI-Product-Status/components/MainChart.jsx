@@ -11,7 +11,7 @@ const MainChart = ({
 
   const categoriesUniqueYear = Array.from(
     new Set(rowsDataChart.map((row) => row.flpm_year))
-  ).filter((year) => year !== null);
+  ).filter((year) => year !== null && year !== "2021" && year !== "2022");
 
   //   console.log("categoriesUniqueYear: ", categoriesUniqueYear);
 
