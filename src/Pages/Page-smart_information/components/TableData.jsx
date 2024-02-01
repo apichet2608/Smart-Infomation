@@ -1263,12 +1263,12 @@ function TableData({ dataAPI, update, refreshtable, isDarkMode }) {
         }
       },
     },
-    {
-      field: "predictive",
-      headerName: "Predictive",
-      width: 150,
-      headerAlign: "center",
-    },
+    // {
+    //   field: "predictive",
+    //   headerName: "Predictive",
+    //   width: 150,
+    //   headerAlign: "center",
+    // },
   ];
 
   const [rows, setRows] = useState([]);
