@@ -133,37 +133,37 @@ function Table_PM({ DataPM, isDarkMode }) {
       align: "center",
       headerAlign: "center",
     },
-    {
-      field: "cc_code",
-      headerName: "CC Code",
-      width: 150,
-      align: "center",
-      headerAlign: "center",
-    },
-    {
-      field: "pm_status",
-      headerName: "PM Status",
-      width: 150,
-      align: "center",
-      headerAlign: "center",
-      renderCell: (params) => (
-        <span style={{ color: "#34495E", fontWeight: "bold" }}>
-          {params.value}
-        </span>
-      ),
-    },
-    {
-      field: "status_code",
-      headerName: "Status Code",
-      width: 150,
-      align: "center",
-      headerAlign: "center",
-      renderCell: (params) => (
-        <span style={{ color: "#34495E", fontWeight: "bold" }}>
-          {params.value}
-        </span>
-      ),
-    },
+    // {
+    //   field: "cc_code",
+    //   headerName: "CC Code",
+    //   width: 150,
+    //   align: "center",
+    //   headerAlign: "center",
+    // },
+    // {
+    //   field: "pm_status",
+    //   headerName: "PM Status",
+    //   width: 150,
+    //   align: "center",
+    //   headerAlign: "center",
+    //   renderCell: (params) => (
+    //     <span style={{ color: "#34495E", fontWeight: "bold" }}>
+    //       {params.value}
+    //     </span>
+    //   ),
+    // },
+    // {
+    //   field: "status_code",
+    //   headerName: "Status Code",
+    //   width: 150,
+    //   align: "center",
+    //   headerAlign: "center",
+    //   renderCell: (params) => (
+    //     <span style={{ color: "#34495E", fontWeight: "bold" }}>
+    //       {params.value}
+    //     </span>
+    //   ),
+    // },
     {
       field: "status_desc",
       headerName: "Status Description",
