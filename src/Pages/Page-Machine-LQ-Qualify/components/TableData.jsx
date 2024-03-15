@@ -14,6 +14,7 @@ import DoNotDisturbOnIcon from "@mui/icons-material/DoNotDisturbOn";
 import RemoveIcon from "@mui/icons-material/Remove";
 
 import styled from "@mui/material/styles/styled";
+import PM_Dialog from "./PM_Dialog";
 
 //*Styled Components
 const StyledDataGrid = styled(DataGrid)({
@@ -68,6 +69,20 @@ function TableMachineLQ({ datafromAPIlq, isDarkMode }) {
     setSearch(e.target.value);
   };
 
+  //TODO-----------------------PM--------------------------
+  const [selectedMachinePM, setSelectedMachinePM] = useState("");
+  const [isDialogOpenPM, setIsDialogOpenPM] = useState(false);
+
+  const handleOpenPMDialog = (dld_machine) => {
+    setSelectedMachinePM(dld_machine);
+    setIsDialogOpenPM(true);
+  };
+
+  const handleClosePMDialog = () => {
+    setIsDialogOpenPM(false);
+  };
+  //TODO-----------------------PM--------------------------
+
   const filteredItems = datafromAPIlq.filter((item) => {
     return (
       (item.dld_year &&
@@ -110,59 +125,6 @@ function TableMachineLQ({ datafromAPIlq, isDarkMode }) {
 
   const columns = [
     { field: "dld_year", headerName: "Year", width: 80, headerAlign: "center" },
-    // {
-    //   field: "dld_status",
-    //   headerName: "Status",
-    //   width: 200,
-    //   // renderCell: (params) =>
-    //   //   params.value === null ? (
-    //   //     <div>
-    //   //       &nbsp; &nbsp; &nbsp; &nbsp;
-    //   //       <DoNotDisturbOnIcon style={{ fontSize: 20, color: "#CCD1D1" }} />
-    //   //     </div>
-    //   //   ) : (
-    //   //     <>
-    //   //       {params.value === "F" && (
-    //   //         <div style={{ display: "flex", alignItems: "center" }}>
-    //   //           <CheckCircleIcon style={{ fontSize: 20, color: "#2ECC71" }} />
-    //   //           &nbsp;Qualify
-    //   //         </div>
-    //   //       )}
-    //   //       {params.value === "-" && (
-    //   //         <div style={{ display: "flex", alignItems: "center" }}>
-    //   //           <CheckCircleIcon style={{ fontSize: 20, color: "#2ECC71" }} />
-    //   //           &nbsp;Qualify
-    //   //         </div>
-    //   //       )}
-    //   //       {params.value === "Q" && (
-    //   //         <div style={{ display: "flex", alignItems: "center" }}>
-    //   //           <CheckCircleIcon style={{ fontSize: 20, color: "#2ECC71" }} />
-    //   //           &nbsp;Qualify
-    //   //         </div>
-    //   //       )}
-    //   //       {params.value === "P" && (
-    //   //         <div style={{ display: "flex", alignItems: "center" }}>
-    //   //           <AccessTimeFilledIcon
-    //   //             style={{ fontSize: 20, color: "#2980B9" }}
-    //   //           />
-    //   //           &nbsp;Plan
-    //   //         </div>
-    //   //       )}
-    //   //       {params.value === "A" && (
-    //   //         <div style={{ display: "flex", alignItems: "center" }}>
-    //   //           <InfoIcon style={{ fontSize: 20, color: "#F8C471" }} />
-    //   //           &nbsp;Wait NPI Approve
-    //   //         </div>
-    //   //       )}
-    //   //       {params.value === "WA" && (
-    //   //         <div style={{ display: "flex", alignItems: "center" }}>
-    //   //           <InfoIcon style={{ fontSize: 20, color: "#F7DC6F" }} />
-    //   //           &nbsp;Wait Manager Approve
-    //   //         </div>
-    //   //       )}
-    //   //     </>
-    //   //   ),
-    // },
     {
       field: "dld_status_result",
       headerName: "Status",
@@ -211,6 +173,22 @@ function TableMachineLQ({ datafromAPIlq, isDarkMode }) {
       headerName: "Machine",
       headerAlign: "center",
       width: 120,
+      renderCell: (params) => {
+        const dld_machine = params.value;
+
+        return (
+          <div
+            style={{
+              color: "#6495ED",
+              cursor: "pointer",
+              fontWeight: "bold",
+            }}
+            onClick={() => handleOpenPMDialog(dld_machine)}
+          >
+            {dld_machine}
+          </div>
+        );
+      },
     },
     {
       field: "dld_customer_name",
@@ -373,6 +351,11 @@ function TableMachineLQ({ datafromAPIlq, isDarkMode }) {
           },
           height: 640,
         }}
+      />
+      <PM_Dialog
+        openPM={isDialogOpenPM}
+        onClosePM={handleClosePMDialog}
+        dld_machine={selectedMachinePM}
       />
     </div>
   );
