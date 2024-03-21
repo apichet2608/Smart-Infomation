@@ -289,6 +289,7 @@ function Table_unlock({ data_is_y, isDarkMode, refresh_sub_lock }) {
           height: 570,
           width: "100%",
         }}
+        className="grid gap-4"
       >
         <DataGrid
           rows={dataTable}

@@ -274,6 +274,7 @@ function DataGridComponents({ lock_data, refresh_upd, refresh_sub_lock_all }) {
           height: 570,
           width: "100%",
         }}
+        className="grid gap-4"
       >
         <DataGrid
           //Check Box Select
