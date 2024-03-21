@@ -21,6 +21,7 @@ import ULProduct from "./Pages/Page-UL-Product/main/Page-UL-Product";
 import Navbar from "./Components/Common/Navbar/navbar";
 import { useDarkMode } from "../src/Components/Common/DarkModeContext/DarkModeContext";
 import { useLocation } from "react-router-dom";
+import Machine_lq_sub_lock_main from "./Pages/Page-Machine-LQ-sub-lock/main/Machine_lq_sub_lock_main";
 
 const drawerWidth = 240;
 
@@ -96,6 +97,14 @@ export default function PersistentDrawerLeft() {
                 element={
                   <>
                     <Machine_lq isDarkMode={isDarkMode} />
+                  </>
+                }
+              />
+              <Route
+                path="/machine-lq-sub-lock"
+                element={
+                  <>
+                    <Machine_lq_sub_lock_main isDarkMode={isDarkMode} />
                   </>
                 }
               />

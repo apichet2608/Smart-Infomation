@@ -14,6 +14,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import FujiLogo from "../../../../public/Fuji.png";
 import WH from "../../../../public/Icons/warehouse.png";
 import LQ from "../../../../public/Icons/qql.png";
+import LQS from "../../../../public/Icons/lock.png";
 import PS from "../../../../public/Icons/status.png";
 import UP from "../../../../public/Icons/ulproduct.png";
 import PageTitle from "./Title/Title";
@@ -100,6 +101,7 @@ export default function MiniDrawer({ isDarkMode }) {
     { name: "NPI Product Status", link: "/npi-product-status", icon: PS },
     { name: "Machine Information", link: "/smart-information", icon: WH },
     { name: "Machine LQ Qualify", link: "/machine-lq-qualify", icon: LQ },
+    { name: "Machine LQ Sub Lock", link: "/machine-lq-sub-lock", icon: LQS },
     { name: "UL Product", link: "/ul-product", icon: UP },
     // Add more sidebar items as needed
   ];
@@ -122,6 +124,8 @@ export default function MiniDrawer({ isDarkMode }) {
           return "Machine Information";
         case "/machine-lq-qualify":
           return "Machine LQ Qualify";
+        case "/machine-lq-sub-lock":
+          return "Machine LQ Sub Lock";
         // case "/Smart-Factory-Dept":
         //   return "/Smart-Factory-Dept";
         case "/ul-product":

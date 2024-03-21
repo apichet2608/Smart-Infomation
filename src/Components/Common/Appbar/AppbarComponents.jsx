@@ -24,6 +24,7 @@ import On from "../../../../public/Icons/icons8-toggle-on-100.png";
 import Off from "../../../../public/Icons/icons8-toggle-Off-100.png";
 import WH from "../../../../public/Icons/warehouse.png";
 import LQ from "../../../../public/Icons/qql.png";
+
 import Fuji from "../../../../public/Icons/Fuji.png";
 
 const drawerWidth = 240;
@@ -108,6 +109,8 @@ export default function MiniDrawer() {
           return "Machine Information";
         case "/machine-lq-qualify":
           return "Machine LQ Qualify";
+        case "/machine-lq-sub-lock":
+          return "Machine LQ Sub Lock";
         case "/Smart-Factory-Dept":
           return "/Smart-Factory-Dept";
         default:
@@ -266,6 +269,7 @@ export default function MiniDrawer() {
             </ListItem>
           ))}
         </List>
+
         <Divider />
 
         <Divider />
